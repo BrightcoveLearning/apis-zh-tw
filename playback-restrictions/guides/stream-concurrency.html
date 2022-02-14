@@ -1,0 +1,245 @@
+---
+title:“限制每個查看器的並發流"
+description:“在本主題中，您將了解如何在使用 Brightcove 播放限制時限制並發流。”
+parent: Guides 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Brightcove Playback Restrictions.</aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+
+    <p>通過並發流限制，您可以定義特定用戶在任何給定時間可以觀看的視頻流數量。限制每個用戶的並發流會阻止查看者與沒有帳戶的朋友共享其憑據。</p>
+    <p>
+      當達到並發流的最大數量，並且查看者或擁有其帳戶憑據的人嘗試打開其他流時，最舊的會話將停止或最新的請求被阻止。您可以控制這種行為。
+    </p>
+    <p>
+      此功能與 DRM 工作流程掛鉤，因此它是安全的，並且可以以最少的集成使用。
+    </p>
+
+    <p>如果您不熟悉此功能，請參閱<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概述：Brightcove播放限制</a>文檔。</p>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Account_setup">帳戶設定</h2>
+
+    <p>請與您的客戶經理聯繫，以啟用您的帳戶以進行流並發。</p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Implementation">執行</h2>
+    <p>
+      對於此功能，需要將內容加密為DRM。要實施，請按照下列步驟操作：
+    </p>
+    <ol class="bcls-tasklist">
+      <li>
+        <p>確定索賠值：</p>
+        <ul>
+          <li>這<code translate="No">climit</code>聲明表示可以同時播放多少個觀察者或流。 </li>
+          <li>
+            這<code translate="No">cbeh</code> claim 定義瞭如何阻塞並發。當達到流限制時，您可以阻止新的查看器（意味著不同的 IP 地址和設備）或阻止新的流請求（會話）。
+            <ul>
+              <li><code translate="No">cbeh</code>價值<code translate="No">BLOCK_NEW_USER</code> -阻止新觀眾</li>
+              <li><code translate="No">cbeh</code>價值<code translate="No">BLOCK_NEW</code> -阻止新的流</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>創建一個JSON Web Tokent（JWT），並將其聲明與所需的並發流限制相關聯。有關詳細信息，請參閱<a href="https://general.support.brightcove.com/developer/create-jwt.html">創建一個<span translate="No">JSON 網絡令牌</span> (智威湯遜)</a>文檔。
+      </li>
+      <li>
+        配置您的播放器以使用播放限制並通過<span translate="No">JSON 網絡令牌</span> (JWT) 檢索您的視頻內容時。有關詳細信息，請參見<a href="/playback-rights/getting-started/implementing-epa.html#Configure_your_player">配置播放器</a>實施播放權限管理服務文檔中的“部分"。
+      </li>
+    </ol>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Renewal_interval">更新間隔</h2>
+    <p>
+      為確保執行並發流限制，在播放期間根據定義的續訂間隔發送 DRM 許可證續訂請求。在設置時，需要定義此更新間隔。
+    </p>
+    <p>
+      中間流播放授權請求需要在JWT令牌中指定並發限制以及公共密鑰ID。
+    </p>
+
+    <p>今天，每個續訂請求都算作一個額外的許可證，將計入您購買的許可證數量。當您決定間隔時，應考慮到這一點。</p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>更新間隔</th>
+          <th>每個流提供2小時內容的許可</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>無</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>15分鐘</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>5分鐘</td>
+          <td>24</td>
+        </tr>
+        <tr>
+          <td>2分鐘</td>
+          <td>60</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Understanding_behavior">理解行為</h2>
+    <p>
+      使用此功能，您可以選擇阻止流的行為。
+    </p>
+    <h3>阻止最舊的流</h3>
+    <p>
+      Brightcove支持限制受DRM保護的內容的播放流。處理新的續訂請求時，將停止最早的會話。這允許新用戶請求獲得訪問權限，同時阻止可能不再有效的最舊請求，顯示有關網絡或設備故障的消息。
+    </p>
+    <p>
+      這是默認行為。
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/pas/concurrency-general.png" alt="Block oldest stream">
+      <figcaption class="bcls-caption--image">阻止最舊的流</figcaption>
+    </figure>
+
+    <p>
+      <strong>用戶活動：</strong>
+    </p>
+    <ol>
+      <li>
+        本，傑森和莎拉開始看電影。
+      </li>
+      <li>
+        傑米（Jamie）決定也開始觀看，導致本（Ben）即將進行的續約請求被拒絕。
+      </li>
+      <li>
+        Ben重新啟動電影，現在導致Jason的續訂請求失敗。
+      </li>
+      <li>
+        一段時間後，傑森開始觀看另一部電影，導致莎拉的電影停播。
+      </li>
+    </ol>
+
+    <h3>阻止新請求</h3>
+    <p>
+      或者，當達到並發流的最大數量時，您可以阻止任何新的許可證請求。這允許所有當前用戶繼續觀看，同時向任何新用戶請求顯示消息。
+    </p>
+    <p>
+      要啟用此行為，您需要設置<code translate="No">cbeh</code>在你的索賠<a href="https://general.support.brightcove.com/developer/create-jwt.html">JSON 網絡令牌 (JWT)</a>如下：
+    </p>
+    <pre><code class="language-json" translate="No">&quot;cbeh&quot;: &quot;BLOCK_NEW&quot;</code></pre>
+    <br />
+    <p>
+      這是一個例子：
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/pas/block-new-request.png" alt="Block new request">
+      <figcaption class="bcls-caption--image">阻止新請求</figcaption>
+    </figure>
+
+    <p>
+      <strong>用戶活動：</strong>
+    </p>
+    <ol>
+      <li>
+        本，傑森和莎拉開始看電影。
+      </li>
+      <li>
+        傑米（Jamie）嘗試開始觀看，但是由於最大限制，她的請求被阻止。
+      </li>
+      <li>
+        Jason停止觀看，允許其他觀眾開始觀看。傑米開始看電影。
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="PlayReady">PlayReady</h2>
+    <p>PlayReady 不支持中游許可證檢查。</p>
+    <h3>現任 Brightcove 球員</h3>
+    <p>如果您使用的是 Brightcove Player v6.48.x 或更新版本，則播放器會為 Edge 瀏覽器設置首選順序以使用 Widevine 而不是 PlayReady。因此，PlayReady 應該不是問題。</p>
+    <p>您可以在 Chromium Edge 瀏覽器中找到 EPA DRM 源選擇的修復程序<a href="https://player.support.brightcove.com/release-notes/brightcove-player-release-notes.html">Brightcove 播放器發行說明</a> .</p>
+    <h3>舊版本</h3>
+    <p>Brightcove Player 的舊版本首先使用 PlayReady 的 Chromium Edge 瀏覽器默認值。在這種情況下，您必須手動執行中游許可檢查。</p>
+    <p>
+      要在您的播放器中實施手動許可證續訂，請參閱<a href="https://docs.microsoft.com/en-us/playready/features/concurrency-limiting">微軟的並發限制</a>文檔。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Safari">蘋果瀏覽器</h2>
+    <p>
+      Safari瀏覽器支持並發限制，但不會發送續訂請求。這意味著與其他瀏覽器相比，新會話/流將被阻止更長的時間。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Notes">筆記</h2>
+    <p>
+      以下注意事項適用於此功能：
+    </p>
+    <ul>
+      <li>
+        在以下情況下，應實施手動許可證續訂請求：
+        <ul>
+          <li>
+            非Brightcove播放器中的並發限制，除非受Widevine保護
+          </li>
+          <li>
+            所有設備中 PlayReady 的並發限制，使用 Brightcove Player v6.48.x 或更新版本時除外
+          </li>
+        </ul>
+      </li>
+      <li>
+        應在比定義的更新間隔短的時間內請求手動更新許可證。
+      </li>
+    </ul>
+
+  </section>
+
+  <!-- <section class="bcls-section">
+<h2 id="Limitations">Limitations</h2>
+<p>
+  The following limitations apply to this feature:
+</p>
+
+<ul>
+  <li>
+    Concurrency limit is not yet supported in Safari due to the browser's limitations.
+  </li>
+</ul>
+</section> -->
+
+  <!-- <section class="bcls-section">
+    <h2 id="Related_topics">Related topics</h2>
+
+    <ul>
+      <li>
+        <a href="/playback-rights/getting-started/overview-epa.html">Overview: Managing Playback Rights</a>
+      </li>
+      <li>
+        <a href="/playback-rights/getting-started/implementing-epa.html">Implementing Playback Rights</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-bcp.html">Using Playback Rights with Brightcove Player</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-sdks.html">Using Playback Rights with the Native SDKs</a>
+      </li>
+    </ul>
+  </section> -->
+
+</article>

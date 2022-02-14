@@ -1,0 +1,51 @@
+---
+title: '快速開始：社交API'
+description: '本主題提供了使用社交 API 的快速入門。'
+parent: Getting Started 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+    <p>社交 API 允許您獲取將視頻分享到社交媒體平台的狀態和歷史記錄。通過此快速入門，您可以使用自己的帳戶或 Brightcove 學習服務示例帳戶查看可用請求及其響應。</p>
+    <h3>關於示例應用程序的註釋</h3>
+    <ul>
+      <li>這是一個快速入門，旨在為您提供一個圍繞社交 API 構建應用程序的模型。它允許您測試基本請求，但不使用這些請求可以使用的任何參數。要查看這些，請查看<a href="/social/references/reference.html">API 參考</a> .</li>
+      <li>該應用程序還向<span translate="No">內容管理系統 API</span>獲取視頻社交共享狀態的初始請求返回的視頻名稱。這只是為其他請求填充視頻選擇器，因為社交 API 僅返回視頻 ID，而不返回其名稱。</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">提供此示例和相關代碼作為生產開發的指南。該代碼未經認證可用於生產用途，也未經官方支持。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="getCredentials" class="bcls-expander-head">獲取憑證</h2>
+    <div class="bcls-expander-content">
+      <p>要使用社交 API，您需要適當的憑據。</p>
+      <p>獲得它們的最簡單方法是使用 Studio <strong>管理員/API 認證</strong>部分，點擊<strong>註冊新申請</strong>，並為您的憑據選擇社交權限：</p>
+      <figure class="bcls-figure"><img class="bcls-image" alt="Social API Permissions" src="/assets/images/social/social-api-permissions.png" />
+        <figcaption class="bcls-caption--image">社交 API 權限</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="bcls-section" id="workingSample">
+    <h2>快速啟動應用</h2>
+    <p>在此找到與此樣本相關的所有代碼<a href="https://github.com/BrightcoveLearning/18731-quick-start-social-api">GitHub資料庫</a>。</p>
+    <p class="codepen" data-height="1100" data-theme-id="34967" data-default-tab="result" data-user="rcrooks1969" data-slug-hash="QYVmRP" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Social API Quick Start"><span>看筆<a href="https://codepen.io/team/rcrooks1969/pen/QYVmRP/">社交 API 快速入門</a>通過 Brightcove 學習服務 ( <a href="https://codepen.io/rcrooks1969"> @rcooks1969</a>） 在<a href="https://codepen.io">代碼筆</a> .</span></p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script></section>
+  <section class="bcls-section">
+    <h2 id="Using_the_CodePen" class="bcls-expander-head">使用代碼筆</h2>
+    <div class="bcls-expander-content">
+      <p>以下是一些有效使用上述 CodePen 的提示：</p>
+      <ul>
+        <li>通過單擊切換播放器的實際顯示<strong>結果</strong>按鈕。</li>
+        <li>點擊<strong>HTML / CSS / JS</strong>按鈕顯示一種代碼類型。</li>
+        <li>點擊<strong>在CodePen上編輯</strong>在右上角將此CodePen分支到您自己的帳戶中。</li>
+        <li>在此找到與此樣本相關的所有代碼<a href="https://github.com/BrightcoveLearning/18729-cms-api-sample-report-audio-only-content">GitHub資料庫</a>。</li>
+      </ul>
+    </div>
+  </section>
+  <section class="bcls-section">
+    <h2 id="proxy">代理代理代碼</h2>
+    <p>為了建立您自己的版本此頁面上的範例應用程式，您必須建立並裝載您自己的 Proxy。（布萊特灣學習服務所使用的代理只接受來自布萊特灣域的請求。）可以在以下位置找到一個示例代理，該代理與我們使用的代理代理非常相似，但是沒有檢查阻止來自非Brightcove域的請求。<a href="https://github.com/BrightcoveLearning/sample-proxy-apps">這個GitHub倉庫</a>。您還將在那裡找到使用它的基本說明，以及圍繞代理構建應用程序的更詳細指南<a href="/getting-started/learning-guide-using-rest-apis.html">使用 REST API</a> .</p>
+  </section>
+</article>

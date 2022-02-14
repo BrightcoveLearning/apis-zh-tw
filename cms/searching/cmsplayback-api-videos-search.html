@@ -1,1465 +1,156 @@
-﻿<!doctype html>
-<html lang="zh-TW">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="在本主題中，您將學習如何使用 CMS API 搜尋帳戶中的影片。CMS API提供了一種編程方式來搜索“視頻雲”庫中的視頻。本主題提供搜尋語法的詳細資訊。注意：這是原始的搜索語法-我們建議您使用更簡單的視頻搜索語法v2。">
-  
-  <title>CM/播放API：影片搜尋 v1</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">  
-  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&amp;display=swap">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/prism.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/styles.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
-  <link rel="stylesheet" href="/assets/css/local.css">
-  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
-  <script src="/assets/js/sajari-head.js"></script>
-</head>
-
-<body class="body">
-
-<header>
-  <div class="div-header">
-    <a href="/"><img class="product-logo" src="https://support.brightcove.com/site-assets/images/site/product-logos/Video_Cloud_Logo.svg" alt="產品標誌" style="max-height: 100px;max-width: 232px;"/></a>
-<!-- GTranslate: https://gtranslate.io/ -->
-<select onchange="doGTranslate(this);"><option value="">選擇語言</option><option value="en|en" translate="No">English</option><option value="en|zh-TW" translate="No">繁體中文</option><option value="en|fr" translate="No">Français</option><option value="en|de" translate="No">Deutsche</option><option value="en|ja" translate="No">日本語</option><option value="en|ko" translate="No">한국어</option><option value="en|es" translate="No">Español</option></select>
-
-<script>
-/* <![CDATA[ */
-function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];var plang=location.hostname.split('.')[0];if(plang.length !=2 && plang.toLowerCase() != 'zh-cn' && plang.toLowerCase() != 'zh-tw')plang='en';location.href=location.protocol+'//'+(lang == 'en' ? '' : lang+'.')+location.hostname.replace('www.', '').replace(RegExp('^' + plang + '\\.'), '')+location.pathname+location.search;}
-/* ]]> */
-</script>
-
-Brightcove 
-
-    <span class="secondary-nav"><a href="https://supportportal.brightcove.com/s/login/?"><img src="https://support.brightcove.com/site-assets/images/site/support.png" alt="支持"/>聯繫支持</a><span style="vertical-align: top;margin-left:1em;margin-right:1em;">|</span><a href="https://status.brightcove.com/"><img src="https://support.brightcove.com/site-assets/images/site/status.png" alt="系統狀態"/>系統狀況</a></span><br/>
-    
-  </div>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb arr-right">
-      
-      <li class="breadcrumb-item"><a href="/">首頁</a></li>
-      
-      
-      
-      <li class="breadcrumb-item"><a href="/cms/searching/">搜尋</a></li>
-      
-      <li class="breadcrumb-item active" aria-current="page">CM/播放API：影片搜尋 v1</li>
-    </ol>
-  </nav>
-</header>
-<div class="container">
-    <div class="row">
-      <div class="col-sm-3 left-side-bar">
-        				<select id="site_select" class="bcls-select" style="margin-right: 1rem;">
-					<option value="">其他布萊特灣文件</option>
-					
-						
-							<option value="https://support.brightcove.com">文件首頁</option>
-						
-					
-						
-							<option value="https://audience.support.brightcove.com">布萊特灣觀眾</option>
-						
-					
-						
-							<option value="https://beacon.support.brightcove.com">布萊特灣燈塔</option>
-						
-					
-						
-							<option value="https://campaign.support.brightcove.com">布萊特灣戰役</option>
-						
-					
-						
-							<option value="https://engage.support.brightcove.com">布萊特灣參與</option>
-						
-					
-						
-							<option value="https://live.support.brightcove.com">Brightcove Live</option>
-						
-					
-						
-							<option value="https://gallery.support.brightcove.com">Brightcove 圖庫</option>
-						
-					
-						
-							<option value="https://ssai.support.brightcove.com">布萊特灣</option>
-						
-					
-						
-							<option value="https://social.support.brightcove.com">布萊特灣社會</option>
-						
-					
-						
-							<option value="https://studio.support.brightcove.com">視訊雲端工作室</option>
-						
-					
-						
-							<option value="https://player.support.brightcove.com">布萊特灣球員開發</option>
-						
-					
-						
-							<option value="https://apis.support.brightcove.com">視訊雲端平台 API</option>
-						
-					
-						
-							<option value="https://sdks.support.brightcove.com">視訊雲端裝置開發套件</option>
-						
-					
-						
-							<option value="https://integrations.support.brightcove.com">整合與 CMS 連接器</option>
-						
-					
-						
-							<option value="https://general.support.brightcove.com">視訊雲端一般資訊</option>
-						
-					
-						
-							<option value="https://zencoder.support.brightcove.com">Zencoder</option>
-						
-					
-				</select>
-						<nav class="sidenav" id="side_nav">
-
-          
-            
-            <h5><a href="/index.html">首頁</a></h5>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/getting-started/index.html">開始使<strong>用 + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/getting-started/getting-started-brightcove-apis.html">概述：平台 API </a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/authentication-brightcove-api-requests.html">API 請求的身份驗證</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/concepts-testing-tools-brightcove-apis.html">布萊特灣 API 的測試工具</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/learning-guide-using-rest-apis.html">學習指南：使用其他應用程式介</a>面</li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/general/index.html">一般資訊<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/general/all-api-references.html">所有 API 參考</a></li>
-                  
-                
-                  
-                    <li><a href="/general/overview-context-aware-encoding.html">上下文感知編碼概述</a></li>
-                  
-                
-                  
-                    <li><a href="/general/managing-api-authentication-credentials.html">管理 API 身份驗證憑證</a></li>
-                  
-                
-                  
-                    <li><a href="/general/integrating-your-cms-video-cloud.html">將CMS與Video Cloud集成</a></li>
-                  
-                
-                  
-                    <li><a href="/general/platform-api-code-samples.html">平台 API 程式碼範例</a></li>
-                  
-                
-                  
-                    <li><a href="/general/video-cloud-api-training-videos.html">平台 API 訓練影片</a></li>
-                  
-                
-                  
-                    <li><a href="/general/concepts-api-tester.html">線上 API 測試儀</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-insomnia-api-requests.html">針對 API 請求使用失眠</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-postman-api-requests.html">使用郵遞員進行 API 請求</a></li>
-                  
-                
-                  
-                    <li><a href="/general/audio-content.html">音訊內容</a></li>
-                  
-                
-                  
-                    <li><a href="/general/known-issues.html">平台 API 已知問題</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/analytics/index.html">分析 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/getting-started/overview-analytics-api-v1.html">概述：分析 API </a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-explorer.html">分析 API 資源管理器</a></li>
-                        
-                        <li><a href="/analytics/getting-started/overview-video-data-endpoint.html">概述：視訊資料端點</a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html">概述：標註、欄位和參數</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/general/faq-analytics-api.html">常見問題集：分析 API </a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-glossary.html">分析 API 詞彙</a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-unique-users.html">唯一使用者</a></li>
-                        
-                        <li><a href="/analytics/general/live-metrics.html">即時測量結果</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/references/reference.html">分析 API 參考</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-release-notes.html">版本資訊</a></li>
-                        
-                        <li><a href="/analytics/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-error-reference.html">錯誤參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/dimension-guides/index.html">維度導引線<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-account.html">維度：<code>帳戶</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-browsertype.html">尺寸：<code>瀏覽器類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-date.html">尺寸：<code>日期</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-datehour.html">尺寸：<code>日期 _ 小時</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationdomain.html">維度：<code>目的地 _ 網域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationpath.html">尺寸標註：<code>目的地路徑</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicemanufacturer.html">尺寸：<code>裝置 _ 製造商</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicetype.html">尺寸：<code>裝置類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-deviceos.html">尺寸：<code>裝置</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-city.html">尺寸：<code>城市</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-country.html">尺寸：<code>國家</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-region.html">尺寸：<code>區域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-livestream.html">尺寸：<code>直流</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-referrerdomain.html">維度：<code>參照網域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-sourcetype.html">尺寸：<code>來源類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-searchterms.html">尺寸：<code>搜尋術語</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-socialplatform.html">尺寸：<code>社交平台</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-player.html">尺寸：<code>玩家</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-video.html">尺寸：<code>視訊</code></a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html">現場活動的同時觀眾</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html">每日分析報表產生器</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-destinations-report.html">目的地報表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html">地理分析報表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-unique-users-day.html">每天的獨特使用者</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-engagement-graph.html">視訊參與圖表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html">按玩家和日期分類的影片報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-reference-id.html">依參考 ID 分類的影片報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-tags.html">依標籤分類的視訊報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html">按播放清單分析</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html">最近新增的影片</a></li>
-                        
-                        <li><a href="/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html">視訊分析報表 (按國家/地區和日期</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/cms/index.html">CMS 應用程式介面<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/getting-started/overview-cms-api.html">概述：CMS 應用程式</a></li>
-                        
-                        <li><a href="/cms/getting-started/practice-area-cms-api.html">練習區域：CMS 應用程式</a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
-                        
-                        <li><a href="/cms/getting-started/cms-api-notifications.html">CMS 應用程式介面通知</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/references/reference.html">CMS 應用程式介面參考</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
-                        
-                        <li><a href="/cms/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-video-fields-reference.html">CMS 應用程式介面影片欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-playlist-fields-reference.html">CMS API 播放清單欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-custom-fields-reference.html">CMS API 自訂欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-folder-fields-reference.html">CMS API 文件夾字段參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-error-message-reference.html">CMS 應用程式介面錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/searching/index.html">搜尋<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 應用程式介面：視訊搜尋 v2 </a></li>
-                        
-                        <li><a href="/cms/searching/cms-api-playlists-search.html">CMS 應用程式介面：播放清單搜尋</a></li>
-                        
-                        <li><a href="/cms/searching/using-cms-api-page-search-results.html">網頁搜尋結果</a></li>
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋 v1 </a></li>
-                        
-                        <li><a href="/playback/guides/catalog-search-architecture.html">目錄搜尋架構</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/managing-videos/index.html">管理視訊/資產<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-geo-filtering.html">新增地理篩選</a></li>
-                        
-                        <li><a href="/cms/managing-videos/digital-master-delete-api.html">數位主版刪除 API </a></li>
-                        
-                        <li><a href="/cms/managing-videos/deleting-videos.html">刪除視訊</a></li>
-                        
-                        <li><a href="/cms/managing-videos/getting-counts-videos-and-playlists.html">取得影片和播放清單的計數</a></li>
-                        
-                        <li><a href="/cms/managing-videos/managing-playlists-using-cms-api.html">使用 CMS API 管理播放清單</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-managing-clips.html">管理剪輯片段</a></li>
-                        
-                        <li><a href="/cms/managing-videos/media-sharing-cms-api.html">媒體分享</a></li>
-                        
-                        <li><a href="/cms/managing-videos/multilingual-metadata.html">多語言元資料</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-retrieve-video-data.html">擷取視訊資料</a></li>
-                        
-                        <li><a href="/cms/managing-videos/setting-360-degree-video-properties-cms-api.html">設定 360 度視訊屬性</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-remote-assets.html">遠端資產</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">新增 WebVTT 字幕 (文字曲目) </a></li>
-                        
-                        <li><a href="/cms/managing-videos/generate-video-sitemaps.html">產生視訊網站地圖</a></li>
-                        
-                        <li><a href="/cms/managing-videos/identifying-low-performing-content.html">識別效能低的內容</a></li>
-                        
-                        <li><a href="/cms/managing-videos/cms-api-working-folders.html">使用資料夾</a></li>
-                        
-                        <li><a href="/cms/managing-videos/working-with-labels.html">使用標示</a></li>
-                        
-                        <li><a href="/cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html">連結 ZenCoder 與視訊雲端</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html">新增多個聯盟帳戶</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-share-multiple-videos.html">分享多個視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-media-sharing-report.html">媒體分享報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-shared-media-report.html">共用媒體報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-videos.html">更新視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html">將自訂欄位新增至多個視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-geo-properties.html">更新地理內容</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-cue-points.html">新增提示點</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-report-generator.html">視訊報告產生器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-videos-delivery-type.html">按傳送類型劃分的影片</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-download-links.html">下載連結</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-sitemap-generator.html">視訊網站地圖產生</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-generator.html">MRSS 產生器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">播放清單中的 MRSS 摘要</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html">適用於 iTunes 的 RSS 播客摘要</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-renditions-inspector.html">視訊轉譯檢查器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-report-audio-only-content.html">僅限音訊內容的報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-schema-builder.html">視訊架構建置器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-python-code-get-request.html">一個 GET 請求的 Python 代碼</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-search-app.html">視訊搜尋應用程式</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/xdr/index.html">跨裝置履歷 (XDR) API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">概述：跨裝置繼續</a></li>
-                        
-                        <li><a href="/xdr/getting-started/get-playback-position.html">從 XDR API 獲取播放位置</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html">與布萊特灣播放器的跨裝置履歷</a></li>
-                        
-                        <li><a href="https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html">使用原生 SDK 進行跨裝置恢復</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">跨裝置履歷 API 參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/data-collection/index.html">資料收集 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/data-collection/overview-data-collection-api-v2.html">概述：資料收集 API </a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/data-collection-api-sample.html">資料收集 API 範例</a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/references/reference.html">資料收集 API 參考</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/delivery-system/index.html">傳送系統 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/delivery-system/overview-delivery-system-api.html">概述：傳送系統 API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/step-step-delivery-system-api.html">逐步：傳送系統 API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/delivery-system-api-git-overview.html">Git 概述</a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/references/reference.html">傳送系統 API 參考</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/dynamic-ingest/index.html">動態內嵌 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">概述：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html">快速入門：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動態內嵌的來源檔案上傳 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動態傳遞概觀</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動態內嵌 API：最佳實務</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html">動態內嵌通知</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html">取得動態內嵌要求的狀態</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">後備/試策略</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">與 S3 搭配使用動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/ugc-strategies.html">教資會策略</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/references/reference.html">動態內嵌 API 參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動態內嵌 API 版本資訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">內嵌欄位參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動態內嵌錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/ingest-guides/index.html">內嵌指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">使用上下文感知編碼</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html">動態傳遞內嵌優先順序佇列</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html">實作多個音軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">影像和動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">透過媒體分享進行動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">使用 DRM 擷取內容</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">擷取網頁 VTT 檔案</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html">動態內嵌 API 測試儀</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html">內嵌視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html">重新轉碼視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html">取代視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">新增排程視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">新增文字軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html">擷取低優先順序視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">蟒蛇代碼</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/ingest-profiles/index.html">內嵌設定檔 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">概述：內嵌設定檔 API </a></li>
-                        
-                        <li><a href="/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html">練習區域：內嵌設定檔 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/hevc-video.html">HEVC 影片</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/cae-fast-publish.html">CAE 快速發佈</a></li>
-                        
-                        <li><a href="/general/audio-content.html">音訊內容</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/mp4s-dynamic-delivery.html">動態傳遞中的 MP3 </a></li>
-                        
-                        <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">最佳實務</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/references/reference.html">內嵌設定檔 API 參考</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html">內嵌設定檔欄位參考</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">標準內嵌設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準即時擷取設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/fields-custom-live-ingest-profiles.html">自訂即時擷取設定檔的欄位</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html">建立自訂動態傳送設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html">建立自訂 CAE 設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">將設定檔新增至多個帳戶</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">取得帳戶的所有設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html">設定預設設定檔</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/oauth/index.html">OAuth API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/getting-started/overview-oauth-api-v4.html">概述：OAuth 應用程式介面</a></li>
-                        
-                        <li><a href="/oauth/getting-started/quick-start-oauth.html">快速入門：OAuth 應用程式介面</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">創建客戶端憑據：cURL </a></li>
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">建立用戶端認證：郵遞員</a></li>
-                        
-                        <li><a href="/oauth/guides/getting-access-tokens.html">取得存取權杖</a></li>
-                        
-                        <li><a href="/oauth/guides/api-operations-client-credentials-requests.html">用戶端認證要求的 API 作業</a></li>
-                        
-                        <li><a href="/oauth/guides/get-your-bc-token.html">取得您的 BC_Token </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/references/reference.html">OAuth 應用程式介面參考</a></li>
-                        
-                        <li><a href="/oauth/references/oauth-api-error-message-reference.html">OAuth API 錯誤消息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">建立用戶端認證</a></li>
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">取得存取權杖</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/playback/index.html">播放 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/getting-started/overview-playback-api.html">概述：播放 API </a></li>
-                        
-                        <li><a href="/playback/getting-started/quick-start-playback-api.html">快速入門：播放 API </a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋</a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">目錄搜尋架構</a></li>
-                        
-                        <li><a href="/playback/guides/static-url-delivery.html">靜態 URL 傳送</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/references/reference_v1.html">播放 API 參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-video-fields-reference.html">視訊欄位參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-playlist-fields-reference.html">播放清單欄位參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-error-reference.html">錯誤參考</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/code-samples/thumbnail-grid.html">視訊縮圖格點</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-mrss-generator.html">MRSS 產生器</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html">從播放清單中的JSON/MRSS 摘要</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/player-management/index.html">玩家管理 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/getting-started/overview-player-management-api.html">概述：玩家管理 API </a></li>
-                        
-                        <li><a href="/player-management/getting-started/step-step-player-management.html">逐步：玩家管理</a></li>
-                        
-                        <li><a href="/player-management/getting-started/training-demand-quick-start-player-management.html">隨選訓練：玩家管理快速入門</a></li>
-                        
-                        <li><a href="/player-management/getting-started/oauth-guide.html">OAuth 指南</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/guides/player-configuration-guide.html">播放程式組態指南</a></li>
-                        
-                        <li><a href="/player-management/guides/plugin-registry.html">外掛程式登錄</a></li>
-                        
-                        <li><a href="/player-management/guides/pre-release-player.html">發行前播放程式</a></li>
-                        
-                        <li><a href="/player-management/guides/player-repositories.html">播放程式儲存庫</a></li>
-                        
-                        <li><a href="/player-management/guides/guide-embed-apis.html">內嵌 API </a></li>
-                        
-                        <li><a href="/player-management/guides/opting-out-automatic-player-updates.html">選擇退出玩家自動更新</a></li>
-                        
-                        <li><a href="/player-management/guides/embedding-brightcove-players-cms.html">在 CMS 中嵌入布萊特灣玩家</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/references/reference.html">玩家管理 API 參考</a></li>
-                        
-                        <li><a href="/player-management/references/player-management-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/code-samples/setup-player-management-samples.html">玩家管理範例的設定</a></li>
-                        
-                        <li><a href="/player-management/code-samples/bulk-updating-brightcove-default-player.html">大量更新預設播放程式</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-create-player.html">建立玩家</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-display-players.html">顯示播放器</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-delete-players.html">刪除玩家</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html">使用上次檢視的資料 (_L) </a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-programmatically-update-players.html">以編程方式更新播放器</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/policy/index.html">政策 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/getting-started/overview-policy-api.html">概述：政策 API </a></li>
-                        
-                        <li><a href="/policy/getting-started/quick-start-policy-api.html">程式碼範例：產生原則金鑰</a></li>
-                        
-                        <li><a href="/policy/getting-started/policy-keys.html">玩家的策略金鑰</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/references/reference.html">政策 API 參考</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/social-syndication/index.html">社交聯合發行 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/getting-started/public-syndication-api-overview.html">概述：聯合發行項目設定 API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/feed-syndication-api-overview.html">概述：聯合發行摘要 API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/sample-templates-universal-syndication.html">通用聯合發行項目範本</a></li>
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 和播放應用程式：視訊搜尋 v2 </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/references/configuration-reference.html">聯合發行項目設定 API 參考</a></li>
-                        
-                        <li><a href="/social-syndication/references/feed-reference.html">聯合發行摘要 API 參考</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/dynamic-ingest-legacy/index.html">動態內嵌 API 舊版<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/overview-dynamic-ingest-api-legacy-ingest.html">概述：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/quick-start-dynamic-ingest-api-legacy-ingest.html">快速入門：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/migrating-legacy-ingest-system-dynamic-delivery.html">移轉至動態傳遞</a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動態內嵌的來源檔案上傳 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動態內嵌 API：最佳實務</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/general/dynamic-ingest-notifications-legacy-ingest.html">動態內嵌通知</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/general/get-status-dynamic-ingest-requests-legacy-ingest.html">取得請求狀態</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">後備/試策略</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">與 S3 搭配使用動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/ugc-strategies.html">教資會策略</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/references/reference.html">動態內嵌 API 參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動態內嵌 API 版本資訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">內嵌欄位參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動態內嵌錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/ingest-guides/index.html">內嵌指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">影像和動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">透過媒體分享進行動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">擷取網頁 VTT 檔案</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-ingesting-videos-legacy-ingest.html">內嵌視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-legacy-ingest.html">重新轉碼視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-replacing-videos-legacy-ingest.html">取代視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-legacy-ingest.html">新增排程視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">新增文字軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">蟒蛇代碼</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/ingest-profiles-legacy/index.html">內嵌設定檔 API 舊版<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles-legacy/getting-started/overview-ingest-profiles-api-legacy-ingest.html">概述：內嵌設定檔 API </a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/getting-started/quick-start-ingest-profiles-api.html">快速入門：內嵌設定檔 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/guides/rendition-settings-and-video-quality.html">節目設定和視訊品質</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/guides/conditional-output.html">條件輸出</a></li>
-                        
-                        <li><a href="/general/audio-content.html">音訊內容</a></li>
-                        
-                        <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">最佳實務</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/references/reference.html">內嵌設定檔 API 參考</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/references/ingest-profiles-api-fields-reference-legacy-ingest.html">內嵌設定檔欄位參考</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">標準內嵌設定檔：舊式系統</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準即時擷取設定檔</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">將設定檔新增至多個帳戶</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">取得帳戶的所有設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/code-samples/ingest-profiles-api-sample-set-default-profile-multiple-accounts-legacy-ingest.html">設定預設設定檔多個帳戶</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/training/index.html">訓練<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/training/online-training-courses.html">線上訓練課程</a></li>
-                  
-                
-                  
-                    <li><a href="/training/register-training.html">註冊參加講師指導訓練</a></li>
-                  
-                
-                  
-                    <li><a href="/training/brightcove-university.html">布萊特灣大學培訓課程</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/support/index.html">支援<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">檢視布萊特灣系統狀態頁面</a></li>
-                  
-                
-                  
-                    <li><a href="/support/contact-sales.html">聯絡銷售人員</a></li>
-                  
-                
-                  
-                    <li><a href="/support/opening-case-with-brightcove-support.html">開啟支援案例</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="導覽功能表"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">頁面內容</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="在新分頁中開啟" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>CM/播放API：影片搜尋 v1</h1>
+---
+title: '內容管理系統/播放 API：視頻搜索 v1'
+description: '在本主題中，您將學習如何使用 CMS API 在您的帳戶中搜索視頻。這<span translate="No">內容管理系統 API</span>提供了一種在您的視頻雲庫中搜索視頻的編程方式。本主題提供有關搜索語法的詳細信息。<strong>注意：這是原始搜索語法 - 我們建議您使用更簡單的<a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">視頻搜索語法 v2</a></strong> . '
+parent: Searching 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
 <article class="bcls-article">
-  <summary>在本主題中，您將學習如何使用 CMS API 搜尋帳戶中的影片。的<span translate="No">CMS API</span>提供了一種編程方式來搜索“視頻雲”庫中的視頻。本主題提供搜尋語法的詳細資訊。<strong>注意：這是原始搜索語法-我們建議您使用簡單的搜索語法<a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">視頻搜索語法v2</a></strong>。</summary>
+  <summary>{{ page.description }}</summary>
     <section class="bcls-section">
-    <h2 id="Introduction">簡介</h2>
+    <h2 id="Introduction">介紹</h2>
 
     <p>在本主題中，您將學習如何執行以下操作：</p>
 
     <ul>
-      <li>使用來創建和限制基本搜索<code translate="No">q</code>參數</li>
-      <li>排序搜索結果</li>
-      <li>使用必填項和排除項進行搜索</li>
-      <li>使用帶引號的搜索來匹配確切的詞和多個詞</li>
+      <li>使用<code translate="No">q</code>範圍</li>
+      <li>對搜索結果進行排序</li>
+      <li>使用必需和排除的術語進行搜索</li>
+      <li>使用帶引號的搜索來匹配精確的術語和多個單詞</li>
       <li>搜索自定義字段</li>
       <li>搜索具有特定日期和範圍的日期字段</li>
-      <li>合併搜尋條件</li>
+      <li>組合搜索條件</li>
     </ul>
 
-    <aside class="bcls-aside bcls-aside--information">請注意，本主題涵蓋視頻搜索-另請參見<a href="/cms/searching/cms-api-playlists-search.html">播放清單搜尋</a>。</aside>
+    <aside class="bcls-aside bcls-aside--information">請注意，本主題涵蓋視頻搜索 - 另請參閱<a href="/cms/searching/cms-api-playlists-search.html">播放列表搜索</a> .</aside>
     </section>
     <!-- API Usage -->
 
     <section class="bcls-section">
-    <h2 id="API_usage">API使用</h2>
+    <h2 id="API_usage">接口使用</h2>
 
-    <p>搜索功能可以與<span translate="No">CMS API</span>或Playback API。</p>
+    <p>搜索功能可用於<span translate="No">內容管理系統 API</span>或播放 API。</p>
 
-    <aside class="bcls-aside bcls-aside--information">這兩個API的搜索字符串必須至少包含3個字符。</aside>
+    <aside class="bcls-aside bcls-aside--information">任一 API 的搜索字符串必須至少包含 3 個字符。</aside>
 
-    <h3>CMS 應用程式</h3>
+    <h3>內容管理系統 API</h3>
 
-    <p>將搜索與CMS API結合使用時，以下條件適用：</p>
+    <p>將搜索與 CMS API 結合使用時，以下內容適用：</p>
 
     <ul>
-      <li>所有請求（包括搜索）都需要包含您的訪問令牌的授權標頭。如需有關如何取得用戶端認證並使用它們來擷取存取權杖的詳細資訊，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth 概觀</a>。</li>
-      <li>搜索返回的最大視頻數量沒有限制，但速率限制確實適用。</li>
-      <li>搜索結果包括您帳戶中的所有視頻，無論它們是否可以播放和/或受地理位置限制。</li>
+      <li>所有請求（包括搜索）都需要一個包含您的訪問令牌的授權標頭。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .</li>
+      <li>從搜索返回的最大視頻數沒有限制，但速率限制確實適用。</li>
+      <li>搜索結果包括您帳戶中的所有視頻，無論它們是否可播放，和/或受地域限制。</li>
     </ul>
 
-    <p>有關API請求/響應的詳細信息，請參見<strong>取得影片</strong>的部分<a href="/cms/references/reference.html#api-videoGroup-Get_Videos">CMS API參考</a>。</p>
+    <p>有關 API 請求/響應的詳細信息，請參閱<strong>獲取視頻</strong>的部分<a href="/cms/references/reference.html#api-videoGroup-Get_Videos">CMS API 參考</a> .</p>
 
-    <h3>播放 API</h3>
+    <h3>播放接口</h3>
 
-    <p>將搜索與Playback API結合使用時，適用以下條件：</p>
+    <p>在 Playback API 中使用搜索時，以下內容適用：</p>
 
     <ul>
-      <li>使用Playback API的搜索請求需要一個策略密鑰，該密鑰為<a href="/policy/getting-started/policy-keys.html">啟用搜索</a>。</li>
+      <li>使用 Playback API 的搜索請求需要一個 Policy Key，它是<a href="/policy/getting-started/policy-keys.html">啟用搜索</a> .</li>
       <li>有一個<a href="/playback/references/reference_v1.html#api-videoGroup-Get_Videos">限制</a>搜索返回的最大視頻數。</li>
-      <li>搜索結果將僅返回可播放的視頻（帶有<code translate="No">state:inactive</code>將被忽略）。</li>
-      <li>搜索會強制執行播放策略限制，例如從結果中刪除受地理位置限制的視頻。</li>
-      <li>緩存結果可提供更高的請求速率和更快的響應，並且沒有速率限制。</li>
+      <li>搜索結果只會返回可播放的視頻（帶有<code translate="No">state:inactive</code>將被忽略）。</li>
+      <li>搜索強制執行播放策略限制，例如從結果中省略受地理限制的視頻。</li>
+      <li>結果緩存提供了更高的請求率和更快的響應，並且沒有速率限制。</li>
     </ul>
 
-    <aside class="bcls-aside bcls-aside--information">播放 API 搜尋的每個要求限制為 100 個影片，上限為 1000 個影片。了解如何<a href="/playback/getting-started/overview-playback-api.html#Search_videos">搜索結果頁面</a>。當您需要返回1000個以上的視頻時，必須使用CMS API。</aside>
+    <aside class="bcls-aside bcls-aside--information">Playback API 搜索限制為每個請求 100 個視頻，上限為 1000 個視頻。了解如何<a href="/playback/getting-started/overview-playback-api.html#Search_videos">翻頁搜索結果</a> .當您需要返回超過 1000 個視頻時，您必須使用 CMS API。</aside>
 
-    <p>如需 API 要求/回應的詳細資訊，請參閱<a href="/playback/references/reference_v1.html">播放 API 參考</a>資料的 [ <strong>取得影片</strong> ] 區段。</p>
+    <p>有關 API 請求/響應的詳細信息，請參閱<strong>獲取視頻</strong>的部分<a href="/playback/references/reference_v1.html">播放 API 參考</a> .</p>
     </section>
     <!-- Basic Search -->
 
     <section class="bcls-section">
-    <h2 id="Basic_search">基本搜尋</h2>
+    <h2 id="Basic_search">基本搜索</h2>
 
-    <p>要在您的媒體庫中搜索術語，請使用<code translate="No">q</code>參數。</p>
+    <p>要在媒體庫中搜索術語，請使用<code translate="No">q</code>範圍。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q={search terms}</code></pre>
 
-    <p>您指定的搜索字詞應該是網址編碼的字詞列表，以空格分隔。</p>
+    <p>您指定的搜索詞應該是用空格分隔的 url 編碼的詞列表。</p>
 
-    <p>搜索支持<em>發芽</em>。詞幹是詞到詞根以及其他詞源於相同詞根的映射。例如，對“運行”的搜索應匹配在指定字段中具有“正在運行”或“運行”的視頻。它會<strong>不</strong>匹配“符文”，因為“符文”的根沒有“符文”。</p>
+    <p>搜索支持 <em>詞乾化</em>.詞乾化是將一個詞映射到詞根和其他來自同一詞根的詞。例如，對“run”的搜索應該匹配在指定字段中包含“running”或“ran”的視頻。它會<strong>不是</strong>匹配“rune”，因為“rune”沒有“run”作為它的根。</p>
 
-    <p>如果您沒有為搜索詞提供限定詞，例如<code translate="No">q=bird</code>，請求將在以下字段中搜索該值：</p>
+    <p>當您沒有為搜索詞提供限定詞時，例如<code translate="No">q=bird</code>，請求將在以下字段中搜索該值：</p>
 
     <ul>
       <li><code translate="No">id <sup><strong><a href="#note1-1">[1-1]</a> </strong></sup></code></li>
       <li><code translate="No">name</code></li>
       <li><code translate="No">description</code></li>
       <li><code translate="No">long_description</code></li>
-      <li><code translate="No">text</code>（不是真正的元數據字段，而是可用於搜索<code translate="No">name</code>，<code translate="No">description</code>和<code translate="No">long_description</code> -例如<code translate="No">q=text:bird</code>）</li>
+      <li><code translate="No">text</code>（不是真正的元數據字段，而是可用於搜索<code translate="No">name</code> , <code translate="No">description</code>， 和<code translate="No">long_description</code> - 例如<code translate="No">q=text:bird</code> )</li>
       <li><code translate="No">tags</code></li>
       <li><code translate="No">reference_id</code></li>
       <li><code translate="No">custom_fields</code>（搜索所有自定義字段）</li>
-      <li><code translate="No">custom_field_name</code>（搜索特定的命名自定義字段）<sup><strong><a href="#note1-2"> [1-2]</a></strong></sup></li>
+      <li><code translate="No">custom_field_name</code>（搜索特定命名的自定義字段）<sup>[1-2]<strong><a href="#note1-2"></a></strong></sup></li>
     </ul>
 
-    <p><strong>注意事項</strong></p>
+    <p><strong>筆記</strong></p>
 
-    <div class="bcls-footnote" id="note1-1"><sup><strong>[1-1]</strong></sup>注意：為了確保一致性，包括了按ID搜索，但搜索<code translate="No">q=id:12345</code>將返回與請求完全相同的結果<code translate="No">https://cms.api.brightcove.com/v1/accounts/{account_id}/videos/12345</code></div>
+    <div class="bcls-footnote" id="note1-1"><sup>[1-1]<strong></strong></sup> 注意：為了一致性，包括按 id 搜索，但搜索<code translate="No">q=id:12345</code>將返回與請求完全相同的結果<code translate="No">https://cms.api.brightcove.com/v1/accounts/{account_id}/videos/12345</code></div>
 
-    <div class="bcls-footnote" id="note1-2"><sup><strong>[1-2]</strong></sup>如果您具有列表類型的自定義字段，並且想要返回具有多個值之一的視頻，則可以這樣操作：
+    <div class="bcls-footnote" id="note1-2"><sup>[1-2]<strong></strong></sup> 如果您有一個列表類型的自定義字段並希望返回具有多個值之一的視頻，您可以這樣做：
 
-    <p>假設您有一個名為<code translate="No">color</code>可以採用以下值：<code translate="No">red</code>，<code translate="No">green</code>，<code translate="No">yellow</code>， 要么<code translate="No">blue</code>。您想查找將該字段設置為值的視頻<code translate="No">green</code>要么<code translate="No">blue</code>：</p>
+    <p>假設您有一個名為的字段<code translate="No">color</code>可以採用以下值：<code translate="No">red</code> , <code translate="No">green</code> , <code translate="No">yellow</code>， 或者<code translate="No">blue</code> .您想查找將該字段設置為該值的視頻<code translate="No">green</code>或者<code translate="No">blue</code>：</p>
 
     <pre>
       <code class="language-http" translate="No">q=color:green%20color:blue</code></pre>
     </div>
 
-    <p>範例：此請求返回的視頻值為<code translate="No">bird</code>在上面列出的至少一個字段中。</p>
+    <p>例子：此請求返回值為<code translate="No">bird</code>至少在上面列出的領域之一。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=bird </code></pre>
 
-    <aside class="bcls-aside bcls-aside--warning">少於3個字符的搜索字符串將不起作用-而是將返回所有視頻。</aside>
+    <aside class="bcls-aside bcls-aside--warning">少於 3 個字符的搜索字符串將不起作用 - 相反，將返回所有視頻。</aside>
 
-    <h3>將搜索限製到特定的屬性</h3>
+    <h3>將搜索限制為特定屬性</h3>
 
-    <p>當您為搜索詞提供限定詞時，例如<code translate="No">q=name:bird</code>，請求將搜索視頻<code translate="No">name</code>值為的字段<code translate="No">bird</code>。</p>
+    <p>當您為搜索詞提供限定詞時，例如<code translate="No">q=name:bird</code>，請求將搜索視頻<code translate="No">name</code>字段的值<code translate="No">bird</code> .</p>
 
-    <p>範例：此請求返回的視頻值為<code translate="No">wildlife</code>在裡面<code translate="No">name</code>領域。</p>
+    <p>例子：此請求返回值為<code translate="No">wildlife</code>在裡面<code translate="No">name</code>場地。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=name:wildlife</code></pre>
 
-    <p>支援的搜尋欄位是：</p>
+    <p>支持的搜索字段是：</p>
 
     <table class="bcls-table" id="supported_search_fields">
-      <caption class="bcls-caption--table">支援的搜尋欄位</caption>
+      <caption class="bcls-caption--table">支持的搜索字段</caption>
       <thead class="bcls-table__head">
         <tr>
-          <th>欄位</th>
-          <th>合法價值</th>
+          <th>場地</th>
+          <th>法律價值</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
           <td><code translate="No">name</code></td>
-          <td>字串或以括弧括住的字串</td>
+          <td>字符串或帶引號的字符串</td>
         </tr>
         <tr>
-          <td>文字</td>
-          <td>字串或引號字串 (搜尋<code translate="No">name<code translate="No">description</code></code>、和<code translate="No">long_description</code> )</td>
+          <td>文本</td>
+          <td>字符串或帶引號的字符串（搜索<code translate="No">name</code> , <code translate="No">description</code>， 和<code translate="No">long_description</code> )</td>
         </tr>
         <tr>
           <td><code translate="No">tags</code></td>
-          <td>字符串或引號字符串（多個標籤應以逗號分隔）</td>
+          <td>字符串或帶引號的字符串（多個標籤應以逗號分隔）</td>
         </tr>
         <tr>
           <td><code translate="No">custom_fields</code></td>
-          <td>字符串或帶引號的字符串（搜索所有自定義字段-您也可以使用特定的自定義字段<em>內部</em>名稱）<sup><strong><a href="#note2-1"> [2-1]</a></strong></sup></td>
+          <td>字符串或帶引號的字符串（搜索所有自定義字段 - 您也可以使用特定的自定義字段 <em>內部的</em> 姓名） <sup><strong><a href="#note2-1">[2-1]</a></strong></sup></td>
         </tr>
         <tr>
           <td><code translate="No">reference_id</code></td>
-          <td>字串或引號字串</td>
+          <td>字符串或帶引號的字符串</td>
         </tr>
         <tr>
           <td><code translate="No">state</code></td>
-          <td><code translate="No">ACTIVE</code>，<code translate="No">INACTIVE</code>，<code translate="No">PENDING</code>，<code translate="No">DELETED</code><sup><strong><a href="#note2-3"> [2-3]</a></strong></sup></td>
+          <td><code translate="No">ACTIVE</code> , <code translate="No">INACTIVE</code> , <code translate="No">PENDING</code> , <code translate="No">DELETED</code> <sup><strong><a href="#note2-3">[2-3]</a></strong></sup></td>
         </tr>
         <tr>
           <td><code translate="No">updated_at</code></td>
@@ -1482,33 +173,33 @@ Brightcove
           <td>日期範圍</td>
         </tr>
         <tr>
-          <td><code translate="No">complete</code><sup><strong><a href="#note2-2"> [2-2]</a></strong></sup></td>
-          <td><code translate="No">true</code>或<code translate="No">false</code></td>
+          <td><code translate="No">complete</code> <sup><strong><a href="#note2-2">[2-2]</a></strong></sup></td>
+          <td><code translate="No">true</code>或者<code translate="No">false</code></td>
         </tr>
       </tbody>
     </table>
 
-    <h3>注意事項</h3>
+    <h3>筆記</h3>
 
     <ul>
-      <li id="note2-1"><sup><strong>[2-1]</strong></sup>它是<strong>不</strong>可以搜索自定義字段沒有值或值為的視頻<code translate="No">null</code>，因為除非為該字段提供值，否則它根本不會包含在視頻元數據中。</li>
-      <li id="note2-2"><sup><strong>[2-2]</strong></sup>當您創建新視頻時，<code translate="No">complete</code>屬性自動設置為<code translate="No">false</code>。視頻存在一個副本時，<code translate="No">complete</code>屬性將自動設置為<code translate="No">true</code>。</li>
-      <li id="note2-3"><sup><strong>[2-3]</strong></sup>以下限制適用於搜索DELETED視頻：
+      <li id="note2-1"><sup>[2-1]<strong></strong></sup> 這是<strong>不是</strong>可以搜索具有沒有值或值的自定義字段的視頻<code translate="No">null</code>，因為除非該字段已被賦予值，否則它根本不包含在視頻元數據中。</li>
+      <li id="note2-2"><sup>[2-2]<strong></strong></sup> 當您創建新視頻時，<code translate="No">complete</code>屬性自動設置為<code translate="No">false</code> .一旦存在視頻的一種再現，<code translate="No">complete</code>屬性將自動設置為<code translate="No">true</code> .</li>
+      <li id="note2-3"><sup>[2-3]<strong></strong></sup> 以下限制適用於搜索已刪除的視頻：
       <ul>
-        <li>搜索已刪除的視頻是<strong>只要</strong>可通過CMS API獲得； Playback API將<strong>不</strong>返回已刪除的視頻</li>
-        <li>只要<strong>將返回前10天（當前時間減去10天）內刪除的視頻</strong></li>
+        <li>搜索已刪除的視頻是<strong>只要</strong>使用 CMS API 可用；播放 API 將<strong>不是</strong>返回已刪除的視頻</li>
+        <li>僅有的<strong>將返回前 10 天（當前時間減去 10 天）刪除的視頻</strong></li>
       </ul>
       </li>
     </ul>
 
-    <aside class="bcls-aside bcls-aside--information">使用字符串值的字段將對該字段執行文本搜索。</aside>
+    <aside class="bcls-aside bcls-aside--information">使用字符串值的字段對該字段執行文本搜索。</aside>
     </section>
     <!-- Sorting results -->
 
     <section class="bcls-section">
     <h2 id="Sorting_of_search_results">搜索結果排序</h2>
 
-    <p>的<code translate="No">sort</code>參數可讓您對視頻獲取請求的結果進行排序。您可以對以下內容進行排序：</p>
+    <p>這<code translate="No">sort</code>參數允許您對視頻獲取請求的結果進行排序。您可以按以下順序排序：</p>
 
     <ul>
       <li><code translate="No">reference_id</code></li>
@@ -1523,24 +214,24 @@ Brightcove
       <li><code translate="No">plays_trailing_week</code></li>
     </ul>
 
-    <p>當沒有通過使用顯式排序結果<code translate="No">sort</code>，結果將根據稱為術語頻率/文檔反向頻率或<code translate="No">TF-IDF</code>。看到<a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">這裡</a>欲獲得更多信息。</p>
+    <p>當未通過使用顯式排序結果時<code translate="No">sort</code>，結果將根據稱為術語頻率/逆文檔頻率的算法進行排序或<code translate="No">TF-IDF</code> .看<a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">這裡</a>想要查詢更多的信息。</p>
 
-    <p>舉例來說，假設您搜尋字詞<code translate="No">coastal,city</code>並且您帳戶中有120部視頻，這些術語在視頻元數據中的某個位置（<code translate="No">name</code>，<code translate="No">description</code>，<code translate="No">tags</code>，依此類推），並且還與結果的排序標準相匹配（例如，它們都具有相同的<code translate="No">schedule_starts_at</code>約會時間）。視頻出現在結果中的程度取決於一個或兩個術語在元數據中出現的頻率，並且對在整個視頻庫中最頻繁出現的術語給予更大的重視。</p>
+    <p>例如，假設您搜索條件<code translate="No">coastal,city</code>並且您的帳戶中有 120 個視頻在視頻元數據的某處包含這些術語（<code translate="No">name</code> , <code translate="No">description</code> , <code translate="No">tags</code>，等等）並且也符合結果的排序標準（例如，它們都具有相同的<code translate="No">schedule_starts_at</code>約會時間）。視頻在結果中出現的頻率取決於一個或兩個術語在元數據中出現的頻率，對於整個視頻庫中出現頻率最高的術語給予更大的權重。</p>
     </section>
     <!-- Required/Excluded Search -->
 
     <section class="bcls-section">
-    <h2 id="required_excluded_terms">必要/排除的詞彙</h2>
+    <h2 id="required_excluded_terms">必需/排除條款</h2>
 
-    <p>您可以將搜尋詞彙標示為必要 (傳回的視訊必須相符) 或排除 (傳回的視訊不必相符)。這由URI編碼控制<code translate="No">+ (%2B)</code>要么<code translate="No">-</code>在學期前立即簽名。</p>
+    <p>您可以根據需要標記搜索詞（返回的視頻必須匹配）或排除（返回的視頻必須不匹配）。這是由 URI 編碼的控制<code translate="No">+ (%2B)</code>或者<code translate="No">-</code>緊接在該術語之前的標誌。</p>
 
-    <p>您必須編碼<code translate="No">+</code>如<code translate="No">%2B</code>當使用它來表示必填項時。</p>
+    <p>你必須編碼<code translate="No">+</code>作為<code translate="No">%2B</code>當使用它來表示所需的術語時。</p>
 
     <table class="bcls-table">
-      <caption class="bcls-caption--table">必要/排除條款</caption>
+      <caption class="bcls-caption--table">必需/排除條款</caption>
       <thead class="bcls-table__head">
         <tr>
-          <th>例</th>
+          <th>例子</th>
           <th>網址編碼</th>
           <th>意義</th>
         </tr>
@@ -1549,50 +240,50 @@ Brightcove
         <tr>
           <td><code translate="No">+foo</code></td>
           <td><code translate="No">%2Bfoo</code></td>
-          <td>視頻必須包含該詞<code translate="No">foo</code>在裡面<code translate="No">name</code>，<code translate="No">description</code>，<code translate="No">long_description</code>，<code translate="No">tags</code>，<code translate="No">reference_id</code>要么<code translate="No">custom_fields</code></td>
+          <td>視頻必須包含術語<code translate="No">foo</code>在裡面<code translate="No">name</code> , <code translate="No">description</code> , <code translate="No">long_description</code> , <code translate="No">tags</code> , <code translate="No">reference_id</code>或者<code translate="No">custom_fields</code></td>
         </tr>
         <tr>
           <td><code translate="No">+custom_fields:foo</code></td>
           <td><code translate="No">%2Bcustom_fields:foo</code></td>
-          <td>視頻必須包含值<code translate="No">foo</code>對於某些自定義字段</td>
+          <td>視頻必須包含值<code translate="No">foo</code>對於一些自定義字段</td>
         </tr>
         <tr>
           <td><code translate="No">+foo -bar</code></td>
           <td><code translate="No">%2Bfoo%20-bar</code></td>
-          <td>視頻必須包含該詞<code translate="No">foo</code>但不得包含該詞<code translate="No">bar</code>在裡面<code translate="No">name</code>，<code translate="No">description</code>，<code translate="No">long_description</code>，<code translate="No">tags</code>，<code translate="No">reference_id</code>要么<code translate="No">custom_fields</code></td>
+          <td>視頻必須包含術語<code translate="No">foo</code>但不得包含該術語<code translate="No">bar</code>在裡面<code translate="No">name</code> , <code translate="No">description</code> , <code translate="No">long_description</code> , <code translate="No">tags</code> , <code translate="No">reference_id</code>或者<code translate="No">custom_fields</code></td>
         </tr>
         <tr>
           <td><code translate="No">+name:foo -name:bar</code></td>
           <td><code translate="No">%2Bname:foo%20-name:bar</code></td>
-          <td>視頻必須包含該詞<code translate="No">foo</code>但不得包含該詞<code translate="No">bar</code>在裡面<code translate="No">name</code></td>
+          <td>視頻必須包含術語<code translate="No">foo</code>但不得包含該術語<code translate="No">bar</code>在裡面<code translate="No">name</code></td>
         </tr>
       </tbody>
     </table>
 
-    <p>範例：此請求返回的視頻值為<code translate="No">sea</code>但不要具有<code translate="No">lake</code>在裡面<code translate="No">tags</code>領域。</p>
+    <p>例子：此請求返回值為<code translate="No">sea</code>但沒有價值<code translate="No">lake</code>在裡面<code translate="No">tags</code>場地。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=%2Btags:sea%20-tags:lake</code></pre>
 
-    <p>看到<a href="#combine_search_criteria">組合搜索條件</a>下面介紹如何使用必需/排除的語法對多個搜索字詞強制執行AND邏輯。</p>
+    <p>看<a href="#combine_search_criteria">組合搜索條件</a>下面查看如何使用必需/排除的語法來強制執行多個搜索詞的 AND 邏輯。</p>
     </section>
     <!-- Combine search with other params -->
 
     <section class="bcls-section">
-    <h2 id="otherParams">與其他參數結合</h2>
+    <h2 id="otherParams">結合其他參數</h2>
 
-    <p>搜索（使用<code translate="No">q</code>參數）可以與其他參數（例如<code translate="No">sort</code>，<code translate="No">limit</code>和<code translate="No">offset</code>。所有網址參數均以<code translate="No">&amp;</code>。參數順序無關緊要。</p>
+    <p>搜索（使用<code translate="No">q</code>參數）可以與其他參數組合，例如<code translate="No">sort</code> , <code translate="No">limit</code>和<code translate="No">offset</code> .所有 URL 參數都由<code translate="No">&amp;</code> .參數順序無關緊要。</p>
 
-    <aside class="bcls-aside bcls-aside--warning">搜索參數<code translate="No">limit</code>的最大值為<strong>100</strong>每個請求。請參閱<a href="/cms/searching/using-cms-api-page-search-results.html">頁面搜索結果</a>關於視頻分頁。</aside>
+    <aside class="bcls-aside bcls-aside--warning">搜索參數<code translate="No">limit</code>有一個最大值<strong>100</strong>每個請求。請參見<a href="/cms/searching/using-cms-api-page-search-results.html">頁面搜索結果</a>關於視頻分頁。</aside>
 
-    <h3>範例</h3>
+    <h3>例子</h3>
 
-    <p>範例：此請求返回的視頻值必須為<code translate="No">bar</code>在裡面<code translate="No">tag</code>字段，並且可能有一個<code translate="No">name</code>包含價值<code translate="No">foo</code></p>
+    <p>例子：此請求返回必須具有值的視頻<code translate="No">bar</code>在裡面<code translate="No">tag</code>字段並且可能有一個<code translate="No">name</code>包含價值<code translate="No">foo</code></p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">.../videos?q=name:foo%20%2Btags:bar&amp;sort=updated_at</code></pre>
 
-    <p>範例：此請求返回的視頻與上述相同，但還會按字段對這些結果進行排序<code translate="No">updated_at</code>然後將結果限制為僅10個視頻。</p>
+    <p>例子：此請求返回與上述相同的視頻，但另外按字段對這些結果進行排序<code translate="No">updated_at</code>然後將結果限制為僅 10 個視頻。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">.../videos?sort=updated_at&amp;q=name:foo%20%2Btags:bar&amp;limit=10</code></pre>
@@ -1600,11 +291,11 @@ Brightcove
     <!-- Quoted Search Terms -->
 
     <section class="bcls-section">
-    <h2 id="Quoted_search_terms">引用搜索字詞</h2>
+    <h2 id="Quoted_search_terms">引用的搜索詞</h2>
 
-    <p>依預設，搜尋會符合與您搜尋詞彙類似的字詞。如果你想匹配多個單詞，只需將術語包裝在引號中。</p>
+    <p>默認情況下，搜索會將相似的詞與您的搜索詞進行匹配。如果要匹配多個單詞，只需將術語括在引號中即可。</p>
 
-    <p>大多數瀏覽器和其他代理都會將文字引號（<code translate="No">"..."</code>）正確，但是如果遇到帶引號的搜索字詞似乎未返回正確結果的情況，請嘗試將引號替換為<code translate="No">%22</code>（<code translate="No">%22...%22</code>）</p>
+    <p>大多數瀏覽器和其他代理會處理文字引號 ( <code translate="No">"..."</code> ) 正確，但如果您遇到引用的搜索詞似乎沒有返回正確結果的情況，請嘗試將引號替換為<code translate="No">%22</code> ( <code translate="No">%22...%22</code> )</p>
 
     <pre class="line-numbers">
             <code class="language-http" translate="No">
@@ -1613,9 +304,9 @@ Brightcove
             </code>
           </pre>
 
-    <aside class="bcls-aside bcls-aside--information">請注意，引號要求匹配的視頻中包含所有術語，但不一定與這些術語完全匹配。例如，在<code translate="No">"home run"</code>可能會返回帶有以下文字的視頻<code translate="No">homeless</code>和<code translate="No">running</code>在標題中。</aside>
+    <aside class="bcls-aside bcls-aside--information">請注意，引號要求匹配視頻中包含所有術語，但不一定完全匹配這些術語。例如，搜索<code translate="No">"home run"</code>可能會返回帶有文字的視頻<code translate="No">homeless</code>和<code translate="No">running</code>在標題中。</aside>
 
-    <p>這也適用於搜索特定字段：</p>
+    <p>這在針對特定字段進行搜索時也有效：</p>
 
     <pre class="line-numbers">
             <code class="language-http" translate="No">
@@ -1624,24 +315,24 @@ Brightcove
             </code>
           </pre>
 
-    <h3>多個詞</h3>
+    <h3>多個單詞</h3>
 
-    <p>範例：請注意，此請求返回的視頻值為<code translate="No">sea</code>要么<code translate="No">mammal</code>在裡面<code translate="No">tags</code>領域。</p>
+    <p>例子：請注意，此請求返回具有以下值的視頻<code translate="No">sea</code>或者<code translate="No">mammal</code>在裡面<code translate="No">tags</code>場地。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=tags:sea,mammal</code></pre>
 
-    <p>但是，以下請求僅返回帶有標籤的視頻<code translate="No">sea,mammal</code>。</p>
+    <p>但是，以下請求僅返回具有標籤的視頻<code translate="No">sea,mammal</code> .</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=tags:"sea,mammal"</code></pre>
 
-    <aside class="bcls-aside bcls-aside--warning">標籤是一種特殊情況，您可以將多個標籤作為逗號分隔的列表進行搜索-對於其他字段（例如名稱，說明等）則不是這樣。對於其他多種條款，請將條款與<code translate="No">+</code>標誌，像這樣：<code translate="No">q=tags:"bird"%20name:"owl"</code>。</aside>
+    <aside class="bcls-aside bcls-aside--warning">標籤是一種特殊情況，您可以在其中搜索多個標籤作為逗號分隔的列表 - 這不適用於名稱、描述等其他字段。對於其他類型的多個術語，將術語與<code translate="No">+</code>簽名，像這樣：<code translate="No">q=tags:"bird"%20name:"owl"</code> .</aside>
     </section>
     <!-- Custom Field Search -->
 
     <section class="bcls-section">
-    <h2 id="custom_fields">自訂欄位</h2>
+    <h2 id="custom_fields">自定義字段</h2>
 
     <p>您可以搜索為視頻定義的任何自定義字段。</p>
 
@@ -1649,9 +340,9 @@ Brightcove
       <code class="language-http" translate="No">q=my_field:foo
       q=my_field:"foo"</code></pre>
 
-    <p class="BCL-aside">注意：所有自定義字段值都視為字符串。例如，如果您有一個列表類型的自定義字段，該字段可以使用值<code translate="No">true</code>要么<code translate="No">false</code>，搜索將查找那些字符串，而不是布爾值（在許多編程語言中，<code translate="No">1</code>和<code translate="No">0</code>可以與<code translate="No">true</code>和<code translate="No">false</code>作為布爾值，但搜索<code translate="No">q=my_boolean_field:1</code>將不會返回具有以下內容的視頻<code translate="No">my_boolean_field</code>設置<code translate="No">true</code>）。</p>
+    <p class="BCL-aside">注意：所有自定義字段值都被視為字符串。例如，如果您有一個列表類型的自定義字段，可以採用值<code translate="No">true</code>或者<code translate="No">false</code> , search 將尋找那些字符串，而不是布爾值（在許多編程語言中，<code translate="No">1</code>和<code translate="No">0</code>可以與<code translate="No">true</code>和<code translate="No">false</code>作為布爾值，但搜索<code translate="No">q=my_boolean_field:1</code>不會返回具有<code translate="No">my_boolean_field</code>設置<code translate="No">true</code>）。</p>
 
-    <p>範例：此請求返回的視頻值為<strong>動物</strong>在裡面<code translate="No">subject</code>自定義字段。</p>
+    <p>例子：此請求返回值為<strong>動物</strong>在裡面<code translate="No">subject</code>自定義字段。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/921483702001/videos?q=subject:animal</code></pre>
@@ -1661,141 +352,141 @@ Brightcove
     <section class="bcls-section">
     <h2 id="date_ranges">日期範圍</h2>
 
-    <p>如果您要在日期字段中進行搜索，則可以指定特定日期或日期範圍，使用兩個句點將開始日期和結束日期分開（<code translate="No">q=updated_at:2018-01-01..2018-02-01</code>）。</p>
+    <p>如果您在日期字段上進行搜索，您可以指定特定日期或日期範圍，使用兩個句點來分隔開始日期和結束日期 ( <code translate="No">q=updated_at:2018-01-01..2018-02-01</code>）。</p>
 
-    <p>這將搜索所有帶有<code translate="No">updated_at</code>值介於2012年8月1日至2012年10月8日之間。在這裡，我們以UTC格式指定每個日期。</p>
+    <p>這將搜索所有帶有<code translate="No">updated_at</code> 2012 年 8 月 1 日至 2012 年 10 月 8 日之間的值。在這裡，我們以 UTC 格式指定每個日期。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=updated_at:2012-08-01T00:00:00Z..2012-10-08T23:59:59Z</code></pre>
 
-    <p>您可以通過刪除時間成分來簡化此搜索。以下等同於上面的搜索。</p>
+    <p>您可以通過刪除時間組件來簡化此搜索。以下相當於上面的搜索。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=updated_at:2012-08-01..2012-10-08</code></pre>
 
     <h3>支持的日期格式</h3>
 
-    <p>支持的日期格式包括UTC和相對日期。</p>
+    <p>支持的日期格式包括UTC 和relative。</p>
 
     <table class="bcls-table">
       <caption class="bcls-caption--table">日期格式示例</caption>
       <thead class="bcls-table__head">
         <tr>
-          <th>格式（URI編碼格式）</th>
+          <th>格式（URI 編碼格式）</th>
           <th>意義</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
-          <td>2015-08-01T06：15：00Z</td>
-          <td>這代表UTC時間。</td>
+          <td>2015-08-01T06:15:00Z</td>
+          <td>這表示 UTC 時間。</td>
         </tr>
         <tr>
           <td>2012-08-01</td>
-          <td>這表示UTC一天中的午夜。該示例等效於2012-08-01T00：00：00Z</td>
+          <td>這表示 UTC 中一天的午夜。該示例相當於 2012-08-01T00:00:00Z</td>
         </tr>
         <tr>
-          <td>-1D</td>
-          <td>當前時間減去1天。 （看到<a href="#relativeDates">下面</a>）</td>
+          <td>-1天</td>
+          <td>當前時間減1天。 （看<a href="#relativeDates">以下</a> )</td>
         </tr>
       </tbody>
     </table>
 
     <h3 id="relativeDates">相對日期</h3>
 
-    <p>對於相對日期，我們支持一個方向（<code translate="No">+</code>要么<code translate="No">-</code>），然後是數字，然後是持續時間。相對日期始終從當前時間開始計算。合法期限為：分鐘，小時，天。</p>
+    <p>對於相對日期，我們支持一個方向（<code translate="No">+</code>或者<code translate="No">-</code> ) 後跟一個數字，後跟一個持續時間。相對日期始終從當前時間開始計算。法定持續時間為：分鐘、小時、天。</p>
 
-    <aside class="bcls-aside bcls-aside--warning">的<code translate="No">+</code>標誌必須用URI編碼為<code translate="No">%2B</code>。</aside>
+    <aside class="bcls-aside bcls-aside--warning">這<code translate="No">+</code>標誌必須被 URI 編碼為<code translate="No">%2B</code> .</aside>
 
-    <p>範例：</p>
+    <p>例子：</p>
 
     <table class="bcls-table">
       <caption class="bcls-caption--table">相對日期樣本</caption>
       <thead class="bcls-table__head">
         <tr>
-          <th>q日期參數</th>
-          <th>意思</th>
+          <th>q 日期參數</th>
+          <th>意義</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
-          <td>q = updated_at：-1day..NOW</td>
-          <td>從1天前更新到今天的視頻</td>
+          <td>q=updated_at:-1day..NOW</td>
+          <td>從 1 天前更新到今天的視頻</td>
         </tr>
         <tr>
-          <td>q = created_at：-2天</td>
-          <td>影片於2天前加入</td>
+          <td>q=created_at:-2 天</td>
+          <td>2 天前添加的視頻</td>
         </tr>
         <tr>
-          <td>q = updated_at：-4hours..NOW</td>
-          <td>視頻已從4小時前更新為當前時間</td>
+          <td>q=updated_at:-4hours..NOW</td>
+          <td>視頻從 4 小時前更新到當前時間</td>
         </tr>
         <tr>
-          <td>q = created_at：-60minutes ..</td>
-          <td>從60分鐘前添加到當前時間的視頻</td>
+          <td>q=created_at:-60 分鐘..</td>
+          <td>從 60 分鐘前添加到當前時間的視頻</td>
         </tr>
         <tr>
-          <td>q = created_at：2016-01-01 ..- 1d</td>
-          <td>從2015年1月1日到一天前創建的視頻</td>
+          <td>q=created_at:2016-01-01..-1d</td>
+          <td>2015 年 1 月 1 日至一天前創建的視頻</td>
         </tr>
         <tr>
-          <td>q = updated_at：-14d..NOW</td>
+          <td>q=updated_at:-14d..NOW</td>
           <td>過去兩週的視頻</td>
         </tr>
       </tbody>
     </table>
 
-    <h3>開放結束範圍</h3>
+    <h3>開放範圍</h3>
 
-    <p>如果您想要比對指定時間之前的所有日期，或者比對自指定時間以來的所有日期，請留下範圍的一個結尾。</p>
+    <p>如果您想匹配指定時間之前的所有日期，或匹配指定時間以來的所有日期，請保留範圍的一端。</p>
 
-    <p>範例：搜索最近2天修改的所有視頻</p>
+    <p>例子：搜索過去 2 天內修改過的所有視頻</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=updated_at:-2days..
       </code>
       </pre>
 
-    <p>範例：搜索在2013年8月11日或之後修改的所有視頻：</p>
+    <p>例子：搜索 2013 年 8 月 11 日或之後修改的所有視頻：</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=updated_at:2013-08-11T00:00:00Z..
       </code>
       </pre>
 
-    <h3><code translate="No">NOW</code>計劃日期的運算符</h3>
+    <h3><code translate="No">NOW</code>預定日期的運算符</h3>
 
-    <p>對於<code translate="No">schedule.starts_at</code>和<code translate="No">schedule.ends_at</code>， 您可以使用<code translate="No">NOW</code>作為日期值。這是一個便利運算符，可讓您基於當前日期時間設置動態查詢。幾個例子：</p>
+    <p>為了<code translate="No">schedule.starts_at</code>和<code translate="No">schedule.ends_at</code>， 您可以使用<code translate="No">NOW</code>作為日期值。這是一個方便的運算符，允許您根據當前日期時間設置動態查詢。幾個例子：</p>
 
     <table class="bcls-table">
-      <caption class="bcls-caption--table">計劃數據示例</caption>
+      <caption class="bcls-caption--table">調度數據示例</caption>
       <thead class="bcls-table__head">
         <tr>
           <th>從/到參數</th>
-          <th>URI編碼</th>
-          <th>意思</th>
+          <th>URI 編碼</th>
+          <th>意義</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
-          <td>?q = 排程。開始在:.. 現在</td>
-          <td>?q = 排程。開始在:.. 現在</td>
-          <td>starts_at是從時間開始到這一刻</td>
+          <td>?q=schedule.starts_at:..NOW</td>
+          <td>?q=schedule.starts_at:..NOW</td>
+          <td>starts_at 是從時間開始到這一刻</td>
         </tr>
         <tr>
-          <td>?Q = 排程。開始 _ 在:現在</td>
-          <td>?Q = 排程。開始 _ 在:現在</td>
-          <td>從這一刻開始</td>
+          <td>?q=schedule.starts_at:NOW</td>
+          <td>?q=schedule.starts_at:NOW</td>
+          <td>starts_at 是從這一刻開始</td>
         </tr>
         <tr>
-          <td>?Q = 排程。結束時間表:現在..</td>
-          <td>?Q = 排程。結束時間表:現在..</td>
-          <td>從這個時刻到時間的終點</td>
+          <td>?q=schedule.ends_at:NOW..</td>
+          <td>?q=schedule.ends_at:NOW..</td>
+          <td>Ends_at 是從這一刻到時間的盡頭</td>
         </tr>
         <tr>
-          <td>？q = + schedule.starts_at：.. NOW + schedule.ends_at：NOW ..</td>
-          <td>？q =％2Bschedule.starts_at：.. NOW％20％2Bschedule.ends_at：NOW ..</td>
-          <td>此刻之前的starts_at和此刻之後的ends_at（此刻視頻已排定）</td>
+          <td>?q=+schedule.starts_at:..NOW +schedule.ends_at:NOW..</td>
+          <td>?q=%2Bschedule.starts_at:..NOW%20%2Bschedule.ends_at:NOW..</td>
+          <td>在這一刻之前開始_在這一刻之後結束_在這一刻之後（視頻在這一刻排定）</td>
         </tr>
       </tbody>
     </table>
@@ -1803,95 +494,95 @@ Brightcove
     <!-- Combined Search -->
 
     <section class="bcls-section">
-    <h2 id="combine_search_criteria">合併搜尋條件</h2>
+    <h2 id="combine_search_criteria">組合搜索條件</h2>
 
-    <p>您可以組合用於復雜搜索的條件。</p>
+    <p>您可以組合複雜搜索的條件。</p>
 
-    <p>範例：此請求搜索帶有<code translate="No">name</code>的價值<strong>八卦</strong>，它們在2010年8月1日至2010年10月8日之間進行了更新。然後按以下順序對響應數據進行排序<code translate="No">updated_at</code>日期按降序排列。</p>
+    <p>例子：此請求搜索帶有<code translate="No">name</code>的價值<strong>閒話</strong>，其更新時間為 2010 年 8 月 1 日至 2010 年 10 月 8 日。然後它對響應數據進行排序<code translate="No">updated_at</code>日期按降序排列。</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=%2Bname:gossip%20%2Bupdated_at:2010-08-01..2010-10-08&amp;sort=-updated_at</code></pre>
 
     <h3>組合詞</h3>
 
-    <p>使用<a href="#requiredexcludedterms">必需/排除的語法</a>返回具有以下內容的視頻<strong>所有</strong>指定條款。</p>
+    <p>使用<a href="#requiredexcludedterms">必需/排除的語法</a>返回具有<strong>全部</strong>指定的條款。</p>
 
-    <aside class="bcls-aside bcls-aside--information">請注意以下所有多個搜索字詞的示例，<strong>文本搜索字詞後跟其他字詞，第一個字詞後有一個URI編碼的空格（％20），因此，該附加字詞不會被解釋為第一個字詞的一部分</strong>。</aside>
+    <aside class="bcls-aside bcls-aside--information">請注意以下多個搜索詞的所有示例，<strong>文本搜索詞後跟附加詞在第一個詞之後有一個 URI 編碼的空格 (%20)，這樣附加詞就不會被解釋為第一個詞的一部分</strong> .</aside>
 
     <p>例如，如果您搜索：</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=name:foo +tags:bar (URI-encoded: q=name:foo%20%2Btags:bar)</code></pre>
 
-    <p>響應中將包含帶有“ bar”標籤的視頻，也可能包含<code translate="No">foo</code>在名字裡。如果您只想退回那些具有<code translate="No">foo</code>在名稱和標籤“ bar”中，您必須搜索：</p>
+    <p>響應將包含帶有標籤“bar”的視頻' 並且可能還有<code translate="No">foo</code>在名字裡。如果您只想返回那些具有<code translate="No">foo</code>在名稱和標籤“bar”中，您必須搜索：</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">(unencoded) q=<strong>+</strong>name:foo <strong>+</strong>tags:bar (URI-encoded) q=<strong>%2B</strong>name:foo%20<strong>%2B</strong>tags:bar</code></pre>
 
-    <p>同樣，如果您只想返回包含<code translate="No">foo</code>以這個名字，但是<strong>不</strong>具有標籤“ bar”，您可以搜索：</p>
+    <p>同樣，如果您只想返回具有<code translate="No">foo</code>以名義，但做<strong>不是</strong>有標籤“bar”，你可以搜索：</p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">(unencoded) q=<strong>+</strong>name:foo<strong> -</strong>tags:bar (encoded) q=<strong>%2B</strong>name:foo%20<strong>-</strong>tags:bar</code></pre>
 
-    <h4>範例</h4>
+    <h4>例子</h4>
 
     <table class="bcls-table">
-      <caption class="bcls-caption--table">樣品：合併條款</caption>
+      <caption class="bcls-caption--table">樣品：組合術語</caption>
       <thead class="bcls-table__head">
         <tr>
           <th>未編碼的搜索字符串</th>
-          <th>URI編碼的搜索字符串</th>
-          <th>意思</th>
+          <th>URI 編碼的搜索字符串</th>
+          <th>意義</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
           <td><code translate="No">q=foo bar</code></td>
           <td><code translate="No">q=foo%20bar</code></td>
-          <td>返回的項目帶有“ foo”或“ bar”</td>
+          <td>退回的物品有“foo”或“bar”</td>
         </tr>
         <tr>
           <td><code translate="No">q=foo +bar</code></td>
           <td><code translate="No">q=foo%20%2Bbar</code></td>
-          <td>返回的項目必須帶有“ bar”，可能帶有“ foo”</td>
+          <td>退回的物品必須有“bar”，可能有“foo”</td>
         </tr>
         <tr>
           <td><code translate="No">q=+foo bar</code></td>
           <td>q <code translate="No">=%2Bfoo%20bar</code></td>
-          <td>返回的項目必須具有“ foo”，可能具有“ bar”</td>
+          <td>退回的物品必須有“foo”，可能有“bar”</td>
         </tr>
         <tr>
           <td><code translate="No">q=+foo +bar</code></td>
           <td><code translate="No">q=%2Bfoo%20%2Bbar</code></td>
-          <td>返回的項目必須具有“ foo”和“ bar”</td>
+          <td>退回的商品必須有“foo”和“bar”</td>
         </tr>
         <tr>
           <td><code translate="No">q=-foo +bar</code></td>
           <td><code translate="No">q=-foo%20%2Bbar</code></td>
-          <td>返回的項目必須具有“ bar”且不能具有“ foo”</td>
+          <td>退回的商品必須有“bar”且不能有“foo”</td>
         </tr>
         <tr>
-          <th colspan="3">多個標籤搜索</th>
+          <th colspan="3">多標籤搜索</th>
         </tr>
         <tr>
           <td><code translate="No">q=tags:bee,bop</code></td>
           <td><code translate="No">q=tags:bee,bop</code></td>
-          <td>返回帶有標籤「蜜蜂」或「國際收支」的視頻</td>
+          <td>返回帶有“bee”或“bop”標籤的視頻</td>
         </tr>
         <tr>
           <td><code translate="No">q=tags:bee tags:bop</code></td>
           <td><code translate="No">q=tags:bee%20tags:bop</code></td>
-          <td>返回帶有標籤「蜜蜂」或「國際收支」的視頻</td>
+          <td>返回帶有“bee”或“bop”標籤的視頻</td>
         </tr>
         <tr>
           <td><code translate="No">q=+tags:bee tags:bop</code></td>
           <td><code translate="No">q=%2Btags:bee%20tags:bop</code></td>
-          <td>返回的所有視頻必須帶有標籤“ bee”；他們也可能有“ bop”標籤</td>
+          <td>返回的所有視頻都必須帶有“蜜蜂”標籤；他們可能也有標籤“bop”</td>
         </tr>
         <tr>
           <td><code translate="No">q=+tags:bee +tags:bop</code></td>
           <td><code translate="No">q=%2Btags:bee%20%2Btags:bop</code></td>
-          <td>返回的所有視頻將帶有標籤“ bee”和標籤“ bop”</td>
+          <td>返回的所有視頻都將帶有“bee”標籤和“bop”標籤</td>
         </tr>
       </tbody>
     </table>
@@ -1901,9 +592,9 @@ Brightcove
     <section class="bcls-section">
     <h2 id="specificVideos">搜索特定視頻</h2>
 
-    <p>如果您想將搜索範圍限制為一組特定的視頻，則可以在<code translate="No">id</code>：</p>
+    <p>如果您想將搜索限制為一組特定的視頻，您可以在<code translate="No">id</code>：</p>
 
-    <p>範例：此請求返回ID為的視頻<code translate="No">123456789</code>，<code translate="No">987654321</code>和<code translate="No">48376387</code></p>
+    <p>例子：此請求返回帶有 ID 的視頻<code translate="No">123456789</code> , <code translate="No">987654321</code>和<code translate="No">48376387</code></p>
 
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=id:123456789%20id:987654321%20id:48376387</code></pre>
@@ -1918,10 +609,10 @@ Brightcove
     <pre class="line-numbers">
       <code class="language-http" translate="No">q=state:ACTIVE( | INACTIVE | PENDING | DELETED)<sup><strong><a href="#note3">[3]</a></strong></sup></code></pre>
 
-    <h3>注意事項</h3>
+    <h3>筆記</h3>
 
     <ul>
-      <li id="note3"><sup><strong>[3]</strong></sup>搜索刪除的視頻僅適用於過去10天（當前時間減去10天）內刪除的視頻，並且只能通過<span translate="No">CMS API</span>（不是Playback API）。</li>
+      <li id="note3"><sup>[3]<strong></strong></sup> 搜索已刪除的視頻僅適用於過去 10 天（當前時間減去 10 天）刪除的視頻，並且只能通過<span translate="No">內容管理系統 API</span>（不是播放 API）。</li>
     </ul>
     </section>
     <!-- Stemming -->
@@ -1929,45 +620,45 @@ Brightcove
     <section class="bcls-section">
     <h2 id="Stemming">詞幹</h2>
 
-    <p>支持詞幹，但是<strong>不</strong>部分單詞搜索。例如，<code translate="No">q=name:ban</code>應該返回名稱為“<code translate="No">Parking Ban Announced</code>“ 要么 ”<code translate="No">Parking to be Banned</code>“ 要么 ”<code translate="No">City Banning Parking</code>“ 但不是 ”<code translate="No">Bank Holiday</code>“ 要么 ”<code translate="No">Bandit Captured</code>”。</p>
+    <p>支持詞幹，但<strong>不是</strong>部分詞搜索。例如，<code translate="No">q=name:ban</code>應該返回名稱為“的視頻”<code translate="No">Parking Ban Announced</code>“ 或者 ”<code translate="No">Parking to be Banned</code>“ 或者 ”<code translate="No">City Banning Parking</code>“ 但不是 ”<code translate="No">Bank Holiday</code>“ 或者 ”<code translate="No">Bandit Captured</code>”。</p>
     </section>
     <!-- Special Characters/Encoding -->
 
     <section class="bcls-section">
     <h2 id="url_encoding">空格/特殊字符</h2>
 
-    <p>的<span translate="No">CMS API</span>通常會處理搜索字符串中的特殊字符，但有兩個例外：</p>
+    <p>這<span translate="No">內容管理系統 API</span>通常處理搜索字符串中的特殊字符，但有幾個例外：</p>
 
     <ul>
-      <li>不允許使用空格，並且必須將其編碼為<code translate="No">%20</code>。（未編碼<code translate="No">+</code>符號也可以代替空格，但這會導致查詢混亂，因為<code translate="No">+</code>也可以表示需要一個術語。看到<a href="#requiredexcludedterms">必需/排除的語法</a>）
+      <li>不允許使用空格，必須編碼為<code translate="No">%20</code> .（未編碼<code translate="No">+</code>符號也可以替換空格，但這可能會導致您的查詢混淆，因為<code translate="No">+</code>也可以表示需要一個術語。看<a href="#requiredexcludedterms">必需/排除的語法</a> )
 
-      <p>例如，要搜索名稱中的“我最喜歡的視頻”：</p>
+      <p>例如，要在名稱中搜索“我最喜歡的視頻”：</p>
 
       <p><code translate="No">q=name:"my%20favorite%20video"</code></p>
 
-      <aside class="bcls-aside bcls-aside--information">請注意，引號確保返回的視頻具有所有條款。沒有它們，將返回具有三個術語中任何一個的視頻。下面的更多內容。</aside>
+      <aside class="bcls-aside bcls-aside--information">請注意，引號確保返回的視頻包含所有條款。如果沒有它們，將返回具有三個術語中任何一個的視頻。更多關於下面的內容。</aside>
       </li>
-      <li>搜索文字<code translate="No">+</code>簽名或使用<code translate="No">+</code>表示返回的視頻<strong>必須</strong>包含一個術語，您必須對<code translate="No">+</code>如<code translate="No">%2B</code>：
-      <p>搜索必須包含以下內容的視頻<code translate="No">"two+two"</code>在名稱字段中</p>
+      <li>搜索文字<code translate="No">+</code>簽署或使用<code translate="No">+</code>表示返回的視頻<strong>必須</strong>包括一個術語，你必須編碼<code translate="No">+</code>作為<code translate="No">%2B</code>：
+      <p>搜索必須包含的視頻<code translate="No">"two+two"</code>在名稱字段中</p>
 
       <p><code translate="No">q=name:two%2Btwo</code></p>
 
-      <p>搜索必須包含以下內容的視頻<code translate="No">"heron"</code>在名稱字段中</p>
+      <p>搜索必須包含的視頻<code translate="No">"heron"</code>在名稱字段中</p>
 
       <p><code translate="No">q=%2Bname:heron</code></p>
       </li>
-      <li>一些代理可能無法正確處理文字引號，因此編碼起來更安全<code translate="No">"foo"</code>如<code translate="No">%22foo%22</code></li>
+      <li>有些代理可能無法正確處理文字引號，因此編碼更安全<code translate="No">"foo"</code>作為<code translate="No">%22foo%22</code></li>
     </ul>
 
-    <aside class="bcls-aside bcls-aside--information">注意事項：
-    <p>對於多字標籤或字符串，請將標籤/字符串括在URI編碼的引號（<code translate="No">%22</code>），並用URI編碼空格<code translate="No">(%20)</code>：</p>
+    <aside class="bcls-aside bcls-aside--information">筆記：
+    <p>對於多字標籤或字符串，將標籤/字符串括在 URI 編碼的引號 ( <code translate="No">%22</code> )，並對空格進行 URI 編碼<code translate="No">(%20)</code>：</p>
 
     <table class="bcls-table">
       <caption class="bcls-caption--table">多字標籤示例</caption>
       <thead class="bcls-table__head">
         <tr>
           <th>未編碼的搜索字符串</th>
-          <th>編碼的搜索字符串</th>
+          <th>編碼搜索字符串</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
@@ -1978,202 +669,44 @@ Brightcove
       </tbody>
     </table>
 
-    <p>引號確保返回的視頻將與所有條款匹配，但不一定與確切條款匹配。<a href="#Stemming">抽乾</a>仍然適用-例如，在<code translate="No">"new house"</code>還將返回帶有<code translate="No">name</code>要么<code translate="No">description</code>喜歡<code translate="No">news about housing</code>。</p>
+    <p>引號確保返回的視頻與所有條款匹配，但不一定與確切條款匹配。<a href="#Stemming">詞幹</a>仍然適用 - 例如，搜索<code translate="No">"new house"</code>還將返回帶有<code translate="No">name</code>或者<code translate="No">description</code>喜歡<code translate="No">news about housing</code> .</p>
     </aside>
 
-    <p>對於一次性申請，您可以使用Brightcove Learning的<a href="https://general.support.brightcove.com/utilities/string-encoder.html">字符串編碼器</a>對您的搜索字符串進行編碼。對於應用程序，您需要找到所用語言的URI編碼功能。</p>
+    <p>對於一次性請求，您可以使用 Brightcove Learning 的<a href="https://general.support.brightcove.com/utilities/string-encoder.html">字符串編碼器</a>對您的搜索字符串進行編碼。對於應用程序，您需要找到您使用的語言的 URI 編碼函數。</p>
 
-    <aside class="bcls-aside bcls-aside--warning">星號（<strong> *</strong>）被視為普通特殊字符，<strong>不</strong>通配符。</aside>
+    <aside class="bcls-aside bcls-aside--warning">星號 ( <strong> *</strong> ) 被視為普通的特殊字符，<strong>不是</strong>通配符。</aside>
     </section>
     <!-- Clip Search -->
 
     <section class="bcls-section">
     <h2 id="clips">剪輯搜索詞</h2>
 
-    <p>剪輯是從其他視頻部分創建的視頻。剪輯可以通過<a href="https://social.support.brightcove.com/general/creating-video-clip-using-brightcove-social.html">Brightcove社交</a>，將來還會有其他方式。您可以使用一些特殊的搜索詞來查找帳戶中生成的剪輯：</p>
+    <p>剪輯是從其他視頻的部分創建的視頻。剪輯可以通過<a href="https://social.support.brightcove.com/general/creating-video-clip-using-brightcove-social.html">Brightcove 社交</a>，以及其他方式將在未來可用。您可以使用一些特殊的搜索詞來查找帳戶中生成的剪輯：</p>
 
     <ul>
-      <li><code translate="No">q=%2Bis_clip:true</code> -只傳回剪輯片段</li>
-      <li><code translate="No">q=%2Bis_clip:false</code> -僅返回非剪輯</li>
-      <li><code translate="No">q=%2Bclip_source_video_id:<span class="bcls-input">video_id</span></code> -返回從指定視頻生成的剪輯</li>
+      <li><code translate="No">q=%2Bis_clip:true</code> - 只返回剪輯</li>
+      <li><code translate="No">q=%2Bis_clip:false</code> - 僅返回非剪輯</li>
+      <li><code translate="No">q=%2Bclip_source_video_id:<span class="bcls-input">video_id</span></code> - 返回從指定視頻生成的剪輯</li>
     </ul>
     </section>
     <!-- Ignored Words -->
 
     <section class="bcls-section">
-    <h2 id="Ignored_words">忽略的單字</h2>
+    <h2 id="Ignored_words">忽略的詞</h2>
 
-    <p>某些字在搜尋字串中會被忽略，因為它們非常常普遍，因此可能會傳回許多與您實際搜尋內容無關的結果。以下是搜尋所忽略的單字清單：</p>
+    <p>搜索字符串中的某些詞會被忽略，因為它們非常常見，以至於它們可能會返回許多與您實際搜索的內容無關的結果。以下是搜索忽略的單詞列表：</p>
 
-    <p>「a」，「a」，「和」，「是」，「作為」，「在」，「是」，「但」，「通過」，「對」，「如果」，「進」，「進」，「是」，「它」，「不」，「不」，「不」，「的」，「開」，「」或「」，「」，「他們的」，「然後」，「那裡」，「這些」，「他們」，「這」，「到」，「是」，「將」，「與」</p>
+    <p>“a”、“an”、“and”、“are”、“as”、“at”、“be”、“but”、“by”、“for”、“if”、“in”、“into” ", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", “那裡”、“這些”、“他們”、“這”、“至”、“曾經”、“將”、“與”</p>
     </section>
 
     <section class="bcls-section">
-    <h2 id="Known Issues">已知問題</h2>
+    <h2 id="Known Issues">已知的問題</h2>
 
     <ul>
-      <li><strong>結果重複：</strong>在某些情況下，搜索結果中的某些項目可能會出現多次。
+      <li><strong>重複結果：</strong>在某些情況下，搜索結果中的某些項目可能會出現多次。
 
-      <p><strong>解決方法：</strong>為避免重複的搜索結果，請始終使用<code translate="No">sort</code>搜索請求中的參數。</p>
+      <p><strong>解決方法：</strong>為防止重複搜索結果，請始終使用<code translate="No">sort</code>搜索請求中的參數。</p>
       </li>
     </ul>
     </section>
     </article>
-
-<!-- complete bootstrap layout -->
-    </div>
-    <div class="col-sm-2 right-side-bar">
-      
-      <nav class="right-side-nav" id="right_side_nav">
-        <h6 class="toc">頁面內容</h6>
-        <ul id="in_page_nav" class="list-none"></ul>
-      </nav>
-      
-    </div>
-  </div>
-</div>
-
-<hr>
-<footer class="bcls-footer" role="contentinfo">
-  <div class="row">
-    <div class="region region-footer-top-center col-md-12">
-      <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
-
-        <h2>布萊特灣支援</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://status.brightcove.com">系統狀態</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">聯絡支援</a>
-          </li>
-          <li>
-            <a href="https://support.brightcove.com/">文獻資料</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
-
-        <h2>訓練</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://studio.support.brightcove.com/training/online-training-courses.html">線上課程</a>
-          </li>
-          <li>
-            <a href="https://studio.support.brightcove.com/training/register-training.html">註冊課程</a>
-          </li>
-          <li>
-            <a href="https://university.brightcove.com/">布萊特灣大學</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
-
-        <h2>Brightcove</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://www.brightcove.com">亮麗</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">聯絡我們</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-  <div class="row">
-    <div class="region region-footer-bottom-center col-md-12">
-      <div class="bcls-copyright footer-menu">
-        <table>
-          <tr>
-            <td>
-              <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> 布萊特灣公司版權所有</div>
-            </td>
-            <td><a href="https://www.brightcove.com/en/legal/privacy">私隱</a> | 條<a href="https://www.brightcove.com/en/terms-and-conditions">款及細則</a></td>
-            <td>
-              <div class="gf-links-cols footer-menu">
-                <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin"><i class="fab fa-linkedin-in" style="font-size: 1.5rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter"><i class="fab fa-twitter" style="font-size: 1.5rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i class="fab fa-facebook-f" style="font-size: 1.5rem;"></i></a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</div>
-</div>
-<script>
-      
-  var searchBox = sajari.init({
-    mode: "search-box",
-    project: "1588255093746585379", // Set this to your project.
-    collection: "brightcove-documenation", // Set this to your collection.
-    instantPipeline: "autocomplete", // Pipeline used as you type
-    inputPlaceholder: "Search", // Input element placeholder
-    maxSuggestions: 5, // Maximum number of suggestions to show
-    attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
-  });
-  
-    searchBox("sub", "pipeline.search-sent", function (_, query) {
-      window.location = "/search.html?q=" + encodeURIComponent(query.q);
-    });
-  
-
-</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
-  <script src="/assets/js/sites_nav.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
-  <script src="/assets/js/feedback.js"></script>
-  
-  <script src="/assets/js/sajari-search-foot.js"></script>
-  
-  <!-- <script src="/assets/js/sajari-index.js"></script> -->
-  <style>
-    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
-      background-color: lightblue;
-    }
-    div.sj-tabs__tab {
-      margin-top: 3rem;
-      margin-left: .3rem;
-      border-top-left-radius: .4rem;
-      border-top-right-radius: .4rem;
-      background-color:#e8e8e8;
-    }
-
-    div.sj-tabs__tab.sj-tabs__tab--selected {
-      border-bottom-color: crimson;
-      background-color: #f8f8f8;
-    }
-
-    p.sj-results__result__description.css-p9jvyt {
-      font-size: 1rem;
-    }
-
-    .sj-result__text.css-31l7gp h3 {
-      color: navy;
-      font-size: 1.4rem;
-    }
-    </style>
-
-</body>
-
-</html>

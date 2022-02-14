@@ -1,0 +1,714 @@
+---
+title:“概述：Brightcove播放限制"
+description:“在本主題中，您將了解使用 Brightcove 播放限制管理視頻播放的不同策略。”
+parent: Getting Started 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Brightcove Playback Restrictions.</aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+    <p>無論您的內容是面向內部觀眾還是外部觀眾，免費還是貨幣化，Brightcove Playback Restrictions 都能提供合適的內容安全級別以適應您的用例，同時仍允許觀眾從任何設備、任何地方訪問內容。</p>
+    <p>此功能允許您定義用於流式傳輸內容的不同場景，包括：</p>
+    <ul>
+      <li>您的內容在哪裡可用</li>
+      <li>內容如何流式傳輸</li>
+      <li>何時可以查看內容</li>
+      <li>誰可以觀看您的內容</li>
+    </ul>
+    <p>查看博文：<a href="https://www.brightcove.com/en/blog/more-than-just-security/">這不僅僅是安全——它關乎品牌誠信和您對客戶的承諾</a></p>
+
+    <h3>特徵</h3>
+    <p>此功能的靈活性提供了適應多種不同用例的能力。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">播放限制的主要功能</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>特徵</th>
+          <!-- <th>VOD</th>
+                <th>Live</th> -->
+          <th>需要DRM</th>
+          <th>需要JWT</th>
+          <th>需要播放權限</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>IP限制</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>國家限制</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>郵政編碼限制</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>指定市場區域（DMA）</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>域限制</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>日期/時間安排</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>定期時間表</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>代理限制</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <!-- <tr>
+                <td>Token TTL</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td style="background-color:#ededed;"></td>
+                <td>No</td>
+            </tr> -->
+        <tr>
+          <td>權利檢查</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>許可證密鑰保護</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>流並發</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>設備註冊</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>中游限制檢查</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>套餐</h3>
+    <p>幾個安全包可用於播放限制。</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">播放限制功能包</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th colspan="2">特徵</th>
+          <th>安全等級 1</th>
+          <th>安全等級 2</th>
+          <th>安全等級 3</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td rowspan="4">地理限制</td>
+          <td>IP限制</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>國家</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>美國郵政編碼</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>美國DMA</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">域限制</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td rowspan="2">日期/時間安排</td>
+          <td>基本（開始-結束日期）</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td>再次發生的</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">代理限制</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">權利檢查</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">許可證密鑰保護</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <!-- <tr>
+              <td colspan="2">Basic encryption (HLSe)</td>
+              <td style="text-align: center;">No</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+            </tr>
+            <tr>
+              <td colspan="2">DRM platform access</td>
+              <td style="text-align: center;">No</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+            </tr> -->
+        <tr>
+          <td colspan="2">流並發</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">設備註冊</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+        <tr>
+          <td colspan="2">中游限制檢查</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="text-align: center;">沒有</td>
+          <td style="background-color: #D7F6E6;text-align: center;">是的</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Which_products_support_Playback_Restrictions">哪些產品支持播放限制？</h2>
+    <p>以下 Brightcove 產品支持播放限制：</p>
+    <ul>
+      <!-- <li><strong>Brightcove Beacon</strong> - Full Playback Restrictions support and Viewer Entitlements are coming (roll-out date TBD)</li> -->
+      <li><strong>視頻雲：點播和直播</strong></li>
+      <li><strong>虛擬活動</strong></li>
+      <li><strong>活動</strong></li>
+      <li><strong>從事</strong></li>
+      <li><strong>畫廊</strong></li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">播放限制目前不適用於 Brightcove Beacon。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="How_are_Playback_Restrictions_applied">如何應用播放限制？</h2>
+    <p>播放限制可以如下應用：</p>
+    <ul>
+      <li><a href="#Asset_level_restrictions">資產級限制</a></li>
+      <li><a href="#Runtime_restrictions">運行時限制</a></li>
+      <li><a href="#License_Keys_Protection">許可證密鑰保護</a></li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Asset_level_restrictions">資產級限制</h2>
+    <p>資產級別限制在“播放權限"中定義。</p>
+
+    <p>當您想限制以下內容的流式傳輸時，您可以在資產級別使用播放限制：</p>
+    <ul>
+      <li>地區（地理限制）</li>
+      <li>時間（調度）</li>
+      <li>領域</li>
+      <li>代理類型</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">默認情況下，所有新的、攝取的資產都將擁有播放權，允許隨時隨地向所有人流式傳輸。</aside>
+
+    <h3>地區</h3>
+    <p>地理限制限制了您可以在世界各地查看流內容的位置。選項包括：</p>
+    <ul>
+      <li>IP地址</li>
+      <li>CIDR</li>
+      <li>郵政編碼（僅適用於美國郵政編碼）</li>
+      <li>DMA（僅適用於美國DMA）</li>
+      <li>國別</li>
+    </ul>
+    <p>TBD - 地理限制有一個全局規則，它定義瞭如下整體行為：</p>
+    <ul>
+      <li>當全局規則設置為<strong>允許所有</strong>，它將允許所有播放，您可以將區域列入黑名單。</li>
+      <li>當全局規則設置為<strong>全部屏蔽</strong>，它將阻止所有播放，您可以將區域列入白名單。</li>
+    </ul>
+
+    <h3>時間</h3>
+    <p>調度允許您設置可用性窗口以通過兩個選項流式傳輸您的內容：</p>
+    <ul>
+      <li>具體日期</li>
+      <li>定期重複特定的日期和時間</li>
+    </ul>
+
+    <h3>領域</h3>
+    <p>域限制允許您在要允許或阻止流的位置設置域。</p>
+
+    <h3>代理人</h3>
+    <p>代理限制可防止在有代理的情況下進行內容流式傳輸。有五種可用的代理類型：</p>
+    <ul>
+      <li>匿名-客戶端的IP地址不可用</li>
+      <li>公用-可以從某個位置代理的多個用戶允許公用互聯網訪問</li>
+      <li>企業-識別是否有多個用戶通過一個或多個中央位置代理，並且可以共享一個網絡上的IP地址</li>
+      <li>透明 - 客戶端的 IP 地址可通過 HTTP 標頭獲得，但該值不一定可靠</li>
+      <li>代管</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">隨著 VPN 提供商不斷改進他們的服務，解析 IP 地址可能會與您為阻止的 IP 地址定義的不同。正因為如此，代理阻塞並不是 100％ 的保證。</aside> 
+
+    <h3>資產級用例</h3>
+    <details>
+      <summary>
+        <h3 id="Use_cases1">用例</h3>
+      </summary>
+      <p>以下是一些可能的用例：</p>
+      <h4>用郵政編碼限制內容</h4>
+      <ul>
+        <li>
+          <p>目標</p>
+          <p>Shari（Sports League 的網絡製作人）希望通過郵政編碼限制內容訪問，以便體育賽事郵政編碼內的觀眾無法流式傳輸賽事</p>
+        </li>
+        <li>
+          <p>解決方案</p>
+          <p>Shari 可以定義播放權限以將美國每個地區的郵政編碼列入黑名單。由於內容是公開的（沒有中間件應用程序處理權限），因此需要將播放權限設置為不安全。定義播放權限後，Shari 會將這些權限分配給每個媒體資產。</p>
+        </li>
+      </ul>
+
+      <h4>按國家/ IP地址限制內容</h4>
+      <ul>
+        <li>
+          <p>目標</p>
+          <p>Dylan（CMO）希望按國家/地區限制內容訪問，以便觀看者可以從烏克蘭和韓國以外的任何地方進行直播。由於開發團隊位於韓國，Dylan 需要允許從韓國的特定 IP 地址進行流式傳輸。</p>
+        </li>
+        <li>
+          <p>解決方案</p>
+          <p>迪倫可以定義“播放權"來阻止烏克蘭和韓國，並添加允許來自韓國的IP地址。由於 Dylan 的內容是公開的，因此每個播放權限都需要允許不安全的訪問。定義播放權限後，Dylan 會將這些權限分配給每個媒體資產。</p>
+        </li>
+      </ul>
+    </details>
+
+    <h3>設置資產級別限制</h3>
+    <p>
+      播放權限允許您指定視頻播放的限制。這些權利將存儲在<a href="/playback-restrictions/references/playback-rights/reference.html">播放權限 API</a>並且每個集合都被分配了一個唯一的 id ( <code translate="No">playback_right_id</code>）。一組權利可以與零個或多個視頻相關聯。
+    </p>
+    <p>
+      當一個視頻有<code translate="No">playback_right_id</code>，播放權限對像中指定的限制適用於對該視頻的所有請求。
+    </p>
+    <p>
+      此圖顯示了從用戶的視頻和許可請求到播放的流程。
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/overview.png" alt="Playback Rights">
+      <figcaption class="bcls-caption--image">播放權限</figcaption>
+    </figure>
+
+    <p>資產級別的限制可以使用以下任一方法進行定義：</p>
+    <ul>
+      <li><a href="#Using_Brightcove_APIs">使用 Brightcove API</a></li>
+      <li><a href="#Using_Video_Cloud_Studio">使用影音工作室</a></li>
+    </ul>
+
+    <h4 id="Using_Brightcove_APIs">使用 Brightcove API</h4>
+    <p>您可以使用 Brightcove 的 API 來定義資產級別的限制。這些步驟可用於 Brightcove Player、本機 SDK 或您自己的播放器。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>首先，使用<a href="/playback-restrictions/references/playback-rights/reference.html">播放權限API</a>創造一個限制。</p>
+      </li>
+      <li>
+        <p>然後，使用<a href="/cms/index.html">內容管理系統 API</a>將限制與您的視頻資產相關聯。</p>
+      </li>
+      <li>
+        <p>有關詳細信息，請參見<a href="/playback-restrictions/getting-started/implementing-playback-rights.html">實施播放權</a>文檔。</p>
+      </li>
+    </ol>
+
+    <h4 id="Using_Video_Cloud_Studio">使用影音工作室</h4>
+    <p>您還可以使用 Video Cloud Studio 定義資產級別限制。這些步驟可用於 Brightcove Player 或本機 SDK。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>展開<strong>行政</strong>下拉菜單，然後選擇<strong>播放權</strong>。</p>
+        <figure class="bcls-figure">
+          <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/admin.png" alt="Video Cloud Studio Admin" />
+          <figcaption class="bcls-caption--image">影音雲工作室管理員</figcaption>
+        </figure>
+      </li>
+      <li>
+        <p>有關詳細信息，請參見<a href="https://studio.support.brightcove.com/admin/managing-playback-rights.html">管理播放權</a>文檔。</p>
+      </li>
+      <li>
+        <p>導航到<strong>媒體</strong>模塊，然後選擇<strong>名稱</strong>您的視頻的鏈接以查看其詳細信息。</p>
+      </li>
+      <li>
+        <p>向下滾動到<strong>播放限制</strong>部分並單擊<strong>編輯</strong>按鈕。</p>
+      </li>
+      <li>
+        <p>展開下拉菜單，然後選擇要與此視頻關聯的限制。</p>
+        <figure class="bcls-figure">
+          <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/media-module-restrictions.png" alt="Media module restriction assignment" />
+          <figcaption class="bcls-caption--image">媒體模塊限制分配</figcaption>
+        </figure>
+      </li>
+      <li>選擇<strong>節省</strong> .</li>
+      <li>
+        <p>定義了播放限制並將其與視頻相關聯後，就可以配置播放器了。</p>
+        <p> 有關詳細信息，請參見<a href="/playback-restrictions/getting-started/implementing-playback-rights.html#Configure_your_player">配置播放器</a>實施播放權文檔中的“部分"。</p>
+      </li>
+    </ol>
+
+    <h3>筆記</h3>
+    <ul>
+      <li>使用播放權限，內容無需加密</li>
+      <li>默認情況下，需要有效令牌來流式傳輸具有“播放權限"的資產。但是，您可以將“播放權限"設置為不要求令牌。 </li>
+      <li>默認情況下，所有資產都具有播放權，該播放權允許隨時隨地向所有人播放</li>
+      <li>每個視頻雲帳戶最多具有100個播放權</li>
+      <li>播放權與Video Cloud / CMS API限制（國家和日程安排）一起使用。資產的CMS限制在任何播放權之前均已通過驗證</li>
+      <li>播放權限不適用於策略密鑰限制（域和地理位置）。在 Web 播放器或本機 SDK 中使用播放權限時，策略密鑰將被刪除。這意味著使用策略密鑰設置的限制將被忽略。</li>
+      <li>播放權無法刪除；僅啟用或禁用</li>
+    </ul>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Runtime_restrictions">運行時限制</h2>
+    <p>要在運行時限制流式傳輸，您將需要具有特定權限（聲明）的 JSON Web 令牌 (JWT)。此令牌通過每個流請求發送。</p>
+    <p>此功能要求您在用戶管理系統 (UMS) 和 Brightcove 的播放服務之間實施中間件解決方案。</p>
+
+    <p>可以在運行時設置以下限制：</p>
+    <ul>
+      <li>播放權限</li>
+      <li>標籤</li>
+      <li>內容清單</li>
+      <li>特定用戶代理</li>
+      <li>並發流限制</li>
+      <li>設備限制</li>
+    </ul>
+
+    <h3>播放權限</h3>
+    <p>您可以將播放權限分配給資產（請參閱<a href="#Asset_level_restrictions">資產級別限制</a> )，或者您可以在運行時使用<code translate="No">prid</code>宣稱。</p>
+    <aside class="bcls-aside bcls-aside--information">運行時限制會覆蓋任何資產級別的播放權限。</aside>
+
+    <h3>標籤</h3>
+    <p>在運行時，您可以標識具有特定標籤值的資產以允許流式傳輸。這些標籤定義為<code translate="No">tags</code>宣稱。您可以使用標籤對視頻進行分組<strong>媒體模塊</strong>在 Brightcove 的 Video Cloud Studio 中。</p>
+    <p>
+      播放限制服務將檢查與每個視頻關聯的標籤。如果至少有一個標籤與JWT令牌中的列表匹配，則可以觀看視頻。
+    </p>
+    <p>
+      JWT 令牌中的標籤將作為標籤數組列出。
+    </p>
+    <aside class="bcls-aside bcls-aside--information">您只能在 JWT 令牌中使用 40 個標籤的數組。</aside>
+
+    <h3>內容清單</h3>
+    <p>使用<code translate="No">vids</code>聲明，您可以在運行時指定資產列表以允許流式傳輸。</p>
+
+    <h3>權利檢查</h3>
+    <p>權利檢查在運行時根據視頻 ID 和/或標籤設置最終用戶訪問權限。這涉及在 JWT 中設置以下聲明：</p>
+    <ul>
+      <li><code translate="No">prid</code></li>
+      <li><code translate="No">vids</code></li>
+      <li><code translate="No">tags</code></li>
+    </ul>
+    <p>如果一個<code translate="No">prid</code>（播放權限ID）在JWT中設置，然後資產的播放權限將被覆蓋。</p>
+
+    <h3>特定用戶代理</h3>
+    <p>要允許來自特定用戶代理的流式傳輸，請使用<code translate="No">ua</code>宣稱。要使用它，您的內容需要加密，並且您需要設置一個帳戶標誌，該標誌需要在許可證上使用 JWT。請與您的客戶經理聯繫以啟用此帳戶標誌。</p>
+    <aside class="bcls-aside bcls-aside--information">使用特定用戶代理時需要啟用許可證密鑰保護。</aside>
+
+    <h3>並發流限制</h3>
+    <p>限制每個用戶的並發流會阻止查看者與沒有帳戶的朋友共享其憑據。通過並發流限制，您可以定義特定用戶在任何給定時間可以觀看的視頻流數量。</p>
+    <p>對於此功能，需要將內容加密為DRM或HLSe。</p>
+    <p>有關詳細信息，請參見<a href="/playback-restrictions/guides/stream-concurrency.html">限制每個查看器的並發流</a>文檔。</p>
+    <aside class="bcls-aside bcls-aside--information">將並發流限制與 HLSe 一起使用時，需要啟用許可證密鑰保護。</aside>
+
+    <h3>設備限制</h3>
+    <p>在運行時，可以為用戶限制流設備的數量。為此，需要將內容加密為DRM或HLSe。</p>
+    <p>設備註冊是在發出DRM許可請求時發生的，這時為每個設備分配了唯一的ID。對於每個許可證請求，都會檢查並強制執行設備限制。</p>
+    <p>例如，發布者必須遵守內容所有者的要求，以將與單個查看器關聯的設備數限制為2個設備。達到該限制後，如果觀眾嘗試在第三台設備（如連接的電視）上流式傳輸內容，則播放將被拒絕。此功能使內容髮布者能夠實現貨幣化目標並最大限度地減少未經授權的訪問。</p>
+
+    <p>有關詳細信息，請參見<a href="/playback-restrictions/guides/device-limits.html">實施設備限制</a>文檔。</p>
+    <aside class="bcls-aside bcls-aside--information">將設備限制與 HLSe 一起使用時，需要啟用許可證密鑰保護。</aside>
+
+    <h3>運行時用例</h3>
+    <details>
+      <summary>
+        <h3 id="Use_cases1">用例</h3>
+      </summary>
+      <p>以下是一些可能的用例：</p>
+      <h4>允許付費訪問</h4>
+      <ul>
+        <li>
+          <p>目標</p>
+          <p>Liz（活動策劃者）只想允許付費用戶訪問活動的現場直播和VOD內容。她還想阻止鏈接共享。</p>
+        </li>
+        <li>
+          <p>解決方案</p>
+          <p>對於此用例，從平台請求內容的每個登錄用戶都需要具有以下聲明的令牌：</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW_USER”</code></li>
+          </ul>
+          <p>所有內容（實時或VOD）都需要使用DRM加密。</p>
+          <p>有了這些權限，每個登錄的用戶都可以流式傳輸直播或 VOD 內容，只要他們在同一設備和網絡上即可。如果用戶在令牌有效的時間段內共享其平台憑據，則其他嘗試流式傳輸任何內容的用戶將無法執行此操作。通過該功能的中游檢查，Liz 可以確保整個內容流的這種行為。</p>
+        </li>
+      </ul>
+
+      <h4>阻止新流</h4>
+      <ul>
+        <li>
+          <p>目標</p>
+          <p>Harry（OTT客戶）希望確保其平台用戶能夠查看內容，但一次只能查看一項資產。</p>
+        </li>
+        <li>
+          <p>解決方案</p>
+          <p>對於Harry的用例，每個從其平台請求內容的登錄用戶都需要具有以下聲明的有效令牌</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW”</code></li>
+          </ul>
+          <p>所有內容（實時或VOD）都需要使用DRM加密。</p>
+          <p>此案例的行為類似於 Liz 的用例。主要區別在於，當令牌有效時，Harry 的用戶將無法同時觀看不同的資產。通過該功能每 5 分鐘進行一次中游檢查，Harry 可以確保這種行為。</p>
+        </li>
+      </ul>
+
+      <h4>限制並發流</h4>
+      <ul>
+        <li>
+          <p>目標</p>
+          <p>Shari（Sports League 的網絡製作人）希望將並發流限制為 1，以針對特定內容。</p>
+        </li>
+        <li>
+          <p>解決方案</p>
+          <p>對於這種情況，每個登錄用戶都需要具有以下聲明的令牌：</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">vids</code> = <code translate="No">["asset 1","asset 2","asset 3"]</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW”</code></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+
+    <h3>設置運行時限制</h3>
+    <p>要使用運行時限制，請執行以下操作：</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>實施中間件</p>
+        <p>此功能要求您在用戶管理系統 (UMS) 和 Brightcove 的播放服務之間實施中間件解決方案。</p>
+      </li>
+      <li>
+        <p>創建一個JWT</p>
+        <p>創建具有特定權限（聲明）的有效JSON Web令牌（使用您的私鑰簽名的JWT）。有關詳細信息，請參閱<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">創建一個<span translate="No">JSON 網絡令牌</span> (智威湯遜)</a>文檔。</p>
+      </li>
+      <li>
+        <p>配置播放器</p>
+        <p>令牌隨播放請求一起傳遞。如果令牌無效或已過期，則將限制對內容的訪問。玩家必須配置為使用令牌。</p>
+
+        <strong>網絡播放器</strong>
+        <p>
+          有關配置Brightcove Web播放器的詳細信息，請參閱<a href="https://player.support.brightcove.com/playback/license-protection-with-bcp.html">Brightcove Player的密鑰/許可證保護</a>文檔。
+        </p>
+        <strong>本機Android或iOS播放器</strong>
+        <p>
+          有關為Android或iOS配置本機播放器的詳細信息，請參見<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">使用本機SDK進行密鑰/許可證保護</a>文檔。
+        </p>
+        <strong>你自己的播放器</strong>
+        <p>
+          如果您僅將JWT與播放器一起使用，則不需要額外的配置。如果您正在與播放器一起使用“播放權限"，請參閱<a href="/playback-restrictions/getting-started/implementing-playback-rights.html#Configure_your_player">配置播放器</a>實施播放權文檔中的“部分"。
+        </p>
+      </li>
+    </ol>
+
+    <h3>筆記</h3>
+    <ul>
+      <li>要使用<code translate="No">ua</code> , <code translate="No">maxip</code>和<code translate="No">maxu</code>索賠，您需要以下內容：
+        <ul>
+          <li>內容需要加密</li>
+          <li>您的帳戶需要具有許可請求所需的 JWT（啟用許可密鑰保護）。有關詳細信息，請聯繫您的客戶經理。</li>
+        </ul>
+      </li>
+      <li>要使用<code translate="No">climit</code>和<code translate="No">dlimit</code>索賠，您需要以下內容：
+        <ul>
+          <li>內容需要使用DRM加密</li>
+          <li>您的帳戶需要啟用 CSL 並啟用檢查權限標誌。有關詳細信息，請聯繫您的客戶經理。</li>
+        </ul>
+      </li>
+      <li>每個令牌都有一個到期時間，並且在創建令牌時需要對其進行設置。您的集成負責保持續訂過程。</li>
+      <li>默認情況下，流中檢查每5分鐘進行一次。</li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="License_Keys_Protection">許可證密鑰保護</h2>
+    <p>通過動態交付交付受DRM保護的內容時，許可證密鑰保護可提供更高級別的安全性。這對於想要控制對其內容的訪問並防止未經授權的內容共享的客戶特別有用。</p>
+    <p>DRM或HLSe內容保護使用許可證/密鑰請求，可以使用JSON Web令牌（JWT）保護每個流請求。</p>
+
+    <h3>用例</h3>
+    <p>當您的內容需要公開但來自受信任的請求時，您可以使用此功能。例如，具有使用HLSe加密的專有內容的區域廣播公司希望確保只有來自其平台的請求才能訪問該內容。這意味著觀眾只能從您的平台流式傳輸內容。即使使用流 URL，他們也無法將其流式傳輸到平台之外。</p>
+
+    <aside class="bcls-aside bcls-aside--information">請注意，為具有 DRM 和/或 HLSe 保護的視頻實施播放權限將阻止視頻在 Studio 媒體模塊的預覽播放器中播放。為了啟用預覽，Brightcove 實施了<a href="/cms/references/reference.html#tag/Clear-Sources">明確的來源</a> CMS API 的端點。
+
+    <p>如果內部或第 3 方用戶擁有有效的 API 憑據來檢索未受保護的 URL，則這些端點還可用於使他們能夠預覽視頻。但是，請注意：</p>
+    <ul>
+    <li>一旦不受保護的 URL 可用，Brightcove 和客戶就無法控制誰可以訪問內容或如何使用內容。</li>
+    <li>訪問源時，將對您的帳戶收取出口帶寬費用。</li>
+    </ul>
+    </aside>
+
+    <h3>啟用許可證密鑰保護</h3>
+    <p>要為您的帳戶配置許可證密鑰保護，請聯繫您的客戶經理以啟用許可證密鑰保護標誌。</p>
+
+    <h3>使用許可證密鑰保護</h3>
+    <p>要使用許可證密鑰保護，請執行以下操作：</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>實施中間件</p>
+        <p>此功能要求您在用戶管理系統 (UMS) 和 Brightcove 的播放服務之間實施中間件解決方案。</p>
+      </li>
+      <li>
+        <p>創建一個JWT</p>
+        <p>啟用此功能後，解密內容的每個密鑰或許可證請求都需要一個有效的 JSON Web 令牌（用您的私鑰簽名的 JWT）。有關詳細信息，請參閱<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">創建一個<span translate="No">JSON 網絡令牌</span> (智威湯遜)</a>文檔。</p>
+      </li>
+      <li>
+        <p>配置播放器</p>
+        <p>令牌隨播放請求一起傳遞。如果令牌無效或已過期，則將限制對內容的訪問。玩家必須配置為使用令牌。</p>
+
+        <strong>網絡播放器</strong>
+        <p>
+          有關配置Brightcove Web播放器的詳細信息，請參閱<a href="https://player.support.brightcove.com/playback/license-protection-with-bcp.html">Brightcove Player的密鑰/許可證保護</a>文檔。
+        </p>
+        <strong>本機Android或iOS播放器</strong>
+        <p>
+          有關為Android或iOS配置本機播放器的詳細信息，請參見<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">使用本機SDK進行密鑰/許可證保護</a>文檔。
+        </p>
+        <strong>你自己的播放器</strong>
+        <p>
+          要將 JWT 與您的播放器一起使用，不需要額外的配置。
+        </p>
+      </li>
+    </ol>
+
+    <h3>筆記</h3>
+    <ul>
+      <li>無需使用播放權限即可使用此功能。</li>
+      <li>JWT 令牌不需要特定權限（聲明）。只需使用客戶的私鑰進行簽名即可。</li>
+      <li>您的內容需要加密 HLSe 或 DRM。</li>
+    </ul>
+
+    <h3 id="Limitations">局限性</h3>
+    <p>以下限制適用於此功能：</p>
+    <ul>
+      <li>
+        對於HLSe（AES-128），令牌將附加到主清單請求中，並將傳播到加密密鑰URL。由於這些URL被附加到主清單中，因此客戶應考慮限制使用次數，以最大程度地減少其內容的顯示。
+      </li>
+      <li>
+        對於HLSe（AES-128），播放器在播放視頻時會發出多個請求，通常每個再現一個。這<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">馬蘇索賠</a>需要設置得足夠高以解決這些請求。您應該考慮其他聲明，以盡量減少您的內容的曝光。切換演繹將請求新的許可證。
+      </li>
+      <li>
+        跟踪<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">maxu 和 maxip 聲明</a>最終是一致的。這意味著如果使用這些聲明的令牌被快速連續重複使用多次，則可能會看到該令牌被接受的次數比這些聲明聲明的次數要多。跟踪在幾秒鐘內變得一致，在該窗口之後，令牌將按預期被阻止。
+      </li>
+    </ul>
+  </section>
+
+  <!-- <section class="bcls-section">
+    <h2 id="Related_topics">Related topics</h2>
+    <ul>
+      <li>
+        <a href="/playback-rights/getting-started/implementing-epa.html">Implementing Playback Rights Management Service</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-bcp.html">Using Playback Rights with Brightcove Player</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-sdks.html">Using Playback Rights with the Native SDKs</a>
+      </li>
+      <li>
+        <a href="/playback-authorization/guides/stream-concurrency.html">Implementing Stream Concurrency</a>
+      </li>
+      <li>
+        <a href="https://general.support.brightcove.com/developer/create-jwt-stage.html">Creating a JSON Web Token (JWT)</a>
+      </li>
+    </ul>
+  </section> -->
+</article>

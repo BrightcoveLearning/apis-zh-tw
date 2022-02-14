@@ -1,0 +1,453 @@
+---
+title: '快速開始：使用 Brightcove Live API 創建實時流'
+description: '本教程將引導您使用 Live API 創建實時流作業。'
+parent: Getting Started 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="What_you_need">你需要什麼</h2>
+
+<p>要完成本教程，您需要以下內容。</p>
+
+<ul>
+	<li>為Live API設置的帳戶</li>
+	<li>Live API的api密鑰（設置帳戶時提供給您）</li>
+	<li>Video Cloud帳戶（創建實時流作業不是必需的，但需要在Brightcove Player中設置播放）</li>
+	<li>如果您將使用<span translate="No">內容管理系統 API</span>要創建 Video Cloud 視頻而不是 Studio，您需要具有視頻/讀取和視頻/寫入權限的客戶端憑據 - 如果您不熟悉獲取客戶端憑據的過程，請參閱<a href="#authentication">驗證</a>以下部分。</li>
+	<li>能夠通過以下方式發出 REST API 請求<a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">捲曲</a>或 REST 客戶端，例如<a href="/general/use-insomnia-api-requests.html">失眠</a>或者<a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">郵差</a> .
+	<p>為了幫助您，我們準備了一些 Insomnia 和 Postman 導入，您可以在練習中使用（在 Brightcove Learning Services，我們更喜歡並使用 Insomnia，但如果您擁有 Insomnia，Postman 也可以使用）：</p>
+
+	<p>在每個zip文件中，您都可以找到一個自述頁面來幫助您。</p>
+
+	<ul>
+		<li><a href="/assets/downloads/insomnia-imports.zip">失眠工作區導入</a></li>
+		<li><a href="/assets/downloads/postman-imports.zip">郵遞員收集和環境導入</a></li>
+	</ul>
+	</li>
+	<li>要創建實際的實時流，您需要用於實時流的軟件或硬件編碼器。以下說明將包括使用 Wirecast 設置直播流的步驟（<a href="http://www.telestream.net/controls/wirecast/download-wirecast.htm">報名參加試驗</a>）。如果您使用其他編碼器，則過程將有所不同，但就Live API響應所需的信息而言，該過程應相似。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="getCredentials" class="bcls-expander-head">獲取CMS API的憑據</h2>
+
+<div class="bcls-expander-content">
+<p>要使用<span translate="No">內容管理系統 API</span>您將需要適當的憑據。</p>
+
+<p>在大多數情況下，獲取憑據的最簡單方法是通過 Studio Admin API 身份驗證部分（需要您帳戶的管理員權限）。看<a href="https://studio.support.brightcove.com/admin/managing-api-authentication-credentials.html">管理 API 身份驗證憑據</a>詳情。在這種情況下，您需要的權限是<strong>分享關係</strong> -您同時需要讀寫權限：</p>
+
+<figure class="bcls-figure"><img class="bcls-image" alt="Sharing Relationship Permissions" src="/assets/images/live-api/17765/17765-api-permissions.png" />
+<figcaption class="bcls-caption--image">共享關係權限</figcaption>
+</figure>
+
+<p>如果Studio中沒有所需的權限，或者您希望直接從OAuth API獲取權限，請選擇<strong>獲取客戶憑證</strong>下面列出的文件。無論您選擇哪個選項，您都需要請求正確的操作權限。以下可以與 cURL 或 Postman 一起使用以獲得適當的權限：</p>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">"operations": [
+    "video-cloud/videos/read",
+    "video-cloud/videos/create",
+    "video-cloud/videos/update"]</code></pre>
+
+<ul>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth：使用cURL獲取客戶端憑據</a></li>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth：使用郵遞員獲取客戶憑證</a></li>
+</ul>
+</div>
+</section>
+
+<section class="bcls-section">
+<h2 id="Create_live_job">創建現場工作</h2>
+
+<p>首先，我們將創建現場作業。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>對於此步驟，您將提交一個<code translate="No">POST </code>請求：
+
+	<pre class="line-numbers">
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs
+</code>
+</pre>
+
+	<p>使用以下內容作為請求正文：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "live_stream": true,
+    "region": "us-west-2",
+    "reconnect_time": 1800,
+    "outputs": [
+        {
+            "label": "hls720p",
+            "live_stream": true,
+            "width": 1280,
+            "height": 720,
+            "video_codec": "h264",
+            "h264_profile": "high",
+            "video_bitrate": 2100,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        },
+        {
+            "label": "hls540p",
+            "live_stream": true,
+            "width": 960,
+            "height": 540,
+            "video_codec": "h264",
+            "h264_profile": "main",
+            "video_bitrate": 1500,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        },
+        {
+            "label": "hls360p",
+            "live_stream": true,
+            "width": 640,
+            "height": 360,
+            "video_codec": "h264",
+            "h264_profile": "main",
+            "video_bitrate": 800,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        }
+    ]
+}
+</code>
+</pre>
+	</li>
+	<li>如果您使用的是REST客戶端，例如<a href="/general/use-insomnia-api-requests.html">失眠</a>或者<a href="/general/use-postman-api-requests.html">郵差</a>，您將需要為請求添加以下標頭：
+	<table class="bcls-table">
+		<thead>
+			<tr>
+				<th>鑰匙</th>
+				<th>價值</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>X-API-KEY</td>
+				<td><span class="bcls-input">您的 API 密鑰</span></td>
+			</tr>
+			<tr>
+				<td>內容類型</td>
+				<td>應用程序/ json</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>使用上面步驟 1 中顯示的請求正文，並確保使用 POST 方法發送請求。</p>
+
+	<aside class="bcls-aside bcls-aside--information">如果您更喜歡使用 cURL，您會發現<a href="#curlCreateLiveJob">下面等效的 cURL 命令</a> .</aside>
+	</li>
+	<li>來自 API 的響應應類似於以下內容：
+		
+	<details>
+		<summary>樣本響應</summary>
+		<pre class="line-numbers">
+		<code class="language-json" translate="No">{
+				"id": "15981d93877e490185e6ebc9af2c79a3",
+				"outputs": [
+						{
+								"id": "0-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist_vod.m3u8",
+								"label": "hls720p"
+						},
+						{
+								"id": "1-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist_vod.m3u8",
+								"label": "hls540p"
+						},
+						{
+								"id": "2-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist_vod.m3u8",
+								"label": "hls360p"
+						},
+						{
+								"id": "3-15981d93877e490185e6ebc9af2c79a3",
+								"playlist_type": "defaultS3",
+								"type": "playlist",
+								"filename": "playlist.m3u8",
+								"dvr_filename": "playlist_dvr.m3u8",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist_dvr.m3u8",
+								"ssai_playback_urls": {
+										"685b239f582c42fca49da33be4f2328e": {
+												"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_ssaiM.m3u8",
+												"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_dvr_ssaiM.m3u8",
+												"playback_added_cdns": [],
+												"description": "House Ads - a95ac581551b4478b27910e5675db1f8",
+												"type": "ads"
+										},
+										"c96e2d00d6744c65a3eddb15425e4a51": {
+												"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_ssaiM.m3u8",
+												"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_dvr_ssaiM.m3u8",
+												"playback_added_cdns": [],
+												"description": "House Counter - a95ac581551b4478b27910e5675db1f8",
+												"type": "counter"
+										}
+								}
+						}
+						],
+						<span class="bcls-highlight">"stream_url": "rtmp://ep1-apse2.bcovlive.io:1935/15981d93877e490185e6ebc9af2c79a3"</span>,
+						<span class="bcls-highlight">"stream_name": "alive"</span>,
+						"encryption": {},
+						"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist.m3u8",
+						"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist_dvr.m3u8",
+						"ssai_playback_urls": {
+								"685b239f582c42fca49da33be4f2328e": {
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_ssaiM.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_dvr_ssaiM.m3u8",
+								"playback_added_cdns": [],
+								"description": "House Ads - a95ac581551b4478b27910e5675db1f8",
+								"type": "ads"
+								},
+								"c96e2d00d6744c65a3eddb15425e4a51": {
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_ssaiM.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_dvr_ssaiM.m3u8",
+								"playback_added_cdns": [],
+								"description": "House Counter - a95ac581551b4478b27910e5675db1f8",
+								"type": "counter"
+						}
+				}
+		}
+		</code>
+		</pre>
+	</details>
+	</li>
+	<li>就我們的目的而言，響應中的重要字段是：
+	<ul>
+		<li>stream_url（第 51 行）</li>
+		<li>流名稱（第 52 行）</li>
+		<li>播放網址（第54行）</li>
+	</ul>
+
+	<aside class="bcls-aside bcls-aside--information">請注意，您還可以使用<code translate="No">playback_url_dvr</code>如果您想要 DVR 功能；這<code translate="No">playback_url_vod</code>僅供內部使用。</aside><aside class="bcls-aside bcls-aside--information">請注意，DVR 功能只有在播放器支持時才能使用。看<a href="https://player.support.brightcove.com/plugins/live-dvrux-plugin.html">實時 DVRUX 插件</a>需要 Brightcove Player 插件。</aside>
+
+	<p>在接下來的步驟中，您將需要這些字段的值 - 來自您自己的響應。</p>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Set_up_Video_Cloud_video">設置視頻雲視頻</h2>
+
+<p>現在我們有了實時流信息，我們將在Video Cloud中設置一個遠程視頻，以便我們可以在Brightcove Player中播放它。</p>
+
+<div>在這些步驟中，我們使用<a href="/cms/">CMS API</a>，但是如果您願意，也可以在Video Cloud Studio中完成-請參閱<a href="#useStudio">下面的替代步驟</a>。
+
+<p>如果您使用的是Insomnia或Postman，則需要使用客戶端憑據設置OAuth2身份驗證。如果您需要幫助，請參閱以下指南之一：</p>
+
+<ul>
+	<li><a href="/general/use-insomnia-api-requests.html">將 Insomnia 用於 API 請求</a></li>
+	<li><a href="/general/use-postman-api-requests.html">使用 Postman 處理 API 請求</a></li>
+</ul>
+
+<ol class="bcls-tasklist-restart">
+	<li>
+	<p>首先，您需要通過製作一個新視頻<code translate="No">POST</code>請求：</p>
+
+	<pre>
+<code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos</code></pre>
+	</li>
+	<li>
+	<p>請求正文可以包含多條元數據（請參閱<a href="/cms/references/reference.html#/Videos/CreateVideo">API 參考</a>有關詳細信息），但唯一需要的是<code translate="No">name</code>：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "name": "<span class="bcls-input">some name for your live stream</span>"
+}</code></pre>
+	</li>
+	<li>
+	<p>響應將包含所有視頻元數據，但重要的字段是<code translate="No">id</code>，您將需要添加遠程資產。</p>
+	</li>
+	<li>
+	<p>要添加 HLS 流，您將製作另一個<code translate="No">POST</code>請求：</p>
+
+	<pre>
+<code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video_id</span>/assets/hls_manifest</code></pre>
+	</li>
+	<li>
+	<p>這一次，請求正文將是：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "remote_url": "<span class="bcls-input">playback_url for your live stream</span>"
+}</code></pre>
+	</li>
+</ol>
+</div>
+</section>
+
+<section class="bcls-section">
+<h2 id="Add_video_to_player">將視頻添加到播放器</h2>
+
+<p>現在，我們將創建一個簡單的HTML頁面，並向其中添加播放器以及剛剛創建的視頻。</p>
+
+<aside class="bcls-aside bcls-aside--information">在這裡，我們將再次使用 Studio 來獲取播放器發布代碼 - 您也可以使用<a href="/player-management/getting-started/overview-player-management-api.html">播放器管理 API</a>若你寧可。</aside>
+
+<ol class="bcls-tasklist-restart">
+	<li>創建一個簡單的HTML頁面來測試實時流播放器。您可以包含您喜歡的任何其他內容，也可以完全不包含。</li>
+	<li>在Studio媒體模塊中，選擇在前面的步驟中創建的視頻，然後單擊<strong>發布和嵌入&gt; Web Player</strong>：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Publish Video" src="/assets/images/live-api/17765/17765-publish-video.png" />
+	<figcaption class="bcls-caption--image">發布影片</figcaption>
+	</figure>
+	</li>
+	<li>在“發布"對話框中，選擇一個播放器（Brightcove默認播放器很好）：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select Player" src="/assets/images/get-started/select-player.png" />
+	<figcaption class="bcls-caption--image">選擇玩家</figcaption>
+	</figure>
+	</li>
+	<li>向下滾動，根據需要設置播放器的大小，然後在代碼塊中單擊以選擇標準播放器代碼 - 複製此代碼並粘貼到您的 html 頁面正文中：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Get Publishing Code" src="/assets/images/get-started/get-publishing-code.png" />
+	<figcaption class="bcls-caption--image">獲取發布代碼</figcaption>
+	</figure>
+	</li>
+	<li>將您的 html 頁面保存到遠程或本地 Web 服務器，以便您可以瀏覽它。</li>
+	<li>在網絡瀏覽器中打開頁面。由於我們還沒有開始蒸，你會看到一個媒體錯誤：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Media Error" src="/assets/images/get-started/media-error.png" />
+	<figcaption class="bcls-caption--image">媒體錯誤</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="curl_commands">cURL命令</h2>
+
+<p>本節為不使用 REST 客戶端（如 Insomnia 或 Postman）的用戶提供替代的 cURL 命令。</p>
+
+<details>
+	<summary>
+		<h3 id="curlCreateLiveJob">用於創建現場作業的cURL</h3>
+	</summary>
+	
+	<pre class="line-numbers">
+	<code class="language-bash" translate="No">## Create Job - Simple
+	curl -X "POST" "https://api.bcovlive.io/v1/jobs" \
+	-H "X-API-KEY: <span class="bcls-input">YOUR_API_KEY_HERE</span>" \
+	-H "Content-Type: application/json" \
+	-d $'{
+	"outputs": [
+	{
+	"height": 720,
+	"video_bitrate": 2100,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 1280,
+	"video_codec": "h264",
+	"label": "hls720p",
+	"h264_profile": "high",
+	"live_stream": true
+	},
+	{
+	"height": 540,
+	"video_bitrate": 1500,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 960,
+	"video_codec": "h264",
+	"label": "hls540p",
+	"h264_profile": "main",
+	"live_stream": true
+	},
+	{
+	"height": 360,
+	"video_bitrate": 800,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 640,
+	"video_codec": "h264",
+	"label": "hls360p",
+	"h264_profile": "main",
+	"live_stream": true
+	}
+	],
+	"region": "us-west-2",
+	"reconnect_time": 1800,
+	"live_stream": true
+	}'</code></pre>
+</details>
+
+<p>將代碼複製到文本編輯器中，並替換<code translate="No">YOUR_API_KEY_HERE </code>使用您自己的 api 密鑰。然後將代碼複製並粘貼到命令行並運行它。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="useStudio">使用 Studio 創建視頻</h2>
+
+<p>以下是在Studio中創建視頻的替代步驟。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>登錄到Video Cloud Studio。</li>
+	<li>轉到媒體模塊。</li>
+	<li>在左側的選項中，單擊<strong>添加遠程視頻</strong>：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Add Remote Video Menu Item" src="/assets/images/get-started/add-remote-video-option.png" />
+	<figcaption class="bcls-caption--image">添加遠程視頻菜單項</figcaption>
+	</figure>
+	</li>
+	<li>在裡面<strong>添加遠程視頻</strong>對話框中，添加視頻名稱，然後復制並粘貼<code translate="No">playback_url</code>從實時API響應到“URL"字段中。然後點擊<strong>添加演繹</strong>， 和<strong>節省</strong>：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Add Rendition Dialog" src="/assets/images/get-started/remote-video-dialog.png" />
+	<figcaption class="bcls-caption--image">添加渲染對話框</figcaption>
+	</figure>
+
+	<aside class="bcls-aside bcls-aside--information">注意：如果您想通過 HTTPS 傳輸安全流，只需更改<code translate="No">http</code>在 play_url 到<code translate="No">https</code> .</aside>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="wirecast">使用 Wirecast 流式傳輸事件</h2>
+
+<p>在本節中，我們將配置並使用Telestream Wirecast編碼器來支持直播事件。Telestream Wirecast 軟件是一種桌面應用程序，可從您的相機捕獲輸入並生成可由 CDN 傳送的流。請注意，存在一些可用的基於硬件和其他基於軟件的編碼解決方案，它們可能更適合於傳遞實時流事件。您可以從以下網址下載 Wirecast 軟件的試用版<a href="http://www.telestream.net/controls/wirecast/download-wirecast.htm">Telestream 網站</a> .</p>
+
+<p class="BCL-aside">筆記：在繼續之前，您應該安裝 Wirecast 軟件並將相機連接到您的計算機。</p>
+
+<p>要為直播活動配置 Wirecast，請按照以下步驟操作。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>打開有線廣播。</li>
+	<li>將鼠標懸停在<strong>+，</strong>點擊<strong>捕獲設備</strong>然後選擇您的相機。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select camera" src="/assets/images/get-started/wirecast-camera-select.png" />
+	<figcaption class="bcls-caption--image">選擇相機</figcaption>
+	</figure>
+	</li>
+	<li>單擊箭頭按鈕 ( <img alt="" src="/assets/images/get-started/arrow-icon.png" />) 使相機拍攝實況鏡頭。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Camera setup" src="/assets/images/get-started/wirecast-camera-setup.png" />
+	<figcaption class="bcls-caption--image">線播相機配置</figcaption>
+	</figure>
+	</li>
+	<li>點擊<strong>溪流</strong>按鈕 （ <img alt="" src="/assets/images/get-started/stream-icon.png" />）。系統將提示您配置輸出設置。</li>
+	<li>設置<strong>目的地</strong>到<strong>RTMP服務器</strong> .點擊<strong>好的</strong>。</li>
+	<li>為了<strong>地址</strong>， 使用<strong>stream_url</strong>從Live API返回（第3步）。</li>
+	<li>為了<strong>溪流</strong>，活著使用。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Output settings" src="/assets/images/get-started/output-settings.png" />
+	<figcaption class="bcls-caption--image">線播輸出設置</figcaption>
+	</figure>
+	</li>
+	<li><strong>（可選的）</strong>要創建其他輸出流，請單擊<strong>添加...</strong>創建其他輸出流時，您可能希望創建自己的自定義編碼配置文件來控制輸出比特率。確保<strong>溪流</strong>名稱反映了新的比特率。</li>
+	<li>點擊<strong>好的</strong>保存輸出設置。</li>
+	<li>點擊<strong>溪流</strong>按鈕 （ <img alt="" src="/assets/images/get-started/stream-icon.png" />）。直播應該開始。</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="conclusion">結論</h2>
+
+<p>您現在已準備好創建實時流會話。您需要將以下內容添加到您的編碼器配置中：</p>
+
+<ul>
+	<li><code translate="No">stream_url</code>：添加<code translate="No">stream_url</code>從你的工作中<code translate="No">rtmp</code>地址）</li>
+	<li><code translate="No">stream_name</code>：流名稱必須為<code translate="No">alive</code></li>
+</ul>
+
+<p>啟動實時流後，您應該會看到它出現在前面步驟中創建的Brightcove播放器中。</p>
+</section>
+</article>

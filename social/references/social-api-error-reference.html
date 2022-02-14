@@ -1,0 +1,84 @@
+---
+title: '社交API：錯誤參考'
+description: '本主題提供社交 API 錯誤的參考。'
+parent: References 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="errorMessages">一般錯誤訊息</h2>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>地位</th>
+          <th>名稱</th>
+          <th>信息</th>
+          <th>原因</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>401</td>
+          <td><code translate="No">UNAUTHORIZED</code></td>
+          <td><code translate="No">Permission denied.</code></td>
+          <td>缺少或無效的OAuth訪問令牌。如果您確實提供了訪問令牌，則該令牌可能沒有此請求的適當範圍</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td><code translate="No">FORBIDDEN</code></td>
+          <td>&nbsp;</td>
+          <td>您無權訪問該資源。在大多數情況下，您的請求網址中會有錯誤。</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td><code translate="No">RESOURCE_NOT_FOUND</code></td>
+          <td><code translate="No">Resource does not exist.</code></td>
+          <td>您請求的資源不存在 - 檢查拼寫和路徑錯誤。</td>
+        </tr>
+        <tr>
+          <td>422</td>
+          <td>&nbsp;</td>
+          <td><code translate="No">(Message varies according to the problem; examples: </code>
+            <ul>
+              <li><code translate="No">"Page size is not within the range(1-100) 200"</code></li>
+              <li><code translate="No">"The since parameter must be an ISO-8601 datetime string"</code></li>
+            </ul>
+            <code translate="No"> )</code></td>
+          <td>檢查查詢參數以確保值有效</td>
+        </tr>
+        <tr>
+          <td>500</td>
+          <td>&nbsp;</td>
+          <td><code translate="No">an internal error occurred</code></td>
+          <td>Brightcove系統中的問題-請稍後再試。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="bcls-section">
+    <h2 id="social_sharing_errors">社交分享錯誤</h2>
+    <p>社交分享錯誤不會作為對 API 請求的單獨錯誤響應返回，而是在<code translate="No">errors</code>數組中的正常響應。</p>
+    <p>如果共享操作失敗，API將報告<code translate="No">"result": "ERROR"</code>並返回包含以下內容的錯誤對象：</p>
+    <ul>
+      <li><code translate="No">error_code</code> -服務器從社交平台記錄的錯誤代碼（如果有）。</li>
+      <li><code translate="No">error_message</code> -服務器記錄的錯誤消息，或者從社交平台返回的錯誤消息（如果有）。</li>
+      <li><code translate="No">platform_error</code> -從社交平台返回的錯誤對象的JSON表示（如果有）。</li>
+    </ul>
+    <p>這是一個例子</p>
+    <pre class="line-numbers">
+<code class="language-json" translate="No">"errors": [
+  {
+    "error_code": "UPLOAD_FAILURE",
+    "message": "Upload error: Received Facebook error response of type OAuthException: (#100) sponsor_id requires publishing profile/page to be verified or branding partner. (code 100, subcode null)"
+  }
+]</code></pre>
+    <p>有關它們返回的錯誤的更多信息，請參閱特定社交平台的文檔：</p>
+    <ul>
+      <li>YouTube<a href="https://developers.google.com/youtube/v3/docs/errors"></a></li>
+      <li><a href="https://developers.facebook.com/docs/graph-api/video-uploads#errors">Facebook</a></li>
+      <li><a href="https://developer.twitter.com/en/docs/basics/response-codes.html">推特</a></li>
+    </ul>
+  </section>
+</article>

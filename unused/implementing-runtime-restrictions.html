@@ -1,0 +1,84 @@
+---
+title:“實施運行時限制”
+description:“在本主題中，您將學習如何在使用 Brightcove 播放限制時生成和註冊 Jason Web 令牌 (JWT)。”
+parent: Getting Started 
+grandparent: Playback Restrictions
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <br/>
+  <aside class="bcls-aside bcls-aside--tip">此功能適用於有權訪問 Brightcove 播放限制的有限可用性階段的一組特定客戶。</aside>
+
+<section class="bcls-section">
+<h2 id="Introduction">介紹</h2>
+
+<p>當將動態傳送與受DRM保護或HTTP實時流加密（HLSe）內容一起使用時，Brightcove播放限制提供了更高級別的安全性。 </p>
+
+<p>此功能使您可以通過需要令牌來授權播放來控制內容播放。需要有效的 Jason Web 令牌 (JWT) 才能獲得解密加密 HLS 所需的密鑰，或解密受 DRM 保護的內容所需的許可證。</p>
+
+<p>如果您不熟悉此功能，請參閱<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概述：Brightcove播放限制</a>文檔。</p>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Workflow">工作流程</h2>
+
+<p>要使用播放授權服務，請按照下列步驟操作：</p>
+<ol class="bcls-tasklist">
+  <li>
+    <a href="#Create_a_JSON_Web_Token">創建一個<span translate="No">JSON 網絡令牌</span></a>
+  </li>
+  <li>
+    <a href="#Configure_the_player">配置播放器以使用令牌</a>
+  </li>
+</ol>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Create_a_JSON_Web_Token">創建一個<span translate="No">JSON 網絡令牌</span></h2>
+
+<p>要創建在與 Brightcove 的 Playback API 通信時使用的令牌，請參閱<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">創建一個<span translate="No">JSON 網絡令牌</span> (智威湯遜)</a>文檔。</p>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Configure_the_player">配置播放器</h2>
+
+<p>令牌隨播放請求一起傳遞。如果令牌無效或已過期，則將限制對內容的訪問。玩家必須配置為使用令牌。</p>
+
+<h3>網絡播放器</h3>
+<p>
+  有關配置Brightcove Web播放器的詳細信息，請參閱<a href="https://player.support.brightcove.com/playback/license-protection-with-bcp.html">Brightcove Player的密鑰/許可證保護</a>文檔。
+</p>
+<h3>本機Android播放器</h3>
+<p>
+  有關為 Android 配置本機播放器的詳細信息，請參閱<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">使用本機 SDK 進行密鑰/許可證保護</a>文檔。
+</p>
+<h3>本機iOS播放器</h3>
+<p>
+  有關為 iOS 配置本機播放器的詳細信息，請參閱<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">使用本機 SDK 進行密鑰/許可證保護</a>文檔。
+</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">局限性</h2>
+
+<p>以下限制適用於此功能：</p>
+<ul>
+  <li>
+    對於HLSe（AES-128），令牌將附加到主清單請求中，並將傳播到加密密鑰URL。由於這些URL被附加到主清單中，因此客戶應考慮限制使用次數，以最大程度地減少其內容的顯示。
+  </li>
+  <li>
+    對於HLSe（AES-128），播放器在播放視頻時會發出多個請求，通常每個再現一個。這<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">馬蘇索賠</a>需要設置得足夠高以解決這些請求。您應該考慮其他聲明，以盡量減少您的內容的曝光。切換演繹將請求新的許可證。
+  </li>
+  <li>
+    跟踪<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">maxu 和 maxip 聲明</a>最終是一致的。這意味著如果使用這些聲明的令牌被快速連續重複使用多次，則可能會看到該令牌被接受的次數比這些聲明聲明的次數要多。跟踪在幾秒鐘內變得一致，在該窗口之後，令牌將按預期被阻止。
+  </li>
+</ul>
+</section>
+
+</article>

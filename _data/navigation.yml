@@ -1,0 +1,1019 @@
+- section: 
+  name: '家'
+  url: '/index.html'
+- section: 
+  name: '入門'
+  url: '/getting-started/index.html'
+  docs:
+    - name: '概述：平台API'
+      url: '/getting-started/getting-started-brightcove-apis.html'
+    - name: 'API請求的身份驗證'
+      url: '/getting-started/authentication-brightcove-api-requests.html'
+    - name: 'Brightcove API的測試工具'
+      url: '/getting-started/concepts-testing-tools-brightcove-apis.html'
+    - name: '學習指南：使用REST API'
+      url: '/getting-started/learning-guide-using-rest-apis.html'
+- section: 
+  name: '一般信息'
+  url: '/general/index.html'
+  docs:
+    - name: '所有 API 參考'
+      url: '/general/all-api-references.html'
+    - name: '上下文感知編碼概述'
+      url: '/general/overview-context-aware-encoding.html'
+    - name: '管理API身份驗證憑據'
+      url: '/general/managing-api-authentication-credentials.html'
+    - name: '概述：法醫水印'
+      url: '/general/overview-forensic-watermarking.html'
+    - name: '常問問題：法醫水印'
+      url: '/general/faq-forensic-watermarking.html'
+    - name: '將CMS與Video Cloud集成'
+      url: '/general/integrating-your-cms-video-cloud.html'
+    - name: '平台 API 代碼示例'
+      url: '/general/platform-api-code-samples.html'
+    - name: '平台 API 培訓視頻'
+      url: '/general/video-cloud-api-training-videos.html'
+    - name: '在線API測試儀'
+      url: '/general/concepts-api-tester.html'
+    - name: '對API請求使用失眠'
+      url: '/general/use-insomnia-api-requests.html'
+    - name: '使用Postman進行API請求'
+      url: '/general/use-postman-api-requests.html'
+    - name: '音頻內容'
+      url: '/general/audio-content.html'
+    - name: '平台 API 已知問題'
+      url: '/general/known-issues.html'
+- section: 
+  name: 'Analytics API'
+  url: '/analytics/index.html'
+  docs:
+    - name: '入門'
+      url: '/analytics/getting-started/index.html'
+      docs:
+        - name: '概述：Analytics API'
+          url: '/analytics/getting-started/overview-analytics-api-v1.html'
+        - name: '分析 API 資源管理器'
+          url: '/analytics/getting-started/analytics-api-explorer.html'
+        - name: '概述：視頻數據端點'
+          url: '/analytics/getting-started/overview-video-data-endpoint.html'
+        - name: '概述：維度、字段和參數'
+          url: '/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html'
+    - name: '一般信息'
+      url: '/analytics/general/index.html'
+      docs: 
+        - name: '常問問題：Analytics API'
+          url: '/analytics/general/faq-analytics-api.html'
+        - name: '分析 API 術語表'
+          url: '/analytics/general/analytics-api-glossary.html'
+        - name: '唯一用戶'
+          url: '/analytics/general/analytics-api-unique-users.html'
+        - name: '實時指標'
+          url: '/analytics/general/live-metrics.html'
+    - name: '參考'
+      url: '/analytics/references/index.html'
+      docs: 
+        - name: '分析 API 參考'
+          url: '/analytics/references/reference.html'
+        - name: '發行說明'
+          url: '/analytics/references/analytics-api-release-notes.html'
+        - name: '已知的問題'
+          url: '/analytics/references/known-issues.html'
+        - name: '錯誤參考'
+          url: '/analytics/references/analytics-api-error-reference.html'
+    - name: '尺寸指南'
+      url: '/analytics/dimension-guides/index.html'
+      docs: 
+        - name: '尺寸： <code translate="No">account</code>'
+          url: '/analytics/dimension-guides/dimension-account.html'
+        - name: '尺寸： <code translate="No">browser_type</code>'
+          url: '/analytics/dimension-guides/dimension-browsertype.html'
+        - name: '尺寸： <code translate="No">date</code>'
+          url: '/analytics/dimension-guides/dimension-date.html'
+        - name: '尺寸： <code translate="No">date_hour</code>'
+          url: '/analytics/dimension-guides/dimension-datehour.html'
+        - name: '尺寸： <code translate="No">destination_domain</code>'
+          url: '/analytics/dimension-guides/dimension-destinationdomain.html'
+        - name: '尺寸： <code translate="No">destination_path</code>'
+          url: '/analytics/dimension-guides/dimension-destinationpath.html'
+        - name: '尺寸： <code translate="No">device_manufacturer</code>'
+          url: '/analytics/dimension-guides/dimension-devicemanufacturer.html'
+        - name: '尺寸： <code translate="No">device_type</code>'
+          url: '/analytics/dimension-guides/dimension-devicetype.html'
+        - name: '尺寸： <code translate="No">device_os</code>'
+          url: '/analytics/dimension-guides/dimension-deviceos.html'
+        - name: '尺寸： <code translate="No">city</code>'
+          url: '/analytics/dimension-guides/dimension-city.html'
+        - name: '尺寸： <code translate="No">country</code>'
+          url: '/analytics/dimension-guides/dimension-country.html'
+        - name: '尺寸： <code translate="No">region</code>'
+          url: '/analytics/dimension-guides/dimension-region.html'
+        - name: '尺寸： <code translate="No">live_stream</code>'
+          url: '/analytics/dimension-guides/dimension-livestream.html'
+        - name: '尺寸： <code translate="No">referrer_domain</code>'
+          url: '/analytics/dimension-guides/dimension-referrerdomain.html'
+        - name: '尺寸： <code translate="No">source_type</code>'
+          url: '/analytics/dimension-guides/dimension-sourcetype.html'
+        - name: '尺寸： <code translate="No">search_terms</code>'
+          url: '/analytics/dimension-guides/dimension-searchterms.html'
+        - name: '尺寸： <code translate="No">social_platform</code>'
+          url: '/analytics/dimension-guides/dimension-socialplatform.html'
+        - name: '尺寸： <code translate="No">player</code>'
+          url: '/analytics/dimension-guides/dimension-player.html'
+        - name: '尺寸： <code translate="No">video</code>'
+          url: '/analytics/dimension-guides/dimension-video.html'
+    - name: '代碼樣例'
+      url: '/analytics/code-samples/index.html'
+      docs: 
+        - name: '並發觀眾現場直播'
+          url: '/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html'
+        - name: '每日分析報告生成器'
+          url: '/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html'
+        - name: '目的地報告'
+          url: '/analytics/code-samples/analytics-api-sample-destinations-report.html'
+        - name: '地理分析報告'
+          url: '/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html'
+        - name: '每日唯一身份用戶'
+          url: '/analytics/code-samples/analytics-api-sample-unique-users-day.html'
+        - name: '視頻參與度圖'
+          url: '/analytics/code-samples/analytics-api-sample-video-engagement-graph.html'
+        - name: '播放器和日期的視頻報告'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html'
+        - name: '按參考ID的視頻報告'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-reference-id.html'
+        - name: '按標籤的視頻報告'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-tags.html'
+        - name: '播放清單分析'
+          url: '/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html'
+        - name: '最近添加的視頻'
+          url: '/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html'
+        - name: '按國家和日期劃分的視頻分析報告'
+          url: '/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html'
+- section:
+  name: 受眾群體API
+  url: '/audience/index.html'
+  docs:
+    - name: '入門'
+      url: ' /audience/getting-started/index.html'
+      docs: 
+        - name: '概述：受眾群體API'
+          url: '/audience/getting-started/overview-audience-api.html'
+    - name: '參考'
+      url: '/audience/references/index.html'
+      docs:
+        - name: '受眾群體API參考'
+          url: '/audience/references/reference.html'
+- section:
+  name: '雲播放 API'
+  url: '/cloud-playout-apis/index.html'
+  docs:
+    - name: '入門'
+      url: ' /cloud-playout-apis/getting-started/index.html'
+      docs: 
+        - name: '概述：渠道 API'
+          url: '/cloud-playout-apis/getting-started/overview-channel-api.html'
+        - name: '概述：EPG API'
+          url: '/cloud-playout-apis/getting-started/overview-epg-api.html'
+        - name: '電子節目單API：最佳實踐'
+          url: '/cloud-playout-apis/getting-started/epg-best-practices.html'
+    - name: '參考'
+      url: '/cloud-playout-apis/references/index.html'
+      docs:
+        - name: 'EPG API參考'
+          url: '/cloud-playout-apis/references/reference-epg.html'
+        - name: '通道 API 參考'
+          url: '/cloud-playout-apis/references/reference-channels.html'
+        - name: 'Cloud Playout 的 CMS API 參考'
+          url: '/cloud-playout-apis/references/reference-cms-interactions.html'
+        - name: 'Cloud Playout API 發行說明'
+          url: '/cloud-playout-apis/references/release-notes.html'
+- section: 
+  name: 'CMS API'
+  url: '/cms/index.html'
+  docs:
+    - name: '入門'
+      url: '/cms/getting-started/index.html'
+      docs:
+        - name: '概述：CMS API'
+          url: '/cms/getting-started/overview-cms-api.html'
+        - name: '執業領域：CMS API'
+          url: '/cms/getting-started/practice-area-cms-api.html'
+        - name: '最佳做法：CMS 和播放 API'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+        - name: 'CMS API 通知'
+          url: '/cms/getting-started/cms-api-notifications.html'
+    - name: '參考'
+      url: '/cms/references/index.html'
+      docs:
+        - name: 'CMS API 參考'
+          url: '/cms/references/reference.html'
+        - name: 'CMS/播放 API 發行說明'
+          url: '/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html'
+        - name: '已知的問題'
+          url: '/cms/references/known-issues.html'
+        - name: 'CMS API 視頻字段參考'
+          url: '/cms/references/cms-api-video-fields-reference.html'
+        - name: 'CMS API 播放列表字段參考'
+          url: '/cms/references/cms-api-playlist-fields-reference.html'
+        - name: 'CMS API 自定義字段參考'
+          url: '/cms/references/cms-api-custom-fields-reference.html'
+        - name: 'CMS API 文件夾字段參考'
+          url: '/cms/references/cms-api-folder-fields-reference.html'
+        - name: 'CMS API 錯誤信息參考'
+          url: '/cms/references/cms-api-error-message-reference.html'
+    - name: '搜索'
+      url: '/cms/searching/index.html'
+      docs:
+        - name: 'CMS API：視頻搜索 v2'
+          url: '/cms/searching/cms-and-playback-apis-video-search-v2.html'
+        - name: 'CMS API：播放列表搜索'
+          url: '/cms/searching/cms-api-playlists-search.html'
+        - name: '頁面搜索結果'
+          url: '/cms/searching/using-cms-api-page-search-results.html'
+        - name: 'CMS 和播放 API：視頻搜索 v1'
+          url: '/cms/searching/cmsplayback-api-videos-search.html'
+        - name: '目錄搜索架構'
+          url: '/playback/guides/catalog-search-architecture.html'
+    - name: '管理視頻/資產'
+      url: '/cms/managing-videos/index.html'
+      docs:
+        - name: 激活/停用或安排視頻
+          url: /cms/managing-videos/activate-deactivate-videos.html
+        - name: 添加地理過濾
+          url: /cms/managing-videos/using-cms-api-add-geo-filtering.html
+        - name: 數字大師刪除API
+          url: /cms/managing-videos/digital-master-delete-api.html
+        - name: 刪除視頻
+          url: /cms/managing-videos/deleting-videos.html
+        - name: 獲取視頻和播放列表的數量
+          url: /cms/managing-videos/getting-counts-videos-and-playlists.html
+        - name: 使用 CMS API 管理播放列表
+          url: /cms/managing-videos/managing-playlists-using-cms-api.html
+        - name: 管理剪輯
+          url: /cms/managing-videos/using-cms-api-managing-clips.html
+        - name: 媒體分享
+          url: /cms/managing-videos/media-sharing-cms-api.html
+        - name: 多語言元數據
+          url: /cms/managing-videos/multilingual-metadata.html
+        - name: 檢索視頻數據
+          url: /cms/managing-videos/using-cms-api-retrieve-video-data.html
+        - name: 設置 360 度視頻屬性
+          url: /cms/managing-videos/setting-360-degree-video-properties-cms-api.html
+        - name: 遠程資產
+          url: /cms/managing-videos/using-cms-api-remote-assets.html
+        - name: 添加 WebVTT 字幕（文本軌道）
+          url: /cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html
+        - name: 使用 CMS API 管理文本軌道
+          url: /cms/managing-videos/managing-text-tracks.html
+        - name: 生成視頻站點地圖
+          url: /cms/managing-videos/generate-video-sitemaps.html
+        - name: 識別低性能內容
+          url: /cms/managing-videos/identifying-low-performing-content.html
+        - name: 使用文件夾
+          url: /cms/managing-videos/cms-api-working-folders.html
+        - name: 使用標籤
+          url: /cms/managing-videos/working-with-labels.html
+        - name: 鏈接 Zencoder 和視頻雲
+          url: /cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html
+    - name: '代碼樣例'
+      url: '/cms/code-samples/index.html'
+      docs:
+        - name: '添加多個附屬帳戶'
+          url: '/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html'
+        - name: '分享多部影片'
+          url: '/cms/code-samples/cms-api-sample-share-multiple-videos.html'
+        - name: '媒體分享報告'
+          url: '/cms/code-samples/cms-api-sample-media-sharing-report.html'
+        - name: '共享媒體報告'
+          url: '/cms/code-samples/cms-api-sample-shared-media-report.html'
+        - name: '更新影片'
+          url: '/cms/code-samples/cms-api-sample-update-videos.html'
+        - name: '將自定義字段添加到多個視頻'
+          url: '/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html'
+        - name: '更新地理屬性'
+          url: '/cms/code-samples/cms-api-sample-update-geo-properties.html'
+        - name: '添加提示點'
+          url: '/cms/code-samples/cms-api-sample-add-cue-points.html'
+        - name: '視頻報告生成器'
+          url: '/cms/code-samples/cms-api-sample-video-report-generator.html'
+        - name: '按交付類型分類的視頻'
+          url: '/cms/code-samples/cms-api-sample-videos-delivery-type.html'
+        - name: '下載鏈接'
+          url: '/cms/code-samples/cms-api-sample-download-links.html'
+        - name: '視頻站點地圖生成器'
+          url: '/cms/code-samples/cms-api-sample-video-sitemap-generator.html'
+        - name: 'MRSS發生器'
+          url: '/cms/code-samples/cms-api-sample-mrss-generator.html'
+        - name: '播放列表中的MRSS Feed'
+          url: '/cms/code-samples/cms-api-sample-mrss-feed-playlist.html'
+        - name: 'iTunes的RSS播客Feed'
+          url: '/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html'
+        - name: '視頻轉譯檢查器'
+          url: '/cms/code-samples/cms-api-sample-video-renditions-inspector.html'
+        - name: '有關純音頻內容的報告'
+          url: '/cms/code-samples/cms-api-sample-report-audio-only-content.html'
+        - name: '視頻架構生成器'
+          url: '/cms/code-samples/cms-api-sample-video-schema-builder.html'
+        - name: 'GET請求的Python代碼'
+          url: '/cms/code-samples/cms-api-sample-python-code-get-request.html'
+        - name: '影片搜尋應用程式'
+          url: '/cms/code-samples/cms-api-sample-video-search-app.html'
+- section: 
+  name: '跨設備恢復 (XDR) API'
+  url: '/xdr/index.html'
+  docs:
+    - name: '入門'
+      url: '/xdr/getting-started/index.html'
+      docs:
+        - name: '概述：跨設備簡歷'
+          url: '/xdr/getting-started/xdr-overview.html'
+        - name: '從XDR API獲取播放位置'
+          url: '/xdr/getting-started/get-playback-position.html'
+    - name: '指南'
+      url: '/xdr/index.html'
+      docs:
+        - name: 'Brightcove Player的跨設備簡歷'
+          url: 'https://player.support.brightcove.com/playback/xdr-with-bcplayer.html'
+        - name: '使用本機SDK進行跨設備恢復'
+          url: 'https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html'
+    - name: '參考'
+      url: '/xdr/references/index.html'
+      docs:
+        - name: '跨設備恢復 API 參考'
+          url: '/xdr/getting-started/xdr-overview.html'
+- section: 
+  name: '資料收集API'
+  url: '/data-collection/index.html'
+  docs:
+    - name: '概述：資料收集API'
+      url: '/data-collection/getting-started/overview-data-collection-api-v2.html'
+    - name: '數據收集 API 示例'
+      url: '/data-collection/getting-started/data-collection-api-sample.html'
+    - name: '數據收集API參考'
+      url: '/data-collection/references/reference.html'
+- section: 
+  name: '傳遞規則 API'
+  url: '/delivery-rules/index.html'
+  docs:
+    - name: '入門'
+      url: '/delivery-rules/getting-started/index.html'
+      docs:
+        - name: '概述：交貨規則'
+          url: '/delivery-rules/getting-started/overview-delivery-rules.html'
+        - name: '實施交貨規則'
+          url: '/delivery-rules/getting-started/implementing-delivery-rules.html'
+    - name: '指南'
+      url: '/delivery-rules/guides/index.html'
+      docs:
+        - name: '在Brightcove Player中使用傳送規則'
+          url: 'https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html'
+        - name: '將傳遞規則與本機SDK結合使用'
+          url: 'https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html'
+    - name: '參考'
+      url: '/delivery-rules/references/index.html'
+      docs:
+        - name: '投放規則API參考'
+          url: '/delivery-rules/references/reference.html'
+- section: 
+  name: '投放系統API'
+  url: '/delivery-system/index.html'
+  docs:
+    - name: '概述：投放系統API'
+      url: '/delivery-system/overview-delivery-system-api.html'
+    - name: '一步步：投放系統API'
+      url: '/delivery-system/step-step-delivery-system-api.html'
+    - name: 'Git概述'
+      url: '/delivery-system/delivery-system-api-git-overview.html'
+    - name: '投放系統API參考'
+      url: '/delivery-system/references/reference.html'
+- section: 
+  name: '動態提取API'
+  url: '/dynamic-ingest/index.html'
+  docs:
+    - name: '入門'
+      url: '/dynamic-ingest/getting-started/index.html'
+      docs:
+        - name: '概述：動態提取API'
+          url: '/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html'
+        - name: '快速開始：動態提取API'
+          url: '/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html'
+        - name: '動態提取的源文件上傳API'
+          url: '/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html'
+        - name: '動態交付概述'
+          url: '/dynamic-ingest/getting-started/overview-dynamic-delivery.html'
+    - name: '一般信息'
+      url: '/dynamic-ingest/general/index.html'
+      docs:
+        - name: '動態提取API：最佳實踐'
+          url: '/dynamic-ingest/general/dynamic-ingest-api-best-practices.html'
+        - name: '動態攝取的通知'
+          url: '/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html'
+        - name: '獲取動態攝取請求的狀態'
+          url: '/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html'
+        - name: '後備/重試策略'
+          url: '/dynamic-ingest/general/fallback-retry-strategy.html'
+        - name: '在S3上使用動態提取'
+          url: '/dynamic-ingest/general/using-dynamic-ingest-s3.html'
+        - name: '教資會策略'
+          url: '/dynamic-ingest/general/ugc-strategies.html'
+    - name: '參考'
+      url: '/dynamic-ingest/references/index.html'
+      docs:
+        - name: '動態提取API參考'
+          url: '/dynamic-ingest/references/reference.html'
+        - name: '動態摘要API發行說明'
+          url: '/dynamic-ingest/references/dynamic-ingest-api-release-notes.html'
+        - name: '已知的問題'
+          url: '/dynamic-ingest/references/known-issues.html'
+        - name: '提取字段參考'
+          url: '/dynamic-ingest/references/dynamic-ingest-ingest-fields.html'
+        - name: '動態提取錯誤消息參考'
+          url: '/dynamic-ingest/references/dynamic-ingest-error-message-reference.html'
+    - name: '攝取指南'
+      url: '/dynamic-ingest/ingest-guides/index.html'
+      docs:
+        - name: '使用上下文感知編碼'
+          url: '/dynamic-ingest/ingest-guides/context-aware-encoding.html'
+        - name: '動態交付攝取優先隊列'
+          url: '/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html'
+        - name: '歸檔大師'
+          url: '/ingest-profiles/guides/archiving-masters.html'
+        - name: '實現多個音軌'
+          url: '/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html'
+        - name: '圖片和Dynamic Ingest API'
+          url: '/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html'
+        - name: '具有媒體共享的動態攝取'
+          url: '/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html'
+        - name: '使用DRM提取內容'
+          url: '/dynamic-ingest/ingest-guides/ingesting-content-drm.html'
+        - name: '攝取WebVTT文件'
+          url: '/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html'
+    - name: '代碼樣例'
+      url: '/dynamic-ingest/code-samples/index.html'
+      docs:
+        - name: '動態提取API測試器'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html'
+        - name: '攝取視頻'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html'
+        - name: '重新轉碼視頻'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html'
+        - name: '更換影片'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html'
+        - name: '添加預定視頻'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html'
+        - name: '添加文字軌道'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html'
+        - name: '攝取低優先級視頻'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html'
+        - name: 'Python代碼'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html'
+- section:
+  name: '提取配置文件API'
+  url: '/ingest-profiles/index.html'
+  docs: 
+    - name: '入門'
+      url: '/ingest-profiles/getting-started/index.html'
+      docs:
+        - name: '概述：提取配置文件API'
+          url: '/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html'
+        - name: '執業領域：提取配置文件API'
+          url: '/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html'
+    - name: '指南'
+      url: '/ingest-profiles/guides/index.html'
+      docs:
+        - name: '歸檔大師'
+          url: '/ingest-profiles/guides/archiving-masters.html'
+        - name: 'HEVC視頻'
+          url: '/ingest-profiles/guides/hevc-video.html'
+        - name: 'CAE快速發布'
+          url: '/ingest-profiles/guides/cae-fast-publish.html'
+        - name: '音頻內容'
+          url: '/general/audio-content.html'
+        - name: '動態交付中的 MP4'
+          url: '/ingest-profiles/guides/mp4s-dynamic-delivery.html'
+        - name: '最佳實踐'
+          url: 'https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html'
+    - name: '參考'
+      url: '/ingest-profiles/references/index.html'
+      docs:
+        - name: '提取配置文件API參考'
+          url: '/ingest-profiles/references/reference.html'
+        - name: '提取配置文件字段參考'
+          url: '/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html'
+        - name: '標準攝取配置文件'
+          url: '/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html'
+        - name: '標準實時攝取配置文件'
+          url: '/ingest-profiles/references/standard-live-ingest-profiles.html'
+        - name: '自定義實時攝取配置文件的字段'
+          url: '/ingest-profiles/references/fields-custom-live-ingest-profiles.html'
+    - name: '代碼樣例'
+      url: '/ingest-profiles/code-samples/index.html'
+      docs:
+        - name: '創建自定義動態投放配置文件'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html'
+        - name: '創建自定義 CAE 配置文件'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html'
+        - name: '將配置文件添加到多個帳戶'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html'
+        - name: '獲取帳戶的所有配置文件'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html'
+        - name: '設置默認配置文件'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html'
+- section:
+  name: '頁內體驗API'
+  url: '/ipx/index.html'
+  docs:
+    - name: '入門'
+      url: ' /ipx/getting-started/index.html'
+      docs: 
+        - name: '概述：頁內體驗API'
+          url: '/ipx/getting-started/overview-page-experience-api.html'
+        - name: '快速開始：頁內體驗平台（REST）API'
+          url: '/ipx/getting-started/quick-start-page-experience-platform-rest-api.html'
+    - name: '參考'
+      url: '/ipx/references/index.html'
+      docs:
+        - name: '頁內體驗API參考'
+          url: '/ipx/references/reference.html'
+        - name: '頁內體驗API錯誤參考'
+          url: '/ipx/references/page-experience-api-error-reference.html'
+- section:
+  name: '實時API'
+  url: '/live-api/index.html'
+  docs:
+    - name: '入門'
+      url: '/live-api/getting-started/index.html'
+      docs:
+      - name: '概述：實時API'
+        url: '/live-api/getting-started/overview-brightcove-live-api.html'
+      - name: '使用 API 創建實時流'
+        url: '/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html'
+    - name: '代碼樣例'
+      url: '/live-api/code-samples/index.html'
+      docs:
+      - name: 創建現場工作
+        url: /live-api/code-samples/live-api-sample-create-live-job.html
+      - name: 為 MPEG2-TS 輸入創建實時作業
+        url: /live-api/code-samples/quick-start-create-live-job-mpeg2-ts-input.html
+      - name: 將 RTMP 輸出用於實時事件
+        url: /live-api/code-samples/quick-start-using-rtmp-outputs-live-events.html
+    - name: '參考'
+      url: '/live-api/references/index.html'
+      docs:
+      - name: 錯誤訊息
+        url: /live-api/references/live-api-error-messages.html
+      - name: 發行說明
+        url: /live-api/references/live-api-release-notes.html
+      - name: 實時API參考
+        url: /live-api/references/reference.html
+    - name: '智囊團'
+      url: '/live-api/ssai/index.html'
+      docs:
+      - name: 使用 SSAI 的提示點和廣告信標
+        url: /live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html
+      - name: '服務器端廣告插入（SSAI）'
+        url: /live-api/ssai/live-api-server-side-ad-insertion-ssai.html
+      - name: '概述：實時SSAI的播放器增強'
+        url: /live-api/ssai/overview-player-enhancements-live-ssai.html
+    - name: '指南'
+      url: '/live-api/guides/index.html'
+      docs:
+      - name: Brightcove Live 最佳實踐
+        url: 'https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html'
+      - name: Brightcove 直播節目廣告元數據 API
+        url: /live-api/guides/brightcove-live-program-ad-metadata-api.html
+      - name: 創建幀精確剪輯
+        url: /live-api/guides/live-api-creating-frame-accurate-clip.html
+      - name: 創建 VOD 剪輯
+        url: /live-api/guides/live-api-creating-vod-clips.html
+      - name: 獲取直播或 VOD 作業列表
+        url: /live-api/guides/getting-list-live-or-vod-jobs.html
+      - name: 插入 ID3 定時元數據
+        url: /live-api/guides/live-api-insert-id3-timed-metadata.html
+      - name: 通過 Live API 進行實時 DRM
+        url: /live-api/guides/live-drm-live-api.html
+      - name: 管理 Live API 的憑證
+        url: /live-api/guides/managing-credentials-live-api.html
+      - name: 通知
+        url: /live-api/guides/live-api-notifications.html
+      - name: 實時流的播放限制
+        url: /live-api/guides/live-playback-restrictions.html
+      - name: 減少直播的延遲
+        url: /live-api/guides/reducing-latency-live-streams.html
+      - name: RTMP 輸出
+        url: /live-api/guides/live-api-rtmp-outputs.html
+      - name: 靜態入口點
+        url: /live-api/guides/live-api-static-entry-points.html
+      - name: 帶有實時流的簽名URL和令牌身份驗證
+        url: /live-api/guides/signed-urls-and-token-auth-live-stream.html
+      - name: 使用實時冗餘
+        url: /live-api/guides/using-live-redundancy.html
+      - name: 來自現場活動的 VOD
+        url: /live-api/guides/live-api-vod-live-event.html
+      - name: '概述：實時調度'
+        url: /live-api/guides/live-scheduler.html
+      - name: 計劃SEP流的激活/去激活
+        url: /live-api/guides/live-scheduler-stop-start.html
+      - name: 為實時流安排剪輯生成
+        url: /live-api/guides/live-scheduler-clips.html
+      - name: 實時調度程序通知
+        url: /live-api/guides/live-scheduler-notifications.html
+- section: 
+  name: 'OAuth API'
+  url: '/oauth/index.html'
+  docs:
+    - name: '入門'
+      url: '/oauth/getting-started/index.html'
+      docs:
+        - name: '概述：OAuth API'
+          url: '/oauth/getting-started/overview-oauth-api-v4.html'
+        - name: '快速開始：OAuth API'
+          url: '/oauth/getting-started/quick-start-oauth.html'
+    - name: '指南'
+      url: '/oauth/guides/index.html'
+      docs:
+        - name: '創建客戶端憑據：cURL'
+          url: '/oauth/guides/oauth-create-client-credentials-using-curl.html'
+        - name: '創建客戶端憑據：郵差'
+          url: '/oauth/guides/oauth-create-client-credentials-using-postman.html'
+        - name: '獲取訪問令牌'
+          url: '/oauth/guides/getting-access-tokens.html'
+        - name: '客戶端憑據請求的 API 操作'
+          url: '/oauth/guides/api-operations-client-credentials-requests.html'
+        - name: '獲取您的 BC_TOKEN'
+          url: '/oauth/guides/get-your-bc-token.html'
+    - name: '參考'
+      url: '/oauth/references/index.html'
+      docs:
+        - name: 'OAuth API 參考'
+          url: '/oauth/references/reference.html'
+        - name: 'OAuth API 錯誤信息參考'
+          url: '/oauth/references/oauth-api-error-message-reference.html'
+    - name: '代碼樣例'
+      url: '/oauth/code-samples/index.html'
+      docs:
+        - name: '創建客戶端憑證'
+          url: '/oauth/code-samples/oauth-api-sample-create-client-credentials.html'
+        - name: '獲取訪問令牌'
+          url: '/oauth/code-samples/oauth-api-sample-get-access-token.html'
+- section:
+  name: '播放API'
+  url: '/playback/index.html'
+  docs:
+    - name: '入門'
+      url: '/playback/getting-started/index.html'
+      docs:
+        - name: '概述：播放API'
+          url: '/playback/getting-started/overview-playback-api.html'
+        - name: '快速開始：播放API'
+          url: '/playback/getting-started/quick-start-playback-api.html'
+        - name: '最佳做法：CMS 和播放 API'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+    - name: '指南'
+      url: '/playback/guides/index.html'
+      docs:
+        - name: 'CMS 和播放 API：視頻搜索'
+          url: '/cms/searching/cmsplayback-api-videos-search.html'
+        - name: '目錄搜索架構'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+        - name: '靜態網址傳遞'
+          url: '/playback/guides/static-url-delivery.html'
+    - name: '參考'
+      url: '/playback/references/index.html'
+      docs:
+        # - name: '播放 API 參考 v1'
+        #   url: '/playback/references/reference_v1.html'
+        - name: '播放 API 參考'
+          url: '/playback/references/reference_v2.html'
+        - name: '視頻字段參考'
+          url: '/playback/references/playback-api-video-fields-reference.html'
+        - name: '播放列表字段參考'
+          url: '/playback/references/playback-api-playlist-fields-reference.html'
+        - name: '錯誤參考'
+          url: '/playback/references/playback-api-error-reference.html'
+        - name: 'CMS/播放 API 發行說明'
+          url: '/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html'
+    - name: '代碼樣例'
+      url: '/playback/code-samples/index.html'
+      docs:
+        - name: '視頻縮略圖網格'
+          url: '/playback/code-samples/thumbnail-grid.html'
+        - name: 'MRSS發生器'
+          url: '/playback/code-samples/playback-api-sample-mrss-generator.html'
+        - name: '播放列表中的JSON / MRSS Feed'
+          url: '/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html'
+- section:
+  name: '播放器管理API'
+  url: '/player-management/index.html'
+  docs:
+    - name: '入門'
+      url: '/player-management/getting-started/index.html'
+      docs:
+        - name: '概述：播放器管理API'
+          url: '/player-management/getting-started/overview-player-management-api.html'
+        - name: '一步步：球員管理'
+          url: '/player-management/getting-started/step-step-player-management.html'
+        - name: '按需培訓：播放器管理快速入門'
+          url: '/player-management/getting-started/training-demand-quick-start-player-management.html'
+        - name: 'OAuth 指南'
+          url: '/player-management/getting-started/oauth-guide.html'
+    - name: '指南'
+      url: '/player-management/guides/index.html'
+      docs:
+        - name: '播放器配置指南'
+          url: '/player-management/guides/player-configuration-guide.html'
+        - name: '插件註冊表'
+          url: '/player-management/guides/plugin-registry.html'
+        - name: '預發行播放器'
+          url: '/player-management/guides/pre-release-player.html'
+        - name: '播放器存儲庫'
+          url: '/player-management/guides/player-repositories.html'
+        - name: '嵌入 API'
+          url: '/player-management/guides/guide-embed-apis.html'
+        - name: '選擇退出自動播放器更新'
+          url: '/player-management/guides/opting-out-automatic-player-updates.html'
+        - name: '在 CMS 中嵌入 Brightcove 播放器'
+          url: '/player-management/guides/embedding-brightcove-players-cms.html'
+    - name: '參考'
+      url: '/player-management/references/index.html'
+      docs:
+        - name: '播放器管理 API 參考'
+          url: '/player-management/references/reference.html'
+        - name: '發行說明'
+          url: '/player-management/references/player-management-api-release-notes.html'
+    - name: '代碼樣例'
+      url: '/player-management/code-samples/index.html'
+      docs:
+        - name: '播放器管理示例的設置'
+          url: '/player-management/code-samples/setup-player-management-samples.html'
+        - name: '批量更新默認播放器'
+          url: '/player-management/code-samples/bulk-updating-brightcove-default-player.html'
+        - name: '創建一個玩家'
+          url: '/player-management/code-samples/player-management-api-sample-create-player.html'
+        - name: '顯示播放器'
+          url: '/player-management/code-samples/player-management-api-sample-display-players.html'
+        - name: '刪除玩家'
+          url: '/player-management/code-samples/player-management-api-sample-delete-players.html'
+        - name: '使用 last_viewed 數據'
+          url: '/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html'
+        - name: '以編程方式更新播放器'
+          url: '/player-management/code-samples/player-management-api-sample-programmatically-update-players.html'
+- section:
+  name: '播放限制'
+  url: '/playback-restrictions/index.html'
+  docs:
+    - name: '入門'
+      url: '/playback-restrictions/getting-started/index.html'
+      docs:
+        - name: '概述：Brightcove 播放限制'
+          url: '/playback-restrictions/getting-started/overview-playback-restrictions.html'
+        - name: '實施播放權'
+          url: '/playback-restrictions/getting-started/implementing-playback-rights.html'
+        - name: '影雲工作室：播放權'
+          url: 'https://studio.support.brightcove.com/admin/managing-playback-rights.html'
+    - name: '指南'
+      url: '/playback-restrictions/guides/index.html'
+      docs:
+        - name: '創建一個JSON Web令牌（JWT）'
+          url: 'https://general.support.brightcove.com/developer/create-json-web-token.html'
+        - name: '使用身份驗證 API'
+          url: '/playback-restrictions/guides/authentication-apis.html'
+        - name: '限制每個查看器的並發流'
+          url: '/playback-restrictions/guides/stream-concurrency.html'
+        - name: '實施設備限制'
+          url: '/playback-restrictions/guides/device-limits.html'
+        - name: 'Brightcove Player 的播放限制'
+          url: 'https://player.support.brightcove.com/playback/playback-restrictions-with-bcp.html'
+        - name: '原生 SDK 的播放限制'
+          url: 'https://sdks.support.brightcove.com/features/playback-restrictions-with-sdks.html'
+        - name: '實時流的播放限制'
+          url: '/live-api/guides/live-playback-restrictions.html'
+    - name: '驗證'
+      url: '/playback-restrictions/references/index.html'
+      docs:
+        - name: '關鍵API參考'
+          url: '/playback-restrictions/references/key-api/reference.html'
+        - name: '黑名單API參考'
+          url: '/playback-restrictions/references/blacklist-api/reference.html'
+        - name: '審核API參考'
+          url: '/playback-restrictions/references/audit-api/reference.html'
+    - name: '參考'
+      url: '/playback-restrictions/references/index.html'
+      docs:
+        - name: '播放權限API參考'
+          url: '/playback-restrictions/references/playback-rights/reference.html'
+        - name: 'CMS API 參考'
+          url: '/cms/references/reference.html'
+        - name: '設備API參考'
+          url: '/playback-restrictions/references/devices-api/reference.html'
+        - name: '播放限制錯誤'
+          url: '/playback-restrictions/references/playback-rights-errors.html'
+- section:
+  name: '政策API'
+  url: '/policy/index.html'
+  docs:
+    - name: '入門'
+      url: '/policy/getting-started/index.html'
+      docs:
+        - name: '概述：政策API'
+          url: '/policy/getting-started/overview-policy-api.html'
+        - name: '代碼樣例：生成策略密鑰'
+          url: '/policy/getting-started/quick-start-policy-api.html'
+        - name: '來自玩家的策略密鑰'
+          url: '/policy/getting-started/policy-keys.html'
+    - name: '參考'
+      url: '/policy/references/index.html'
+      docs:
+        - name: '策略API參考'
+          url: '/policy/references/reference.html'
+        - name: '發行說明'
+          url: '/policy/references/policy-api-release-notes.html'
+- section:
+  name: '社交API'
+  url: '/social/index.html'
+  docs:
+    - name: '入門'
+      url: '/social/getting-started/index.html'
+      docs:
+        - name: '概述：社交API'
+          url: '/social/getting-started/overview-social-api.html'
+        - name: '快速開始：社交API'
+          url: '/social/getting-started/quick-start-social-api.html'
+    - name: '參考'
+      url: '/social/references/index.html'
+      docs:
+        - name: '社交API參考'
+          url: '/social/references/reference.html'
+        - name: '社交API：錯誤參考'
+          url: '/social/references/social-api-error-reference.html'
+- section:
+  name: '社交整合 API'
+  url: '/social-syndication/index.html'
+  docs:
+    - name: '入門'
+      url: '/social-syndication/getting-started/index.html'
+      docs:
+        - name: '概述：聯合配置 API'
+          url: '/social-syndication/getting-started/public-syndication-api-overview.html'
+        - name: '概述：聯合提要 API'
+          url: '/social-syndication/getting-started/feed-syndication-api-overview.html'
+        - name: '通用整合模板'
+          url: '/social-syndication/getting-started/sample-templates-universal-syndication.html'
+        - name: 'CMS 和播放 API：視頻搜索 v2'
+          url: '/cms/searching/cms-and-playback-apis-video-search-v2.html'
+    - name: '參考'
+      url: '/social-syndication/references/index.html'
+      docs:
+        - name: '聯合配置API參考'
+          url: '/social-syndication/references/configuration-reference.html'
+        - name: '聯合供稿API參考'
+          url: '/social-syndication/references/feed-reference.html'
+        - name: '發行說明'
+          url: '/policy/references/policy-api-release-notes.html'
+- section:
+  name: SSAI API
+  url: '/ssai/index.html'
+  docs:
+    - name: '入門'
+      url: '/ssai/getting-started/index.html'
+      docs:
+        - name: '視頻雲SSAI API'
+          url: '/ssai/getting-started/video-cloud-ssai-ad-config-api.html'
+    - name: '參考'
+      url: '/ssai/references/index.html'
+      docs:
+        - name: 'SSAI API 參考'
+          url: '/ssai/references/reference.html'
+        - name: 'SSAI API 錯誤參考'
+          url: '/ssai/references/ssai-api-error-reference.html'
+
+# - section:
+#   name: '動態攝取 API 遺留'
+#   url: '/dynamic-ingest-legacy/index.html'
+#   docs:
+#     - name: '入門'
+#       url: '/dynamic-ingest-legacy/getting-started/index.html'
+#       docs:
+#         - name: '概述：動態提取API'
+#           url: '/dynamic-ingest-legacy/getting-started/overview-dynamic-ingest-api-legacy-ingest.html'
+#         - name: '快速開始：動態提取API'
+#           url: '/dynamic-ingest-legacy/getting-started/quick-start-dynamic-ingest-api-legacy-ingest.html'
+#         - name: '遷移到動態交付'
+#           url: '/dynamic-ingest-legacy/getting-started/migrating-legacy-ingest-system-dynamic-delivery.html'
+#         - name: '動態提取的源文件上傳API'
+#           url: '/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html'
+#     - name: '一般信息'
+#       url: '/dynamic-ingest-legacy/general/index.html'
+#       docs:
+#         - name: '動態提取API：最佳實踐'
+#           url: '/dynamic-ingest/general/dynamic-ingest-api-best-practices.html'
+#         - name: '動態提取通知'
+#           url: '/dynamic-ingest-legacy/general/dynamic-ingest-notifications-legacy-ingest.html'
+#         - name: '獲取請求狀態'
+#           url: '/dynamic-ingest-legacy/general/get-status-dynamic-ingest-requests-legacy-ingest.html'
+#         - name: '後備/重試策略'
+#           url: '/dynamic-ingest/general/fallback-retry-strategy.html'
+#         - name: '在S3上使用動態提取'
+#           url: '/dynamic-ingest/general/using-dynamic-ingest-s3.html'
+#         - name: '教資會策略'
+#           url: '/dynamic-ingest/general/ugc-strategies.html'
+#     - name: '參考'
+#       url: '/dynamic-ingest-legacy/references/index.html'
+#       docs:
+#         - name: '動態提取API參考'
+#           url: '/dynamic-ingest/references/reference.html'
+#         - name: '動態摘要API發行說明'
+#           url: '/dynamic-ingest/references/dynamic-ingest-api-release-notes.html'
+#         - name: '提取字段參考'
+#           url: '/dynamic-ingest/references/dynamic-ingest-ingest-fields.html'
+#         - name: '動態提取錯誤消息參考'
+#           url: '/dynamic-ingest/references/dynamic-ingest-error-message-reference.html'
+#     - name: '攝取指南'
+#       url: '/dynamic-ingest-legacy/ingest-guides/index.html'
+#       docs:
+#         - name: '圖片和Dynamic Ingest API'
+#           url: '/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html'
+#         - name: '具有媒體共享的動態攝取'
+#           url: '/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html'
+#         - name: '攝取WebVTT文件'
+#           url: '/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html'
+#     - name: '代碼樣例'
+#       url: '/dynamic-ingest-legacy/code-samples/index.html'
+#       docs:
+#         - name: '攝取視頻'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-ingesting-videos-legacy-ingest.html'
+#         - name: '重新轉碼視頻'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-legacy-ingest.html'
+#         - name: '更換影片'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-replacing-videos-legacy-ingest.html'
+#         - name: '添加預定視頻'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-legacy-ingest.html'
+#         - name: '添加文字軌道'
+#           url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html'
+#         - name: 'Python代碼'
+#           url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html'
+# - section:
+#   name: '攝取配置文件 API 舊版'
+#   url: '/ingest-profiles-legacy/index.html'
+#   docs: 
+#     - name: '入門'
+#       url: '/ingest-profiles-legacy/getting-started/index.html'
+#       docs:
+#         - name: '概述：提取配置文件API'
+#           url: '/ingest-profiles-legacy/getting-started/overview-ingest-profiles-api-legacy-ingest.html'
+#         - name: '快速開始：提取配置文件API'
+#           url: '/ingest-profiles-legacy/getting-started/quick-start-ingest-profiles-api.html'
+#     - name: '指南'
+#       url: '/ingest-profiles-legacy/guides/index.html'
+#       docs:
+#         - name: '歸檔大師'
+#           url: '/ingest-profiles/guides/archiving-masters.html'
+#         - name: '渲染設置和視頻質量'
+#           url: '/ingest-profiles-legacy/guides/rendition-settings-and-video-quality.html'
+#         - name: '條件輸出'
+#           url: '/ingest-profiles-legacy/guides/conditional-output.html'
+#         - name: '音頻內容'
+#           url: '/general/audio-content.html'
+#         - name: '最佳實踐'
+#           url: 'https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html'
+#     - name: '參考'
+#       url: '/ingest-profiles-legacy/references/index.html'
+#       docs:
+#         - name: '提取配置文件API參考'
+#           url: '/ingest-profiles/references/reference.html'
+#         - name: '提取配置文件字段參考'
+#           url: '/ingest-profiles-legacy/references/ingest-profiles-api-fields-reference-legacy-ingest.html'
+#         - name: '標準攝取配置文件：遺留系統'
+#           url: '/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html'
+#         - name: '標準實時攝取配置文件'
+#           url: '/ingest-profiles/references/standard-live-ingest-profiles.html'
+#     - name: '代碼樣例'
+#       url: '/ingest-profiles-legacy/code-samples/index.html'
+#       docs:
+#         - name: '將配置文件添加到多個帳戶'
+#           url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html'
+#         - name: '獲取帳戶的所有配置文件'
+#           url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html'
+#         - name: '設置默認配置文件多個帳戶'
+#           url: '/ingest-profiles-legacy/code-samples/ingest-profiles-api-sample-set-default-profile-multiple-accounts-legacy-ingest.html'
+- section: 
+  name: '訓練'
+  url: '/training/index.html'
+  docs:
+  - name: '在線培訓課程'
+    url: '/training/online-training-courses.html'
+  - name: '註冊以講師指導的培訓'
+    url: '/training/register-training.html'
+  - name: Brightcove大學培訓課程
+    url: /training/brightcove-university.html
+- section:
+  name: '支持'
+  url: '/support/index.html'
+  docs:
+    - name: '查看Brightcove系統狀態頁面'
+      url: '/support/viewing-brightcove-system-status-page.html'
+    - name: '與銷售人員聯繫'
+      url: '/support/contact-sales.html'
+    - name: '打開支持案例'
+      url: '/support/opening-case-with-brightcove-support.html'
+    - name: '重置您的支持門戶密碼'
+      url: '/support/reset-support-portal-password.html'

@@ -1,0 +1,46 @@
+---
+title: '概述：社交API'
+description: '本主題概述了社交 API。'
+parent: Getting Started 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+    <p>Social API 允許獲取您視頻的社交共享狀態和歷史記錄。它主要用於幫助CMS集成，以使您的用戶可以在自己的CMS系統中查看此信息。</p>
+    <p>有關請求的完整詳細信息，請參見<a href="/social/references/reference.html">API參考</a>。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="base_url">基本網址</h2>
+    <p>API 的基本 URL 是：</p>
+    <pre>
+  <code class="language-http" translate="No">https://edge.social.api.brightcove.com/v1</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="authentication">驗證</h2>
+    <p>請求的身份驗證需要<span translate="No">授權頭</span>：</p>
+    <pre class="line-numbers">
+        <code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+    <p>這<code translate="No">access_token</code>是一個臨時的 OAuth2 訪問令牌，必須從<span translate="No">Brightcove OAuth</span>服務。有關如何獲取客戶端憑據以及如何使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth概述</a>話題。</p>
+    <h3>運作方式</h3>
+    <p>當您請求客戶端憑據時，您需要指定所需的帳戶訪問或操作類型。以下是當前支持的操作列表<span translate="No">社交API</span>：</p>
+    <ul>
+      <li><code translate="No">video-cloud/social/status/read</code></li>
+    </ul>
+    <p>請注意，儘管社交API處於測試版中，但其權限為<strong>不是</strong>可在Studio管理員部分中獲取，用於管理API憑據。相反，您將必須使用OAuth API創建憑據。但是，Brightcove學習服務已創建了一個<a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">簡單的在線工具</a>為此。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Summary_of_requests">請求摘要</h2>
+    <p>在當前版本的API中，僅<code translate="No">GET</code>支持請求。有兩組請求，在以下部分中進行了總結。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Status_requests">狀態請求</h2>
+    <p><a href="/social/references/reference.html#tag/Status">狀態請求</a>返回視頻的當前社交共享狀態。您可以獲取帳戶中所有視頻或特定視頻的狀態。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="History_requests">歷史記錄請求</h2>
+    <p><a href="/social/references/reference.html#tag/History">歷史記錄請求</a>返回視頻的社交共享歷史記錄。您可以獲取帳戶中所有視頻或特定視頻的歷史記錄。</p>
+  </section>
+</article>

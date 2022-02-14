@@ -1,0 +1,39 @@
+<section class="bcls-section">
+  <h2 id="app">創建客戶端憑據</h2>
+
+  <fieldset>
+    <legend>輸入項</legend>
+
+    <p>憑證名稱（無特殊字符）： <input id="credentialsName" type="text" size="50" /></p>
+
+    <p>BC_TOKEN： <input id="bcToken" type="text" size="50" /></p>
+
+    <p>要為其創建憑據的帳戶（以逗號分隔的列表）： <input id="accountIds" type="text" size="50" placeholder="57838016001,1752604059001,921483702001" /></p>
+
+    <p>帳戶類型： <select name="accountTypeSelector" id="accountTypeSelector"><option value="video-cloud-account">視頻雲</option><option value="video-cloud-account">布萊特灣玩家</option> </select></p>
+
+    <p>啟用的API操作（請參閱<a href="https://support.brightcove.com/api-operations-client-credentials-requests" target="_blank">客戶端憑證的API操作</a>想要查詢更多的信息）：</p>
+
+    <div id="operationsList">&nbsp;</div>
+
+    <p><button id="submitButton" class="bcls-button">獲取客戶憑證</button></p>
+
+    <p>完整的API請求正文：</p>
+    <textarea name="apiRequest" id="apiRequest" class="bcls-code"></textarea></fieldset>
+
+  <fieldset>
+    <legend>輸出</legend>
+
+    <h3>客戶編號</h3>
+    <textarea name="clientId" id="clientId" class="bcls-code">客戶編號會顯示在這裡...</textarea>
+
+    <h3>客戶機密</h3>
+    <textarea name="clientSecret" id="clientSecret" class="bcls-code">客戶端機密將出現在這裡...</textarea>
+
+    <h3>全面回應</h3>
+
+    <pre class="line-numbers">
+<code id="apiResponse" class="language-json">完整的API響應將顯示在此處...</code></pre>
+  </fieldset>
+</section>
+

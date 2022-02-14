@@ -1,1339 +1,35 @@
-﻿<!doctype html>
-<html lang="zh-TW">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="robots" content="noindex,nofollow"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="在本主題中，您將學習如何建立 JSON 網頁權杖 (JWT)，該權杖可在與布萊特灣播放 API 進行通訊時使用。">
-  
-  <title>創建一個<span translate="No">JSON Web Token</span>（JWT）</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">  
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/prism.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/styles.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
-  <link rel="stylesheet" href="/assets/css/local.css">
-  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
-  <script src="/assets/js/sajari-head.js"></script>
-</head>
-
-<body class="body">
-
-<header>
-  <div class="div-header">
-    <a href="/"><img class="product-logo" src="https://support.brightcove.com/site-assets/images/site/product-logos/Video_Cloud_Logo.svg" alt="產品標誌" style="max-height: 100px;max-width: 232px;"/></a>
-<!-- GTranslate: https://gtranslate.io/ -->
-<select onchange="doGTranslate(this);"><option value="">選擇語言</option><option value="en|en" translate="No">English</option><option value="en|zh-TW" translate="No">繁體中文</option><option value="en|fr" translate="No">Français</option><option value="en|de" translate="No">Deutsche</option><option value="en|ja" translate="No">日本語</option><option value="en|ko" translate="No">한국어</option><option value="en|es" translate="No">Español</option></select>
-
+---
+title: '創建一個<span translate="No">JSON 網絡令牌</span> (智威湯遜)'
+description: '在本主題中，您將學習如何創建一個<span translate="No">JSON 網絡令牌</span> (JWT) 可在與 Brightcove Playback API 通信時使用。'
+parent: Guides 
+grandparent: Playback Authorization
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
 <script>
-/* <![CDATA[ */
-function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];var plang=location.hostname.split('.')[0];if(plang.length !=2 && plang.toLowerCase() != 'zh-cn' && plang.toLowerCase() != 'zh-tw')plang='en';location.href=location.protocol+'//'+(lang == 'en' ? '' : lang+'.')+location.hostname.replace('www.', '').replace(RegExp('^' + plang + '\\.'), '')+location.pathname+location.search;}
-/* ]]> */
+  var BCLS = ( 函數（窗口，文檔）{ var newURL = 'https://general.support.brightcove.com/developer/create-jwt-stage.html', message = 'This page has moved to the Integrations site. The new url is: ' + newURL + ' You will be redirected in 5 seconds. Please update your bookmarks.', t; function goToNewURL() { window.location.href = newURL; }文檔寫（消息）； t = window.setTimeout(goToNewURL, 5000); })(窗口，文檔);
 </script>
 
-Brightcove 
-
-    <span class="secondary-nav"><a href="https://supportportal.brightcove.com/s/login/?"><img src="https://support.brightcove.com/site-assets/images/site/support.png" alt="支持"/>聯繫支持</a><span style="vertical-align: top;margin-left:1em;margin-right:1em;">|</span><a href="https://status.brightcove.com/"><img src="https://support.brightcove.com/site-assets/images/site/status.png" alt="系統狀態"/>系統狀況</a></span><br/>
-    
-  </div>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb arr-right">
-      
-      <li class="breadcrumb-item"><a href="/">首頁</a></li>
-      
-      
-      
-      <li class="breadcrumb-item"><a href="/playback-authorization/guides/">導遊</a></li>
-      
-      <li class="breadcrumb-item active" aria-current="page">創建一個<span translate="No">JSON Web Token</span>（JWT）</li>
-    </ol>
-  </nav>
-</header>
-<div class="container">
-    <div class="row">
-      <div class="col-sm-3 left-side-bar">
-        				<select id="site_select" class="bcls-select" style="margin-right: 1rem;">
-					<option value="">其他布萊特灣文件</option>
-					
-						
-							<option value="https://support.brightcove.com">文件首頁</option>
-						
-					
-						
-							<option value="https://audience.support.brightcove.com">布萊特灣觀眾</option>
-						
-					
-						
-							<option value="https://beacon.support.brightcove.com">布萊特灣燈塔</option>
-						
-					
-						
-							<option value="https://campaign.support.brightcove.com">布萊特灣戰役</option>
-						
-					
-						
-							<option value="https://engage.support.brightcove.com">布萊特灣參與</option>
-						
-					
-						
-							<option value="https://live.support.brightcove.com">Brightcove Live</option>
-						
-					
-						
-							<option value="https://gallery.support.brightcove.com">Brightcove 圖庫</option>
-						
-					
-						
-							<option value="https://ssai.support.brightcove.com">布萊特灣</option>
-						
-					
-						
-							<option value="https://social.support.brightcove.com">布萊特灣社會</option>
-						
-					
-						
-							<option value="https://studio.support.brightcove.com">視訊雲端工作室</option>
-						
-					
-						
-							<option value="https://player.support.brightcove.com">布萊特灣球員開發</option>
-						
-					
-						
-							<option value="https://apis.support.brightcove.com">視訊雲端平台 API</option>
-						
-					
-						
-							<option value="https://sdks.support.brightcove.com">視訊雲端裝置開發套件</option>
-						
-					
-						
-							<option value="https://integrations.support.brightcove.com">整合與 CMS 連接器</option>
-						
-					
-						
-							<option value="https://general.support.brightcove.com">視訊雲端一般資訊</option>
-						
-					
-						
-							<option value="https://zencoder.support.brightcove.com">Zencoder</option>
-						
-					
-				</select>
-						<nav class="sidenav" id="side_nav">
-
-          
-            
-            <h5><a href="/index.html">首頁</a></h5>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/getting-started/index.html">開始使<strong>用 + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/getting-started/getting-started-brightcove-apis.html">概述：平台 API </a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/authentication-brightcove-api-requests.html">API 請求的身份驗證</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/concepts-testing-tools-brightcove-apis.html">布萊特灣 API 的測試工具</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/learning-guide-using-rest-apis.html">學習指南：使用其他應用程式介</a>面</li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/general/index.html">一般資訊<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/general/all-api-references.html">所有 API 參考</a></li>
-                  
-                
-                  
-                    <li><a href="/general/overview-context-aware-encoding.html">上下文感知編碼概述</a></li>
-                  
-                
-                  
-                    <li><a href="/general/managing-api-authentication-credentials.html">管理 API 身份驗證憑證</a></li>
-                  
-                
-                  
-                    <li><a href="/general/integrating-your-cms-video-cloud.html">將CMS與Video Cloud集成</a></li>
-                  
-                
-                  
-                    <li><a href="/general/platform-api-code-samples.html">平台 API 程式碼範例</a></li>
-                  
-                
-                  
-                    <li><a href="/general/video-cloud-api-training-videos.html">平台 API 訓練影片</a></li>
-                  
-                
-                  
-                    <li><a href="/general/concepts-api-tester.html">線上 API 測試儀</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-insomnia-api-requests.html">針對 API 請求使用失眠</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-postman-api-requests.html">使用郵遞員進行 API 請求</a></li>
-                  
-                
-                  
-                    <li><a href="/general/audio-content.html">音訊內容</a></li>
-                  
-                
-                  
-                    <li><a href="/general/known-issues.html">平台 API 已知問題</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/analytics/index.html">分析 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/getting-started/overview-analytics-api-v1.html">概述：分析 API </a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-explorer.html">分析 API 資源管理器</a></li>
-                        
-                        <li><a href="/analytics/getting-started/overview-video-data-endpoint.html">概述：視訊資料端點</a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html">概述：標註、欄位和參數</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/general/faq-analytics-api.html">常見問題集：分析 API </a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-glossary.html">分析 API 詞彙</a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-unique-users.html">唯一使用者</a></li>
-                        
-                        <li><a href="/analytics/general/live-metrics.html">即時測量結果</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/references/reference.html">分析 API 參考</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-release-notes.html">版本資訊</a></li>
-                        
-                        <li><a href="/analytics/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-error-reference.html">錯誤參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/dimension-guides/index.html">維度導引線<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-account.html">維度：<code>帳戶</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-browsertype.html">尺寸：<code>瀏覽器類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-date.html">尺寸：<code>日期</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-datehour.html">尺寸：<code>日期 _ 小時</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationdomain.html">維度：<code>目的地 _ 網域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationpath.html">尺寸標註：<code>目的地路徑</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicemanufacturer.html">尺寸：<code>裝置 _ 製造商</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicetype.html">尺寸：<code>裝置類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-deviceos.html">尺寸：<code>裝置</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-city.html">尺寸：<code>城市</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-country.html">尺寸：<code>國家</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-region.html">尺寸：<code>區域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-livestream.html">尺寸：<code>直流</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-referrerdomain.html">維度：<code>參照網域</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-sourcetype.html">尺寸：<code>來源類型</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-searchterms.html">尺寸：<code>搜尋術語</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-socialplatform.html">尺寸：<code>社交平台</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-player.html">尺寸：<code>玩家</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-video.html">尺寸：<code>視訊</code></a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html">現場活動的同時觀眾</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html">每日分析報表產生器</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-destinations-report.html">目的地報表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html">地理分析報表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-unique-users-day.html">每天的獨特使用者</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-engagement-graph.html">視訊參與圖表</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html">按玩家和日期分類的影片報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-reference-id.html">依參考 ID 分類的影片報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-tags.html">依標籤分類的視訊報告</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html">按播放清單分析</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html">最近新增的影片</a></li>
-                        
-                        <li><a href="/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html">視訊分析報表 (按國家/地區和日期</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/cms/index.html">CMS 應用程式介面<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/getting-started/overview-cms-api.html">概述：CMS 應用程式</a></li>
-                        
-                        <li><a href="/cms/getting-started/practice-area-cms-api.html">練習區域：CMS 應用程式</a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
-                        
-                        <li><a href="/cms/getting-started/cms-api-notifications.html">CMS 應用程式介面通知</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/references/reference.html">CMS 應用程式介面參考</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
-                        
-                        <li><a href="/cms/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-video-fields-reference.html">CMS 應用程式介面影片欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-playlist-fields-reference.html">CMS API 播放清單欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-custom-fields-reference.html">CMS API 自訂欄位參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-folder-fields-reference.html">CMS API 文件夾字段參考</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-error-message-reference.html">CMS 應用程式介面錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/searching/index.html">搜尋<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 應用程式介面：視訊搜尋 v2 </a></li>
-                        
-                        <li><a href="/cms/searching/cms-api-playlists-search.html">CMS 應用程式介面：播放清單搜尋</a></li>
-                        
-                        <li><a href="/cms/searching/using-cms-api-page-search-results.html">網頁搜尋結果</a></li>
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋 v1 </a></li>
-                        
-                        <li><a href="/playback/guides/catalog-search-architecture.html">目錄搜尋架構</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/managing-videos/index.html">管理視訊/資產<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-geo-filtering.html">新增地理篩選</a></li>
-                        
-                        <li><a href="/cms/managing-videos/digital-master-delete-api.html">數位主版刪除 API </a></li>
-                        
-                        <li><a href="/cms/managing-videos/deleting-videos.html">刪除視訊</a></li>
-                        
-                        <li><a href="/cms/managing-videos/getting-counts-videos-and-playlists.html">取得影片和播放清單的計數</a></li>
-                        
-                        <li><a href="/cms/managing-videos/managing-playlists-using-cms-api.html">使用 CMS API 管理播放清單</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-managing-clips.html">管理剪輯片段</a></li>
-                        
-                        <li><a href="/cms/managing-videos/media-sharing-cms-api.html">媒體分享</a></li>
-                        
-                        <li><a href="/cms/managing-videos/multilingual-metadata.html">多語言元資料</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-retrieve-video-data.html">擷取視訊資料</a></li>
-                        
-                        <li><a href="/cms/managing-videos/setting-360-degree-video-properties-cms-api.html">設定 360 度視訊屬性</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-remote-assets.html">遠端資產</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">新增 WebVTT 字幕 (文字曲目) </a></li>
-                        
-                        <li><a href="/cms/managing-videos/generate-video-sitemaps.html">產生視訊網站地圖</a></li>
-                        
-                        <li><a href="/cms/managing-videos/identifying-low-performing-content.html">識別效能低的內容</a></li>
-                        
-                        <li><a href="/cms/managing-videos/cms-api-working-folders.html">使用資料夾</a></li>
-                        
-                        <li><a href="/cms/managing-videos/working-with-labels.html">使用標示</a></li>
-                        
-                        <li><a href="/cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html">連結 ZenCoder 與視訊雲端</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html">新增多個聯盟帳戶</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-share-multiple-videos.html">分享多個視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-media-sharing-report.html">媒體分享報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-shared-media-report.html">共用媒體報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-videos.html">更新視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html">將自訂欄位新增至多個視訊</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-geo-properties.html">更新地理內容</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-cue-points.html">新增提示點</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-report-generator.html">視訊報告產生器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-videos-delivery-type.html">按傳送類型劃分的影片</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-download-links.html">下載連結</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-sitemap-generator.html">視訊網站地圖產生</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-generator.html">MRSS 產生器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">播放清單中的 MRSS 摘要</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html">適用於 iTunes 的 RSS 播客摘要</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-renditions-inspector.html">視訊轉譯檢查器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-report-audio-only-content.html">僅限音訊內容的報告</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-schema-builder.html">視訊架構建置器</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-python-code-get-request.html">一個 GET 請求的 Python 代碼</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-search-app.html">視訊搜尋應用程式</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/xdr/index.html">跨裝置履歷 (XDR) API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">概述：跨裝置繼續</a></li>
-                        
-                        <li><a href="/xdr/getting-started/get-playback-position.html">從 XDR API 獲取播放位置</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html">與布萊特灣播放器的跨裝置履歷</a></li>
-                        
-                        <li><a href="https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html">使用原生 SDK 進行跨裝置恢復</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">跨裝置履歷 API 參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/data-collection/index.html">資料收集 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/data-collection/overview-data-collection-api-v2.html">概述：資料收集 API </a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/data-collection-api-sample.html">資料收集 API 範例</a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/references/reference.html">資料收集 API 參考</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/delivery-system/index.html">傳送系統 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/delivery-system/overview-delivery-system-api.html">概述：傳送系統 API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/step-step-delivery-system-api.html">逐步：傳送系統 API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/delivery-system-api-git-overview.html">Git 概述</a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/references/reference.html">傳送系統 API 參考</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/dynamic-ingest/index.html">動態內嵌 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">概述：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html">快速入門：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動態內嵌的來源檔案上傳 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動態傳遞概觀</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動態內嵌 API：最佳實務</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html">動態內嵌通知</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html">取得動態內嵌要求的狀態</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">後備/試策略</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">與 S3 搭配使用動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/ugc-strategies.html">教資會策略</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/references/reference.html">動態內嵌 API 參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動態內嵌 API 版本資訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/known-issues.html">已知問題</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">內嵌欄位參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動態內嵌錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/ingest-guides/index.html">內嵌指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">使用上下文感知編碼</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html">動態傳遞內嵌優先順序佇列</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html">實作多個音軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">影像和動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">透過媒體分享進行動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">使用 DRM 擷取內容</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">擷取網頁 VTT 檔案</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html">動態內嵌 API 測試儀</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html">內嵌視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html">重新轉碼視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html">取代視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">新增排程視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">新增文字軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html">擷取低優先順序視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">蟒蛇代碼</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/ingest-profiles/index.html">內嵌設定檔 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">概述：內嵌設定檔 API </a></li>
-                        
-                        <li><a href="/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html">練習區域：內嵌設定檔 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/hevc-video.html">HEVC 影片</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/cae-fast-publish.html">CAE 快速發佈</a></li>
-                        
-                        <li><a href="/general/audio-content.html">音訊內容</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/mp4s-dynamic-delivery.html">動態傳遞中的 MP3 </a></li>
-                        
-                        <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">最佳實務</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/references/reference.html">內嵌設定檔 API 參考</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html">內嵌設定檔欄位參考</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">標準內嵌設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準即時擷取設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/fields-custom-live-ingest-profiles.html">自訂即時擷取設定檔的欄位</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html">建立自訂動態傳送設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html">建立自訂 CAE 設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">將設定檔新增至多個帳戶</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">取得帳戶的所有設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html">設定預設設定檔</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/oauth/index.html">OAuth API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/getting-started/overview-oauth-api-v4.html">概述：OAuth 應用程式介面</a></li>
-                        
-                        <li><a href="/oauth/getting-started/quick-start-oauth.html">快速入門：OAuth 應用程式介面</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">創建客戶端憑據：cURL </a></li>
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">建立用戶端認證：郵遞員</a></li>
-                        
-                        <li><a href="/oauth/guides/getting-access-tokens.html">取得存取權杖</a></li>
-                        
-                        <li><a href="/oauth/guides/api-operations-client-credentials-requests.html">用戶端認證要求的 API 作業</a></li>
-                        
-                        <li><a href="/oauth/guides/get-your-bc-token.html">取得您的 BC_Token </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/references/reference.html">OAuth 應用程式介面參考</a></li>
-                        
-                        <li><a href="/oauth/references/oauth-api-error-message-reference.html">OAuth API 錯誤消息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">建立用戶端認證</a></li>
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">取得存取權杖</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/playback/index.html">播放 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/getting-started/overview-playback-api.html">概述：播放 API </a></li>
-                        
-                        <li><a href="/playback/getting-started/quick-start-playback-api.html">快速入門：播放 API </a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋</a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">目錄搜尋架構</a></li>
-                        
-                        <li><a href="/playback/guides/static-url-delivery.html">靜態 URL 傳送</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/references/reference_v1.html">播放 API 參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-video-fields-reference.html">視訊欄位參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-playlist-fields-reference.html">播放清單欄位參考</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-error-reference.html">錯誤參考</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/code-samples/thumbnail-grid.html">視訊縮圖格點</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-mrss-generator.html">MRSS 產生器</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html">從播放清單中的JSON/MRSS 摘要</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/player-management/index.html">玩家管理 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/getting-started/overview-player-management-api.html">概述：玩家管理 API </a></li>
-                        
-                        <li><a href="/player-management/getting-started/step-step-player-management.html">逐步：玩家管理</a></li>
-                        
-                        <li><a href="/player-management/getting-started/training-demand-quick-start-player-management.html">隨選訓練：玩家管理快速入門</a></li>
-                        
-                        <li><a href="/player-management/getting-started/oauth-guide.html">OAuth 指南</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/guides/player-configuration-guide.html">播放程式組態指南</a></li>
-                        
-                        <li><a href="/player-management/guides/plugin-registry.html">外掛程式登錄</a></li>
-                        
-                        <li><a href="/player-management/guides/pre-release-player.html">發行前播放程式</a></li>
-                        
-                        <li><a href="/player-management/guides/player-repositories.html">播放程式儲存庫</a></li>
-                        
-                        <li><a href="/player-management/guides/guide-embed-apis.html">內嵌 API </a></li>
-                        
-                        <li><a href="/player-management/guides/opting-out-automatic-player-updates.html">選擇退出玩家自動更新</a></li>
-                        
-                        <li><a href="/player-management/guides/embedding-brightcove-players-cms.html">在 CMS 中嵌入布萊特灣玩家</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/references/reference.html">玩家管理 API 參考</a></li>
-                        
-                        <li><a href="/player-management/references/player-management-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/code-samples/setup-player-management-samples.html">玩家管理範例的設定</a></li>
-                        
-                        <li><a href="/player-management/code-samples/bulk-updating-brightcove-default-player.html">大量更新預設播放程式</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-create-player.html">建立玩家</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-display-players.html">顯示播放器</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-delete-players.html">刪除玩家</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html">使用上次檢視的資料 (_L) </a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-programmatically-update-players.html">以編程方式更新播放器</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/policy/index.html">政策 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/getting-started/overview-policy-api.html">概述：政策 API </a></li>
-                        
-                        <li><a href="/policy/getting-started/quick-start-policy-api.html">程式碼範例：產生原則金鑰</a></li>
-                        
-                        <li><a href="/policy/getting-started/policy-keys.html">玩家的策略金鑰</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/references/reference.html">政策 API 參考</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/social-syndication/index.html">社交聯合發行 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/getting-started/public-syndication-api-overview.html">概述：聯合發行項目設定 API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/feed-syndication-api-overview.html">概述：聯合發行摘要 API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/sample-templates-universal-syndication.html">通用聯合發行項目範本</a></li>
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 和播放應用程式：視訊搜尋 v2 </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/references/configuration-reference.html">聯合發行項目設定 API 參考</a></li>
-                        
-                        <li><a href="/social-syndication/references/feed-reference.html">聯合發行摘要 API 參考</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/dynamic-ingest-legacy/index.html">動態內嵌 API 舊版<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/overview-dynamic-ingest-api-legacy-ingest.html">概述：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/quick-start-dynamic-ingest-api-legacy-ingest.html">快速入門：動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/getting-started/migrating-legacy-ingest-system-dynamic-delivery.html">移轉至動態傳遞</a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動態內嵌的來源檔案上傳 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/general/index.html">一般資訊<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動態內嵌 API：最佳實務</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/general/dynamic-ingest-notifications-legacy-ingest.html">動態內嵌通知</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/general/get-status-dynamic-ingest-requests-legacy-ingest.html">取得請求狀態</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">後備/試策略</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">與 S3 搭配使用動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/ugc-strategies.html">教資會策略</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/references/reference.html">動態內嵌 API 參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動態內嵌 API 版本資訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">內嵌欄位參考</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動態內嵌錯誤訊息參考</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/ingest-guides/index.html">內嵌指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">影像和動態內嵌 API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">透過媒體分享進行動態內嵌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">擷取網頁 VTT 檔案</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest-legacy/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-ingesting-videos-legacy-ingest.html">內嵌視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-legacy-ingest.html">重新轉碼視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-replacing-videos-legacy-ingest.html">取代視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-legacy-ingest.html">新增排程視訊</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">新增文字軌</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">蟒蛇代碼</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/ingest-profiles-legacy/index.html">內嵌設定檔 API 舊版<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/getting-started/index.html">開始使<strong>用 + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles-legacy/getting-started/overview-ingest-profiles-api-legacy-ingest.html">概述：內嵌設定檔 API </a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/getting-started/quick-start-ingest-profiles-api.html">快速入門：內嵌設定檔 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/guides/index.html">指南<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/guides/rendition-settings-and-video-quality.html">節目設定和視訊品質</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/guides/conditional-output.html">條件輸出</a></li>
-                        
-                        <li><a href="/general/audio-content.html">音訊內容</a></li>
-                        
-                        <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">最佳實務</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/references/index.html">參考資料<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/references/reference.html">內嵌設定檔 API 參考</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/references/ingest-profiles-api-fields-reference-legacy-ingest.html">內嵌設定檔欄位參考</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">標準內嵌設定檔：舊式系統</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準即時擷取設定檔</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles-legacy/code-samples/index.html">程式碼範例<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">將設定檔新增至多個帳戶</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">取得帳戶的所有設定檔</a></li>
-                        
-                        <li><a href="/ingest-profiles-legacy/code-samples/ingest-profiles-api-sample-set-default-profile-multiple-accounts-legacy-ingest.html">設定預設設定檔多個帳戶</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/training/index.html">訓練<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/training/online-training-courses.html">線上訓練課程</a></li>
-                  
-                
-                  
-                    <li><a href="/training/register-training.html">註冊參加講師指導訓練</a></li>
-                  
-                
-                  
-                    <li><a href="/training/brightcove-university.html">布萊特灣大學培訓課程</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/support/index.html">支援<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">檢視布萊特灣系統狀態頁面</a></li>
-                  
-                
-                  
-                    <li><a href="/support/contact-sales.html">聯絡銷售人員</a></li>
-                  
-                
-                  
-                    <li><a href="/support/opening-case-with-brightcove-support.html">開啟支援案例</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="導覽功能表"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">頁面內容</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="在新分頁中開啟" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>創建一個<span translate="No">JSON Web Token</span>（JWT）</h1>
 <article class="bcls-article">
-  <summary>在本主題中，您將學習如何建立與 Brightcove 播放 API 進行通訊時可使用的<span translate="No">JSON Web Token</span> (JWT)。</summary>
+  <summary>{{ page.description }}</summary>
 
-  <br/>
-  <aside class="bcls-aside bcls-aside--tip">此功能適用於具有「播放授權服務」之「有限可用性」階段的特定客戶。</aside>
+  <br>
+  <aside class="bcls-aside bcls-aside--tip">此功能適用於有權訪問回放授權服務的有限可用性階段的一組特定客戶。</aside>
 
   <section class="bcls-section">
-<h2 id="Introduction">簡介</h2>
+<h2 id="Introduction">介紹</h2>
 
-<p>若要在存取影片庫時增加額外層級的保護，或為您的內容套用使用者層級限制，您可以將呼叫<span translate="No">JSON Web Token</span> (JWT) 傳遞給 Brightcove 播放 API。若要建立權杖，請依照下列步驟執行：</p>
+<p>要在訪問您的視頻庫時添加額外級別的保護，或對您的內容應用用戶級限制，您可以通過<span translate="No">JSON 網絡令牌</span> (JWT) 與您對 Brightcove Playback API 的調用。要創建令牌，請按照下列步驟操作：</p>
 <ol class="bcls-tasklist">
-	<li><a href="#Generate_public_private_key_pair">產生公開私密金鑰組</a></li>
+	<li><a href="#Generate_public_private_key_pair">生成公私鑰對</a></li>
   <li>
-    <a href="#Register_public_key">向布萊特灣註冊公開金鑰</a>
+    <a href="#Register_public_key">向Brightcove註冊公鑰</a>
   </li>
   <li>
-    <a href="#Create_a_JSON_Web_Token">建立<span translate="No">JSON Web Token</span></a>
+    <a href="#Create_a_JSON_Web_Token">創建一個<span translate="No">JSON 網絡令牌</span></a>
   </li>
   <li>
-    <a href="#Test_playback">測試播放</a>
+    <a href="#Test_playback">測試回放</a>
   </li>
 </ol>
 
@@ -1341,77 +37,77 @@ Brightcove
 </section>
 
 <section class="bcls-section">
-<h2 id="Generate_public_private_key_pair">產生公開私密金鑰組</h2>
+<h2 id="Generate_public_private_key_pair">生成公私鑰對</h2>
 
-<p>發行者將產生公開私密金鑰組，並將公開金鑰提供給 Brightcove。私密金鑰是由發行者用來簽署令牌，並且不會與 Brightcove 共用。</p>
+<p>發布者將生成一個公私鑰對並將公鑰提供給 Brightcove。私鑰由發布者用於簽署令牌，不與 Brightcove 共享。</p>
 
 <p>
-  有很多方法可以產生公開私密金鑰組。以下是一些範例：
+  有多種方法可以生成公私密鑰對。這裡有些例子：
 </p>
 <h3>
-  bash 腳本示例：
+  bash腳本示例：
 </h3>
 <p>
-  產生金鑰配對的範例指令碼：
+  生成密鑰對的示例腳本：
 </p>
 <pre class="line-numbers"><code class="language-bash" translate="No">#!/bin/bash
 set -euo pipefail
 
 NAME=${1:-}
-test -z "${NAME:-}" &amp;&amp; NAME="brightcove-playback-auth-key-$(date +%s)"
-mkdir "$NAME"
+test -z &quot;${NAME:-}&quot; &amp;&amp; NAME=&quot;brightcove-playback-auth-key-$(date +%s)&quot;
+mkdir &quot;$NAME&quot;
 
-PRIVATE_PEM="./$NAME/private.pem"
-PUBLIC_PEM="./$NAME/public.pem"
-PUBLIC_TXT="./$NAME/public_key.txt"
+PRIVATE_PEM=&quot;./$NAME/private.pem&quot;
+PUBLIC_PEM=&quot;./$NAME/public.pem&quot;
+PUBLIC_TXT=&quot;./$NAME/public_key.txt&quot;
 
-ssh-keygen -t rsa -b 2048 -m PEM -f "$PRIVATE_PEM" -q -N ""
-openssl rsa -in "$PRIVATE_PEM" -pubout -outform PEM -out "$PUBLIC_PEM" 2&gt;/dev/null
-openssl rsa -in "$PRIVATE_PEM" -pubout -outform DER | base64 &gt; "$PUBLIC_TXT"
+ssh-keygen -t rsa -b 2048 -m PEM -f &quot;$PRIVATE_PEM&quot; -q -N &quot;&quot;
+openssl rsa -in &quot;$PRIVATE_PEM&quot; -pubout -outform PEM -out &quot;$PUBLIC_PEM&quot; 2&gt;/dev/null
+openssl rsa -in &quot;$PRIVATE_PEM&quot; -pubout -outform DER | base64 &gt; &quot;$PUBLIC_TXT&quot;
 
-rm "$PRIVATE_PEM".pub
+rm &quot;$PRIVATE_PEM&quot;.pub
 
-echo "Public key to saved in $PUBLIC_TXT"
+echo &quot;Public key to saved in $PUBLIC_TXT&quot;
 </code></pre>
 <p>
-  執行指令碼：
+  運行腳本：
 </p>
 <pre><code class="language-bash" translate="No">$ bash keygen.sh
 </code></pre>
 
 <details>
 <summary>
-  <h3 id="Example_using_Go">使用 Go 的範例</h3>
+  <h3 id="Example_using_Go">使用Go的示例</h3>
 </summary>
 <p>
   使用Go編程語言生成密鑰對的示例：
 </p>
-<aside class="bcls-aside bcls-aside--tip">如果你是新 Go，請參閱<a href="https://golang.org/"> Go 編程語言</a>主頁。</aside>
+<aside class="bcls-aside bcls-aside--tip">如果您是 Go 新手，請參閱<a href="https://golang.org/">Go 編程語言</a>主頁。</aside>
 <pre class="line-numbers"><code class="language-bash" translate="No">package main
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
-	"crypto/x509"
-	"encoding/base64"
-	"encoding/pem"
-	"flag"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
-	"strconv"
-	"time"
+	&quot;crypto/rand&quot;
+	&quot;crypto/rsa&quot;
+	&quot;crypto/x509&quot;
+	&quot;encoding/base64&quot;
+	&quot;encoding/pem&quot;
+	&quot;flag&quot;
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;os&quot;
+	&quot;path&quot;
+	&quot;strconv&quot;
+	&quot;time&quot;
 )
 
 func main() {
 	var out string
 
-	flag.StringVar(&amp;out, "output-dir", "", "Output directory to write files into")
+	flag.StringVar(&amp;out, &quot;output-dir&quot;, &quot;&quot;, &quot;Output directory to write files into&quot;)
 	flag.Parse()
 
-	if out == "" {
-		out = "rsa-key_" + strconv.FormatInt(time.Now().Unix(), 10)
+	if out == &quot;&quot; {
+		out = &quot;rsa-key_&quot; + strconv.FormatInt(time.Now().Unix(), 10)
 	}
 
 	if err := os.MkdirAll(out, os.ModePerm); err != nil {
@@ -1430,119 +126,119 @@ func main() {
 		panic(err.Error())
 	}
 
-	privOut, err := os.OpenFile(path.Join(out, "private.pem"), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	privOut, err := os.OpenFile(path.Join(out, &quot;private.pem&quot;), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	if err := pem.Encode(privOut, &amp;pem.Block{Type: "RSA PRIVATE KEY", Bytes: privBytes}); err != nil {
+	if err := pem.Encode(privOut, &amp;pem.Block{Type: &quot;RSA PRIVATE KEY&quot;, Bytes: privBytes}); err != nil {
 		panic(err.Error())
 	}
 
-	pubOut, err := os.OpenFile(path.Join(out, "public.pem"), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	pubOut, err := os.OpenFile(path.Join(out, &quot;public.pem&quot;), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	if err := pem.Encode(pubOut, &amp;pem.Block{Type: "PUBLIC KEY", Bytes: pubBytes}); err != nil {
+	if err := pem.Encode(pubOut, &amp;pem.Block{Type: &quot;PUBLIC KEY&quot;, Bytes: pubBytes}); err != nil {
 		panic(err.Error())
 	}
 
 	var pubEnc = base64.StdEncoding.EncodeToString(pubBytes)
 
-	var pubEncOut = path.Join(out, "public_key.txt")
-	if err := ioutil.WriteFile(pubEncOut, []byte(pubEnc+"\n"), 0600); err != nil {
+	var pubEncOut = path.Join(out, &quot;public_key.txt&quot;)
+	if err := ioutil.WriteFile(pubEncOut, []byte(pubEnc+&quot;\n&quot;), 0600); err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Println("Public key saved in " + pubEncOut)
+	fmt.Println(&quot;Public key saved in &quot; + pubEncOut)
 }
 </code></pre>
 </details>
 
 <details>
 &lt;<summary>
-  h3 id =“ Example_using_node_js”&gt;使用node.js的示例</h3>
+  <h3 id="Example_using_node_js">使用node.js的示例</h3>
 </summary>
 <p>
-  使用 node.js 生成密鑰對的示例：
+  使用node.js生成密鑰對的示例：
 </p>
-<aside class="bcls-aside bcls-aside--tip">此指令碼範例需要節點版本 11 或更新版本。</aside>
-<pre class="line-numbers"><code class="language-javascript" translate="No">var crypto = require("crypto");
-var fs = require("fs");
+<aside class="bcls-aside bcls-aside--tip">此腳本示例需要節點版本 11 或更高版本。</aside>
+<pre class="line-numbers"><code class="language-javascript" translate="No">var crypto = require(&quot;crypto&quot;);
+var fs = require(&quot;fs&quot;);
 
 var now = Math.floor(new Date() / 1000);
-var dir = "rsa-key_" + now;
+var dir = &quot;rsa-key_&quot; + now;
 fs.mkdirSync(dir);
 
 crypto.generateKeyPair(
-  "rsa",
+  &quot;rsa&quot;,
   {modulusLength: 2048},
   (err, publicKey, privateKey) =&gt; {
     fs.writeFile(
-      dir + "/public.pem",
-      publicKey.export({ type: "spki", format: "pem" }),
+      dir + &quot;/public.pem&quot;,
+      publicKey.export({ type: &quot;spki&quot;, format: &quot;pem&quot; }),
       err =&gt; {}
     );
     fs.writeFile(
-      dir + "/public_key.txt",
-      publicKey.export({ type: "spki", format: "der" }).toString("base64") +
-        "\n",
+      dir + &quot;/public_key.txt&quot;,
+      publicKey.export({ type: &quot;spki&quot;, format: &quot;der&quot; }).toString(&quot;base64&quot;) +
+        &quot;\n&quot;,
       err =&gt; {}
     );
     fs.writeFile(
-      dir + "/private.pem",
-      privateKey.export({ type: "pkcs1", format: "pem" }),
+      dir + &quot;/private.pem&quot;,
+      privateKey.export({ type: &quot;pkcs1&quot;, format: &quot;pem&quot; }),
       err =&gt; {}
     );
   }
 );
 
-console.log("Public key saved in " + dir + "/public_key.txt");</code></pre>
+console.log(&quot;Public key saved in &quot; + dir + &quot;/public_key.txt&quot;);</code></pre>
 
 </details>
 
 </section>
 
 <section class="bcls-section">
-<h2 id="Register_public_key">註冊公開金鑰</h2>
+<h2 id="Register_public_key">註冊公鑰</h2>
 
-<p>您將使用密鑰 API 來註冊您的公鑰與布萊特灣。</p>
-<h3>關鍵 API</h3>
+<p>您將使用 Key API 向 Brightcove 註冊您的公鑰。</p>
+<h3>關鍵API</h3>
 <p>
-  密鑰 API 用於管理您的公鑰與布萊特灣。
+  Key API 用於通過 Brightcove 管理您的公鑰。
 </p>
 <aside class="bcls-aside bcls-aside--tip">
   <p>
-    在管理DRM時，您還可以使用<a href="/playback-authorization/guides/additional-apis-for-pas.html">播放授權服務的其他API</a>。
+    在管理 DRM 時，您還可以使用<a href="/playback-authorization/guides/additional-apis-for-pas.html">播放授權服務的附加 API</a> .
   </p>
 </aside>
 
 
 <h3>基本網址</h3>
 <p>
-  API 的基本網址是：
+  API 的基本 URL 是：
 </p>
 <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com</code></pre>
 
-<h3>帳號路徑</h3>
+<h3>帳戶路徑</h3>
 <p>
-  在所有情況下，我們都會針對特定的視訊雲端帳戶提出要求。因此，您將始終將術語帳戶後面跟著您的帳戶 ID 添加到基本 URL 中：
+  在任何情況下，都將請求特定的視頻雲帳戶。因此，您將始終將術語帳戶後跟您的帳戶 ID 添加到基本 URL：
 </p>
 <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}</code></pre>
 
 <h3>授權</h3>
 <p>
-  請求的訪問令牌是必需的，並且必須出現在授權頭።
+  請求的訪問令牌是必需的，並且必須存在於Authorization標頭中：：
 </p>
 <pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
 <p>
-  訪問令牌是一個臨時的 OAuth2 訪問令牌，必須從布萊特灣 OAuth 服務獲得。如需有關如何取得用戶端認證並使用它們來擷取存取權杖的詳細資訊，請參閱<a href="https://support.brightcove.com/overview-oauth-api-v4"> Brightcove OAuth 概觀</a>。
+  訪問令牌是必須從 Brightcove OAuth 服務獲取的臨時 OAuth2 訪問令牌。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="https://support.brightcove.com/overview-oauth-api-v4">Brightcove OAuth 概述</a> .
 </p>
 
 <h3>權限</h3>
 <p>
-  對金鑰 API 的要求必須從具有下列權限的<a href="https://support.brightcove.com/oauth-api">用戶端認證</a>提出：
+  對Key API的請求必須來自<a href="https://support.brightcove.com/oauth-api">客戶憑證</a>具有以下權限：
 </p>
 <ul>
   <li>
@@ -1555,137 +251,136 @@ console.log("Public key saved in " + dir + "/public_key.txt");</code></pre>
 
 <h3>管理金鑰</h3>
 <p>
-  關鍵 API 支援下列要求：
+  Key API 支持以下請求：
 </p>
 <aside class="bcls-aside bcls-aside--information">
   <p>
-    注意事項：
+    筆記：
   </p>
   <ul>
     <li>
-      您無法編輯現有的金鑰，但您可以刪除並建立新的金鑰。
+      無法編輯現有密鑰，但是您可以刪除並創建一個新密鑰。
     </li>
     <li>
-      一次最多可以註冊 3 個金鑰，並且可以刪除金鑰，以支援按鍵旋轉。在實踐中，最好只有 1 個密鑰。
+      一次最多可以註冊3個按鍵，並且可以刪除按鍵，以支持按鍵旋轉。實際上，最好只有一把鑰匙。
     </li>
   </ul>
 </aside>
 
-<h4>註冊一個新的金鑰：</h4>
+<h4>註冊新密鑰：</h4>
 <p>
-  將您的公鑰的值放在 API 請求主體中。你可以在<strong> public_key.txt </strong>文件中找到密鑰。
+  將您的公共密鑰的值放在API請求正文中。你可以在裡面找到鑰匙<strong>公鑰.txt</strong>文件。
 </p>
-<h5>請求</h5>
+<h5>要求</h5>
 <pre class="line-numbers"><code class="language-http" translate="No">POST /v1/accounts/{accountID}/keys
     Content-Type: application/json
-    Body: {"value": "MFkwEwYHKoZIzj0CAQYIKoZIzj...MyeQviqploA=="}
+    Body: {&quot;value&quot;: &quot;MFkwEwYHKoZIzj0CAQYIKoZIzj...MyeQviqploA==&quot;}
 </code></pre>
 <details>
 <summary>
-  <h5 id="Using_Curl">使用捲曲</h5>
+  <p id="Using_Curl">使用捲曲</p>
 </summary>
-  <pre class="line-numbers"><code class="language-curl">捲曲-X 帖子\
-  -H「內容類型：應用程序/JSON」\
-  -H「授權：承載人 {存取記號}」\
-  -d '{"值」：「{您的公共關鍵值}"}'\
-https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/keys
-</code></pre>
-<h5>響應</h5>
+  <pre class="line-numbers"><code class="language-curl">curl -X POST \\ -H "Content-Type: application/json" \\ -H "授權：不記名{access_token}「-d」{"value": "{your_public_key_value}「} '  \ https://playback-auth.api.brightcove.com/v1/accounts/ {accountID} /按鍵</code> </pre>
+<h5>回复</h5>
 <pre class="line-numbers"><code class="language-json" translate="No">{
-  "id": "{your_public_key_id}",
-  "type": "public",
-  "algorithm": "rsa",
-  "value": "{your_public_key_value}",
-  "createdAt": "2020-01-03T20:30:36.488Z"
+  &quot;id&quot;: &quot;{your_public_key_id}&quot;,
+  &quot;type&quot;: &quot;public&quot;,
+  &quot;algorithm&quot;: &quot;rsa&quot;,
+  &quot;value&quot;: &quot;{your_public_key_value}&quot;,
+  &quot;createdAt&quot;: &quot;2020-01-03T20:30:36.488Z&quot;
 }</code></pre>
 </details>
 
 
-<h4>列出鍵：</h4>
+<h4>清單鍵：</h4>
 <p>
-  取得帳戶中的公開金鑰清單。
+  獲取您帳戶中的公共密鑰列表。
 </p>
 <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys</code></pre>
 
-<h4>取得一個金鑰：</h4>
+<h4>取得一把鑰匙：</h4>
 <p>
-  取得帳戶中公開金鑰的詳細資料。
+  獲取您帳戶中公共密鑰的詳細信息。
 </p>
 <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
 
 <h4>刪除一個鍵：</h4>
 <p>
-  刪除帳戶中的公開金鑰。
+  刪除您帳戶中的公鑰。
 </p>
 <pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
 
 </section>
 
 <section class="bcls-section">
-<h2 id="Create_a_JSON_Web_Token">建立<span translate="No">JSON Web Token</span></h2>
+<h2 id="Create_a_JSON_Web_Token">創建一個<span translate="No">JSON 網絡令牌</span></h2>
 
-<p>發布者創建一個<a href="https://jwt.io/introduction/">JSON Web令牌</a>（JWT）。使用 SHA-256 雜湊演算法 (在 JWT 規格中識別為 " <a href="https://ldapwiki.com/wiki/RS256"> RS256 </a>」) 使用 RSA 演算法簽署該令牌不會支援其他 JWT 演算法。</p>
+<p>發布者創建一個<a href="https://jwt.io/introduction/">JSON Web令牌</a>（JWT）。令牌使用 SHA-256 哈希算法（在 JWT 規範中標識為“<a href="https://ldapwiki.com/wiki/RS256"> RS256</a> ") 不支持其他 JWT 算法。</p>
 <p>
-  標準的子集<a href="https://auth0.com/docs/tokens/jwt-claims">JSON Web令牌聲明</a>將與Brightcove定義的一些私人索賠一起使用。您將創建一個用您的私鑰<span translate="No">JSON Web Token</span>簽名。
+  標準的子集<a href="https://auth0.com/docs/tokens/jwt-claims">JSON Web令牌聲明</a>將與Brightcove定義的一些私人索賠一起使用。您將創建一個<span translate="No">JSON 網絡令牌</span>用你的私鑰簽名。
 </p>
 
-<h3>靜態 URL 傳遞的宣告</h3>
+<h3>靜態網址傳遞聲明</h3>
 <p>
-  有關可以使用的索賠清單，請參見<a href="node/18961/">靜態網址傳遞</a>文件。
+  有關可以使用的索賠清單，請參見<a href="node/18961/">靜態網址傳遞</a>文檔。
 </p>
 
-<h3>播放授權聲明</h3>
+<h3>要求播放授權</h3>
 <p>
-  以下權利要求可以與<a href="/playback-authorization/getting-started/overview-playback-authorization-service.html">Brightcove的播放授權服務</a>。
+  以下聲明可用於<a href="/playback-authorization/getting-started/overview-playback-authorization-service.html">Brightcove 的播放授權服務</a> .
 </p>
 
 <table class="bcls-table">
       <thead class="bcls-table__head">
         <tr>
-          <th>欄位</th>
+          <th>場地</th>
           <th>類型</th>
-          <th>必填</th>
+          <th>必要</th>
           <th>描述</th>
         </tr>
       </thead>
       <tbody class="bcls-table__body">
         <tr>
           <td><code translate="No">accid</code></td>
-          <td>字串</td>
-          <td>是</td>
-          <td>擁有播放內容的帳號 ID</td>
+          <td>細繩</td>
+          <td>是的</td>
+          <td>擁有正在播放的內容的帳戶 ID</td>
         </tr>
         <tr>
           <td><code translate="No">exp</code></td>
           <td>整數</td>
-          <td>是</td>
-          <td>這個令牌的時間將不再有效，以秒為單位，自紀元以來。必須不超過 30 天<code translate="No">iat</code></td>
+          <td>是的</td>
+          <td>此令牌不再有效的時間，以 Epoch 以來的秒數為單位。距離日期不得超過30天<code translate="No">iat</code></td>
         </tr>
         <tr>
           <td><code translate="No">iat</code></td>
           <td>整數</td>
-          <td>是</td>
-          <td>這個令牌發出的時間，以秒為單位，自紀元</td>
-        </tr>
-        <tr>
-          <td><code translate="No">ua</code></td>
-          <td>字串</td>
-          <td></td>
-          <td>如果存在，此令牌將僅對來自此用戶代理的請求有效。<br/><br/>此欄位未驗證。
-          </td>
+          <td>是的</td>
+          <td>發行此令牌的時間，自 Epoch 以來的秒數</td>
         </tr>
         <tr>
           <td><code translate="No">conid</code></td>
-          <td>字串</td>
+          <td>細繩</td>
           <td></td>
-          <td>如果存在，此權杖只會授權擷取特定 Video Cloud 視訊 ID 的授權。<br/><br/>必須是有效的影片 ID。
+          <td>如果存在，則此令牌將僅授權獲取特定Video Cloud視頻ID的許可證。
+            <br /><br />
+            必須是有效的視頻 ID。
           </td>
         </tr>
+        <!-- <tr> This is internal use only!!
+          <td><code translate="No">crt </code></td>
+          <td>String</td>
+          <td></td>
+          <td>Customer Rights Token used for DRM rights management (DRM Only).
+          </td>
+        </tr> -->
         <tr>
           <td><code translate="No">maxip</code></td>
           <td>整數</td>
           <td></td>
-          <td>如果存在，這個令牌將只能被這許多不同的 IP 地址使用。(DRM 與 AES-128) 工作階段追蹤<br/><br/>所需。
+          <td>如果存在，則此令牌只能由許多不同的IP地址使用。(DRM &amp; AES-128)
+            <br /><br />
+            會話跟踪所必需。
           </td>
         </tr>
         <tr>
@@ -1693,71 +388,72 @@ https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/keys
           <td>整數</td>
           <td></td>
           <td>
-              如果存在，此 Token 僅適用於這許多許可證請求。(電子資料管理系統及 AES-128) <br/><br/>
+              如果存在，則此令牌僅對這麼多許可證請求有效。(DRM &amp; AES-128)
+            <br><br>
             <ul>
               <li>
-                對於 HLSE，播放器在播放視訊時會提出多個要求，通常每個節目一次。<code translate="No">maxu</code>必須設定足夠高，才能解決這些額外的要求。
+                對於HLSe，播放視頻時，播放器將發出多個請求，通常每個再現有一個。這<code translate="No">maxu</code>必須設置得足夠高以考慮這些額外的請求。
               </li>
               <li>
-                對於 DRM，每次播放會提出一個授權要求
+                對於DRM，每次播放都會發出一個許可請求
               </li>
             </ul>
-              工作階段追蹤必要項目。
+              會話跟踪所必需。
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">ua</code></td>
+          <td>細繩</td>
+          <td></td>
+          <td>如果存在，則此令牌僅對來自此用戶代理的請求有效。
+            <br /><br />
+            此字段未經驗證。
           </td>
         </tr>
       </tbody>
     </table>
 
-    <h3>播放權聲明</h3>
+    <h3>索取播放權</h3>
     <p>
-      以下權利要求可以與<a href="/playback-rights/getting-started/overview-epa.html">Brightcove的播放權限管理服務</a>。
+      以下聲明可用於<a href="/playback-rights/getting-started/overview-epa.html">Brightcove 的播放權限管理服務</a> .
     </p>
-    <aside class="bcls-aside bcls-aside--information">在 DRM 中使用播放權限時，您不能使用 AES-128。</aside>
+    <aside class="bcls-aside bcls-aside--information">使用帶有 DRM 的播放權限時，您不能使用 AES-128。</aside>
 
     <table class="bcls-table">
           <thead class="bcls-table__head">
             <tr>
-              <th>欄位</th>
+              <th>場地</th>
               <th>類型</th>
-              <th>必填</th>
-              <th>並發流限制所需</th>
-              <th>僅限 DRM</th>
+              <th>必要</th>
+              <th>並發流限制所必需</th>
+              <th>僅DRM</th>
               <th>描述</th>
             </tr>
           </thead>
           <tbody class="bcls-table__body">
             <tr>
               <td><code translate="No">accid</code></td>
-              <td>字串</td>
-              <td>是</td>
+              <td>細繩</td>
+              <td>是的</td>
               <td></td>
               <td></td>
-              <td>擁有播放內容的帳號 ID</td>
+              <td>擁有正在播放的內容的帳戶 ID</td>
             </tr>
             <tr>
               <td><code translate="No">exp</code></td>
               <td>整數</td>
-              <td>是</td>
+              <td>是的</td>
               <td></td>
               <td></td>
-              <td>這個令牌的時間將不再有效，以秒為單位，自紀元以來。必須不超過 30 天<code translate="No">iat</code></td>
+              <td>此令牌不再有效的時間，以 Epoch 以來的秒數為單位。距離日期不得超過30天<code translate="No">iat</code></td>
             </tr>
             <tr>
               <td><code translate="No">iat</code></td>
               <td>整數</td>
-              <td>是</td>
+              <td>是的</td>
               <td></td>
               <td></td>
-              <td>這個令牌發出的時間，以秒為單位，自紀元</td>
-            </tr>
-            <tr>
-              <td><code translate="No">pkid</code></td>
-              <td>字串</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>用於驗證此令牌的公鑰 ID。它已在Brightcove的播放授權服務中註冊，並且必須使用RSA密鑰格式。<br/><br/>如果<code translate="No">pkid</code>指定後，我們將使用指定的密鑰驗證令牌。<br/><br/>如果不<code translate="No">pkid</code>指定後，我們將檢索該帳戶的所有密鑰，並嘗試針對所有密鑰進行驗證。
-              </td>
+              <td>發行此令牌的時間，自 Epoch 以來的秒數</td>
             </tr>
             <tr>
               <td><code translate="No">nbf</code></td>
@@ -1765,76 +461,85 @@ https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/keys
               <td></td>
               <td></td>
               <td></td>
-              <td>這個令牌開始有效的時間，以秒為單位，自紀元</td>
+              <td>此令牌開始生效的時間，以 Epoch 以來的秒數為單位</td>
+            </tr>
+            <tr>
+              <td><code translate="No">pkid</code></td>
+              <td>細繩</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>用於驗證此令牌的公鑰 ID。它已在Brightcove的播放授權服務中註冊，並且必須使用RSA密鑰格式。
+                <br /><br />
+                如果<code translate="No">pkid</code>指定，我們使用指定的密鑰驗證令牌。
+                <br /><br />
+                如果不<code translate="No">pkid</code>指定，我們檢索帳戶的所有密鑰並嘗試針對所有密鑰進行驗證。
+              </td>
             </tr>
             <tr>
               <td><code translate="No">prid</code></td>
-              <td>字串</td>
+              <td>細繩</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>A <code translate="No">playback_rights_id</code> .用於覆寫此視訊目錄中的 ID 設定<br/><br/>此欄位未驗證。
+              <td>一種<code translate="No">playback_rights_id</code>。用於覆蓋此視頻的目錄中設置的 id
+                <br /><br />
+                此字段未經驗證。
               </td>
             </tr>
             <tr>
               <td><code translate="No">tags</code></td>
-              <td>陣列 &lt; 字串 &gt;</td>
+              <td>數組&lt;Strings&gt;</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>如果存在，則此令牌僅適用於授權播放列出的標籤。</td>
+              <td>如果存在，則此令牌僅對列出的授權播放標籤有效。</td>
             </tr>
             <tr>
               <td><code translate="No">vids</code></td>
-              <td>陣列 &lt; 字串 &gt;</td>
+              <td>數組&lt;Strings&gt;</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>如果存在，這個令牌將只授權獲取一組視頻 ID 的許可證。</td>
+              <td>如果存在，則此令牌將僅授權獲取一組視頻ID的許可證。</td>
             </tr>
-            <tr>
-              <td><code translate="No">uid</code></td>
-              <td>字串</td>
+             <tr>
+              <td><code translate="No">cbeh</code></td>
+              <td>細繩</td>
               <td></td>
               <td></td>
-              <td>是</td>
-              <td>最終檢視器的使用者 ID。該字段用於關聯多個會話以強制執行並發流限制。<br/><br/>裝置註冊：必填
-              </td>
-            </tr>
-            <tr>
-              <td><code translate="No">sid</code></td>
-              <td>字串</td>
-              <td></td>
-              <td></td>
-              <td>是</td>
-              <td>通過指定當前流的會話ID，您可以控制如何定義會話。默認情況下，會話定義為用戶代理（瀏覽器）+ IP地址+視頻ID。<br/><br/>例如，您可以將會話的定義放寬為IP地址+視頻ID。<br/><br/>並行串流限制：選用
+              <td>是的</td>
+              <td>將值設置為<code translate="No">BLOCK_NEW</code>當達到最大流數時，啟用並發流限制以阻止任何新請求，即使來自同一用戶。
+                <br /><br />
+                將值設置為<code translate="No">BLOCK_NEW_USER</code>當達到最大流數時，僅阻止來自新用戶的任何新請求。
+                <br /><br />
+                當達到最大流數時，默認會阻止最舊的流。
+                <br /><br />
+          並發流限制：可選的
               </td>
             </tr>
             <tr>
               <td><code translate="No">cexp</code></td>
-              <td>字串</td>
+              <td>細繩</td>
               <td></td>
               <td></td>
-              <td>是</td>
-              <td>會話的並發到期時間-默認為內容持續時間的2倍或15分鐘，以較長者為準。<br/><br/>這會定義工作階段有效的時間，之後結束檢視器必須開始新的工作階段才能繼續播放。例：<code translate="No">2h</code>要么<code translate="No">42m</code><br/><br/>並發流限制：選用
-              </td>
-            </tr>
-            <tr>
-              <td><code translate="No">cbeh</code></td>
-              <td>字串</td>
-              <td></td>
-              <td></td>
-              <td>是</td>
-              <td>將值設置為<code translate="No">BLOCK_NEW</code>當達到最大流數時，啟用並發流限制以阻止任何新請求。<br/><br/>當達到最大流數時，默認值將阻止最早的流。<br/><br/>並行串流限制：選用
+              <td>是的</td>
+              <td>會話的並發到期時間-默認為內容持續時間的2倍或15分鐘，以較長者為準。
+                <br /><br />
+                這定義了會話的有效時長，在此之後，最終查看者必須啟動新會話才能繼續播放。例子：<code translate="No">2h</code>或者<code translate="No">42m</code>
+                <br /><br />
+          並發流限制：可選的
               </td>
             </tr>
             <tr>
               <td><code translate="No">climit</code></td>
               <td>整數</td>
               <td></td>
-              <td>是</td>
-              <td>是</td>
-              <td>包括此字段後，它將啟用並發流限制以及許可證續訂請求。此值表示允許並行觀察者的數目。<br/><br/>並行串流限制：必填
+              <td>是的</td>
+              <td>是的</td>
+              <td>當包含此字段時，它會啟用並發流限制以及許可證續訂請求。此值指示允許的並發觀察者數。
+                <br /><br />
+          並發流限制：必要
         </td>
             </tr>
             <tr>
@@ -1842,40 +547,72 @@ https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/keys
               <td>整數</td>
               <td></td>
               <td></td>
-              <td>是</td>
-              <td>包含此欄位時，它會控制可以與指定的使用者 ( <code translate="No">uid</code> ) 關聯的裝置數目。值必須是 &gt; <code translate="No">0</code>。<br/><br/>如果在稍後的要求中捨棄該<code translate="No">dlimit</code>值，先前允許的裝置將繼續運作。<br/><br/>範例：如果值設定為<code translate="No">3</code>，則使用者可以在裝置 A、B 和 C 上播放 (所有將被允許)。嘗試在裝置 D 上播放將被拒絕。<br/><br/>如果將值更改為<code translate="No">1</code>，用戶仍然可以在A，B和C的所有3種設備上播放，除非通過使用以下命令管理設備來手動撤消設備<a href="/playback-rights/references/reference.html#operation/GetDevices">設備API</a>。<br/><br/>裝置註冊：必填
+              <td>是的</td>
+              <td>當包含此字段時，它控制可以與指定用戶關聯的設備數量（<code translate="No">uid</code>）。值必須 &gt; <code translate="No">0</code> .
+                <br /><br />
+                如果出現以下情況，之前允許的設備將繼續運行<code translate="No">dlimit</code>值在以後的請求中被刪除。
+                <br /><br />
+                示例：如果值設置為<code translate="No">3</code>，用戶可以在設備 A、B 和 C 上玩遊戲（全部都被允許）。嘗試在設備 D 上播放將被拒絕。
+                <br /><br />
+                如果值更改為<code translate="No">1</code>，用戶仍然可以在所有 3 台設備 A、B 和 C 上玩遊戲，除非通過使用<a href="/playback-rights/references/reference.html#operation/GetDevices">設備 API</a> .
+                <br /><br />
+            設備註冊：必要
+              </td>
+            </tr>
+            <tr>
+              <td><code translate="No">sid</code></td>
+              <td>細繩</td>
+              <td></td>
+              <td></td>
+              <td>是的</td>
+              <td>指定當前流的會話 ID 允許您控制會話的定義方式。默認情況下，會話定義為用戶代理（瀏覽器）+ IP地址+視頻ID。
+                <br /><br />
+                  例如，您可以將會話的定義放鬆為 IP 地址 + 視頻 ID。
+                  <br /><br />
+            並發流限制：可選的
+              </td>
+            </tr>
+            <tr>
+              <td><code translate="No">uid</code></td>
+              <td>細繩</td>
+              <td></td>
+              <td></td>
+              <td>是的</td>
+              <td>最終查看者的用戶 ID。此字段用於關聯多個會話以強制執行並發流限制。
+                <br /><br />
+            設備註冊：必要
               </td>
             </tr>
           </tbody>
         </table>
 
-<h3>產生權杖</h3>
+<h3>生成令牌</h3>
 <p>
-  庫通常可用於生成 JWT 令牌。有關詳細信息，請參見<a href="https://jwt.io/">JSON Web令牌</a>現場。
+  庫通常可用於生成JWT令牌。有關詳細信息，請參見<a href="https://jwt.io/">JSON Web令牌</a>地點。
 </p>
 <h4>
-  bash 腳本示例：
+  bash腳本示例：
 </h4>
 <p>
-  生成 JWT 令牌的示例腳本：
+  生成JWT令牌的示例腳本：
 </p>
 <pre class="line-numbers"><code class="language-bash" translate="No">#! /usr/bin/env bash
 # Static header fields.
 HEADER='{
-	"type": "JWT",
-	"alg": "RS256"
+	&quot;type&quot;: &quot;JWT&quot;,
+	&quot;alg&quot;: &quot;RS256&quot;
 }'
 
 payload='{
-	"pkid": "{your_public_key_id}",
-	"accid": "{your_account_id}"
+	&quot;pkid&quot;: &quot;{your_public_key_id}&quot;,
+	&quot;accid&quot;: &quot;{your_account_id}&quot;
 }'
 
 # Use jq to set the dynamic `iat` and `exp`
 # fields on the payload using the current time.
 # `iat` is set to now, and `exp` is now + 1 second.
 PAYLOAD=$(
-	echo "${payload}" | jq --arg time_str "$(date +%s)" \
+	echo &quot;${payload}&quot; | jq --arg time_str &quot;$(date +%s)&quot; \
 	'
 	($time_str | tonumber) as $time_num
 	| .iat=$time_num
@@ -1887,15 +624,15 @@ function b64enc() { openssl enc -base64 -A | tr '+/' '-_' | tr -d '='; }
 
 function rs_sign() { openssl dgst -binary -sha256 -sign playback-auth-keys/private.pem ; }
 
-JWT_HDR_B64="$(echo -n "$HEADER" | b64enc)"
-JWT_PAY_B64="$(echo -n "$PAYLOAD" | b64enc)"
-UNSIGNED_JWT="$JWT_HDR_B64.$JWT_PAY_B64"
-SIGNATURE=$(echo -n "$UNSIGNED_JWT" | rs_sign | b64enc)
+JWT_HDR_B64=&quot;$(echo -n &quot;$HEADER&quot; | b64enc)&quot;
+JWT_PAY_B64=&quot;$(echo -n &quot;$PAYLOAD&quot; | b64enc)&quot;
+UNSIGNED_JWT=&quot;$JWT_HDR_B64.$JWT_PAY_B64&quot;
+SIGNATURE=$(echo -n &quot;$UNSIGNED_JWT&quot; | rs_sign | b64enc)
 
-echo "$UNSIGNED_JWT.$SIGNATURE"
+echo &quot;$UNSIGNED_JWT.$SIGNATURE&quot;
 </code></pre>
 <p>
-  執行指令碼：
+  運行腳本：
 </p>
 <pre><code class="language-bash" translate="No">$ bash jwtgen.sh
 </code></pre>
@@ -1904,47 +641,47 @@ echo "$UNSIGNED_JWT.$SIGNATURE"
 </p>
 <details>
 <summary>
-  <h4 id="Example_using_Go_token">使用 Go 的範例</h4>
+  <h4 id="Example_using_Go_token">使用Go的示例</h4>
 </summary>
 <p>
   這是一個參考Go實現的示例（作為cli工具），用於在不使用任何第三方庫的情況下生成令牌：
 </p>
-<aside class="bcls-aside bcls-aside--tip">如果你是新 Go，請參閱<a href="https://golang.org/"> Go 編程語言</a>主頁。</aside>
+<aside class="bcls-aside bcls-aside--tip">如果您是 Go 新手，請參閱<a href="https://golang.org/">Go 編程語言</a>主頁。</aside>
 <pre class="line-numbers"><code class="language-bash" translate="No">package main
 
 import (
-	"crypto"
-	"crypto/ecdsa"
-	"crypto/rand"
-	"crypto/rsa"
-	"crypto/sha256"
-	"crypto/x509"
-	"encoding/base64"
-	"encoding/json"
-	"encoding/pem"
-	"flag"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"strings"
-	"time"
+	&quot;crypto&quot;
+	&quot;crypto/ecdsa&quot;
+	&quot;crypto/rand&quot;
+	&quot;crypto/rsa&quot;
+	&quot;crypto/sha256&quot;
+	&quot;crypto/x509&quot;
+	&quot;encoding/base64&quot;
+	&quot;encoding/json&quot;
+	&quot;encoding/pem&quot;
+	&quot;flag&quot;
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;os&quot;
+	&quot;strings&quot;
+	&quot;time&quot;
 )
 
 // Header is the base64UrlEncoded string of a JWT header for the RS256 algorithm
-const RSAHeader = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9"
+const RSAHeader = &quot;eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9&quot;
 
 // Header is the base64UrlEncoded string of a JWT header for the EC256 algorithm
-const ECHeader = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9"
+const ECHeader = &quot;eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9&quot;
 
 // Claims represents constraints that should be applied to the use of the token
 type Claims struct {
-	Iat   float64 `json:"iat,omitempty"`   // Issued At
-	Exp   float64 `json:"exp,omitempty"`   // Expires At
-	Accid string  `json:"accid,omitempty"` // Account ID
-	Conid string  `json:"conid,omitempty"` // Content ID
-	Maxu  float64 `json:"maxu,omitempty"`  // Max Uses
-	Maxip float64 `json:"maxip,omitempty"` // Max IPs
-	Ua    string  `json:"ua,omitempty"`    // User Agent
+	Iat   float64 `json:&quot;iat,omitempty&quot;`   // Issued At
+	Exp   float64 `json:&quot;exp,omitempty&quot;`   // Expires At
+	Accid string  `json:&quot;accid,omitempty&quot;` // Account ID
+	Conid string  `json:&quot;conid,omitempty&quot;` // Content ID
+	Maxu  float64 `json:&quot;maxu,omitempty&quot;`  // Max Uses
+	Maxip float64 `json:&quot;maxip,omitempty&quot;` // Max IPs
+	Ua    string  `json:&quot;ua,omitempty&quot;`    // User Agent
 }
 
 func main() {
@@ -1952,53 +689,53 @@ func main() {
 
 	c := Claims{Iat: float64(time.Now().Unix())}
 
-	flag.StringVar(&amp;key, "key", "", "Path to private.pem key file")
-	flag.StringVar(&amp;c.Accid, "account-id", "", "Account ID")
-	flag.StringVar(&amp;c.Conid, "content-id", "", "Content ID (eg, video_id or live_job_id)")
-	flag.Float64Var(&amp;c.Exp, "expires-at", float64(time.Now().AddDate(0, 0, 1).Unix()), "Epoch timestamp (in seconds) for when the token should stop working")
-	flag.Float64Var(&amp;c.Maxu, "max-uses", 0, "Maximum number of times the token is valid for")
-	flag.Float64Var(&amp;c.Maxip, "max-ips", 0, "Maximum number of unique IP addresses the token is valid for")
-	flag.StringVar(&amp;c.Ua, "user-agent", "", "User Agent that the token is valid for")
-	flag.StringVar(&amp;algorithm, "algo", "", "Key algorithm to use for signing. Valid: ec256, rsa256")
+	flag.StringVar(&amp;key, &quot;key&quot;, &quot;&quot;, &quot;Path to private.pem key file&quot;)
+	flag.StringVar(&amp;c.Accid, &quot;account-id&quot;, &quot;&quot;, &quot;Account ID&quot;)
+	flag.StringVar(&amp;c.Conid, &quot;content-id&quot;, &quot;&quot;, &quot;Content ID (eg, video_id or live_job_id)&quot;)
+	flag.Float64Var(&amp;c.Exp, &quot;expires-at&quot;, float64(time.Now().AddDate(0, 0, 1).Unix()), &quot;Epoch timestamp (in seconds) for when the token should stop working&quot;)
+	flag.Float64Var(&amp;c.Maxu, &quot;max-uses&quot;, 0, &quot;Maximum number of times the token is valid for&quot;)
+	flag.Float64Var(&amp;c.Maxip, &quot;max-ips&quot;, 0, &quot;Maximum number of unique IP addresses the token is valid for&quot;)
+	flag.StringVar(&amp;c.Ua, &quot;user-agent&quot;, &quot;&quot;, &quot;User Agent that the token is valid for&quot;)
+	flag.StringVar(&amp;algorithm, &quot;algo&quot;, &quot;&quot;, &quot;Key algorithm to use for signing. Valid: ec256, rsa256&quot;)
 	flag.Parse()
 
-	if key == "" {
-		fmt.Printf("missing required flag: -key\n\n")
+	if key == &quot;&quot; {
+		fmt.Printf(&quot;missing required flag: -key\n\n&quot;)
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	if algorithm == "" {
-		fmt.Printf("missing required flag: -algo\n\n")
+	if algorithm == &quot;&quot; {
+		fmt.Printf(&quot;missing required flag: -algo\n\n&quot;)
 		flag.Usage()
 		os.Exit(2)
 	}
 
-	if algorithm != "rsa256" &amp;&amp; algorithm != "ec256" {
-		fmt.Printf("missing valid value for -algo flag. Valid: rsa256, ec256\n\n")
+	if algorithm != &quot;rsa256&quot; &amp;&amp; algorithm != &quot;ec256&quot; {
+		fmt.Printf(&quot;missing valid value for -algo flag. Valid: rsa256, ec256\n\n&quot;)
 		flag.Usage()
 		os.Exit(3)
 	}
 
-	if c.Accid == "" {
-		fmt.Printf("missing required flag: -account-id\n\n")
+	if c.Accid == &quot;&quot; {
+		fmt.Printf(&quot;missing required flag: -account-id\n\n&quot;)
 		flag.Usage()
 		os.Exit(4)
 	}
 
 	bs, err := json.Marshal(c)
 	if err != nil {
-		fmt.Println("failed to marshal token to json", err)
+		fmt.Println(&quot;failed to marshal token to json&quot;, err)
 		os.Exit(5)
 	}
 
 	kbs, err := ioutil.ReadFile(key)
 	if err != nil {
-		fmt.Println("failed to read private key", err)
+		fmt.Println(&quot;failed to read private key&quot;, err)
 		os.Exit(6)
 	}
 
-	if algorithm == "rsa256" {
+	if algorithm == &quot;rsa256&quot; {
 		processRSA256(kbs, bs)
 	} else {
 		processEC256(kbs, bs)
@@ -2008,22 +745,22 @@ func main() {
 func processRSA256(kbs, bs []byte) {
 	block, _ := pem.Decode(kbs)
 	if block == nil {
-		fmt.Println("failed to decode PEM block containing private key")
+		fmt.Println(&quot;failed to decode PEM block containing private key&quot;)
 		os.Exit(7)
 	}
 
-	if block.Type != "RSA PRIVATE KEY" {
-		fmt.Println("failed to decode PEM block containing private key")
+	if block.Type != &quot;RSA PRIVATE KEY&quot; {
+		fmt.Println(&quot;failed to decode PEM block containing private key&quot;)
 		os.Exit(8)
 	}
 
 	pKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		fmt.Println("failed to parse rsa private key", err)
+		fmt.Println(&quot;failed to parse rsa private key&quot;, err)
 		os.Exit(9)
 	}
 
-	message := RSAHeader + "." + base64.RawURLEncoding.EncodeToString(bs)
+	message := RSAHeader + &quot;.&quot; + base64.RawURLEncoding.EncodeToString(bs)
 
 	hash := crypto.SHA256
 	hasher := hash.New()
@@ -2032,39 +769,39 @@ func processRSA256(kbs, bs []byte) {
 
 	r, err := rsa.SignPKCS1v15(rand.Reader, pKey, hash, hashed)
 	if err != nil {
-		fmt.Println("failed to sign token", err)
+		fmt.Println(&quot;failed to sign token&quot;, err)
 		os.Exit(10)
 	}
 
-	sig := strings.TrimRight(base64.RawURLEncoding.EncodeToString(r), "=")
+	sig := strings.TrimRight(base64.RawURLEncoding.EncodeToString(r), &quot;=&quot;)
 
-	fmt.Println(message + "." + sig)
+	fmt.Println(message + &quot;.&quot; + sig)
 }
 
 func processEC256(kbs, bs []byte) {
 	block, _ := pem.Decode(kbs)
 	if block == nil {
-		fmt.Println("failed to decode PEM block containing private key")
+		fmt.Println(&quot;failed to decode PEM block containing private key&quot;)
 		os.Exit(7)
 	}
 
-	if block.Type != "EC PRIVATE KEY" {
-		fmt.Println("failed to decode PEM block containing private key")
+	if block.Type != &quot;EC PRIVATE KEY&quot; {
+		fmt.Println(&quot;failed to decode PEM block containing private key&quot;)
 		os.Exit(8)
 	}
 
 	pkey, err := x509.ParseECPrivateKey(block.Bytes)
 	if err != nil {
-		fmt.Println("failed to parse ec private key", err)
+		fmt.Println(&quot;failed to parse ec private key&quot;, err)
 		os.Exit(9)
 	}
 
-	message := ECHeader + "." + base64.RawURLEncoding.EncodeToString(bs)
+	message := ECHeader + &quot;.&quot; + base64.RawURLEncoding.EncodeToString(bs)
 	hash := sha256.Sum256([]byte(message))
 
 	r, s, err := ecdsa.Sign(rand.Reader, pkey, hash[:])
 	if err != nil {
-		fmt.Println("failed to sign token", err)
+		fmt.Println(&quot;failed to sign token&quot;, err)
 		os.Exit(10)
 	}
 
@@ -2086,21 +823,21 @@ func processEC256(kbs, bs []byte) {
 	out := append(rBytesPadded, sBytesPadded...)
 
 	sig := base64.RawURLEncoding.EncodeToString(out)
-	fmt.Println(message + "." + sig)
+	fmt.Println(message + &quot;.&quot; + sig)
 }
 </code></pre>
 </details>
 
 <h4>結果</h4>
 <p>
-  以下是一個使用<a href="https://jwt.io/"> https://JWT.io </a>指定完整的聲明集的解碼令牌的示例：
+  這是使用以下代碼的已解碼令牌的示例<a href="https://jwt.io/">https://JWT.io</a>指定完整的索賠：
 </p>
 <p>
-  標頭：
+  標題：
 </p>
 <pre class="line-numbers"><code class="language-json" translate="No">{
-  "alg": "RS256",
-  "type": "JWT"
+  &quot;alg&quot;: &quot;RS256&quot;,
+  &quot;type&quot;: &quot;JWT&quot;
 }
 </code></pre>
 
@@ -2108,23 +845,23 @@ func processEC256(kbs, bs []byte) {
   有效載荷：
 </p>
 <pre class="line-numbers"><code class="language-json" translate="No">{
-  "accid": "1100863500123",
-  "conid": "51141412620123",
-  "exp": 1554200832,
-  "iat": 1554199032,
-  "maxip": 10,
-  "maxu": 10,
-  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
+  &quot;accid&quot;: &quot;1100863500123&quot;,
+  &quot;conid&quot;: &quot;51141412620123&quot;,
+  &quot;exp&quot;: 1554200832,
+  &quot;iat&quot;: 1554199032,
+  &quot;maxip&quot;: 10,
+  &quot;maxu&quot;: 10,
+  &quot;ua&quot;: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36&quot;
 }
 </code></pre>
 </section>
 
 <section class="bcls-section">
-<h2 id="Test_playback">測試播放</h2>
+<h2 id="Test_playback">測試回放</h2>
 
-<p>雖然不是必要的，但您可能想要在設定播放器之前先測試視訊播放。</p>
+<p>儘管不是必需的，但您可能需要在配置播放器之前測試視頻播放。</p>
 <p>
-  要求播放：
+  請求播放：
 </p>
 <pre class="line-numbers"><code class="language-http" translate="No">curl -X GET \
  -H 'Authorization: Bearer {JWT}' \
@@ -2133,160 +870,3 @@ func processEC256(kbs, bs []byte) {
 </section>
 
 </article>
-<!-- complete bootstrap layout -->
-    </div>
-    <div class="col-sm-2 right-side-bar">
-      
-      <nav class="right-side-nav" id="right_side_nav">
-        <h6 class="toc">頁面內容</h6>
-        <ul id="in_page_nav" class="list-none"></ul>
-      </nav>
-      
-    </div>
-  </div>
-</div>
-
-<hr>
-<footer class="bcls-footer" role="contentinfo">
-  <div class="row">
-    <div class="region region-footer-top-center col-md-12">
-      <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
-
-        <h2>布萊特灣支援</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://status.brightcove.com">系統狀態</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">聯絡支援</a>
-          </li>
-          <li>
-            <a href="https://support.brightcove.com/">文獻資料</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
-
-        <h2>訓練</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://studio.support.brightcove.com/training/online-training-courses.html">線上課程</a>
-          </li>
-          <li>
-            <a href="https://studio.support.brightcove.com/training/register-training.html">註冊課程</a>
-          </li>
-          <li>
-            <a href="https://university.brightcove.com/">布萊特灣大學</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
-
-        <h2>Brightcove</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://www.brightcove.com">亮麗</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">聯絡我們</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-  <div class="row">
-    <div class="region region-footer-bottom-center col-md-12">
-      <div class="bcls-copyright footer-menu">
-        <table>
-          <tr>
-            <td>
-              <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> 布萊特灣公司版權所有</div>
-            </td>
-            <td><a href="https://www.brightcove.com/en/legal/privacy">私隱</a> | 條<a href="https://www.brightcove.com/en/terms-and-conditions">款及細則</a></td>
-            <td>
-              <div class="gf-links-cols footer-menu">
-                <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin"><i class="fab fa-linkedin-in" style="font-size: 1.5rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter"><i class="fab fa-twitter" style="font-size: 1.5rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i class="fab fa-facebook-f" style="font-size: 1.5rem;"></i></a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</div>
-</div>
-<script>
-      
-  var searchBox = sajari.init({
-    mode: "search-box",
-    project: "1588255093746585379", // Set this to your project.
-    collection: "brightcove-documenation", // Set this to your collection.
-    instantPipeline: "autocomplete", // Pipeline used as you type
-    inputPlaceholder: "Search", // Input element placeholder
-    maxSuggestions: 5, // Maximum number of suggestions to show
-    attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
-  });
-  
-    searchBox("sub", "pipeline.search-sent", function (_, query) {
-      window.location = "/search.html?q=" + encodeURIComponent(query.q);
-    });
-  
-
-</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
-  <script src="/assets/js/sites_nav.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
-  <script src="/assets/js/feedback.js"></script>
-  
-  <script src="/assets/js/sajari-search-foot.js"></script>
-  
-  <!-- <script src="/assets/js/sajari-index.js"></script> -->
-  <style>
-    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
-      background-color: lightblue;
-    }
-    div.sj-tabs__tab {
-      margin-top: 3rem;
-      margin-left: .3rem;
-      border-top-left-radius: .4rem;
-      border-top-right-radius: .4rem;
-      background-color:#e8e8e8;
-    }
-
-    div.sj-tabs__tab.sj-tabs__tab--selected {
-      border-bottom-color: crimson;
-      background-color: #f8f8f8;
-    }
-
-    p.sj-results__result__description.css-p9jvyt {
-      font-size: 1rem;
-    }
-
-    .sj-result__text.css-31l7gp h3 {
-      color: navy;
-      font-size: 1.4rem;
-    }
-    </style>
-
-</body>
-
-</html>

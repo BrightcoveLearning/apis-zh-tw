@@ -1,0 +1,566 @@
+---
+title: '實時 API：通知'
+description: '本主題展示瞭如何為 Live API 作業設置通知。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Introduction">介紹</h2>
+
+<p>Brightcove Live 系統發送各種事件的通知。您可以為通知設置偵聽器以觸發進一步的操作。偵聽器可以用您使用的任何服務器端語言編寫，它們將查找傳入的 POST 請求，解析 JSON 請求正文，然後執行您想要的任何操作。在下面，我們將看到您如何請求通知。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Requesting_notifications">請求通知</h2>
+
+<p>您可以通過包含一個或多個來請求通知<code translate="No">notifications</code>輸出中的字段<a href="/live-api/references/reference.html#api-Live_Jobs-Create_a_Live_Job">創建工作</a>要求。</p>
+
+<p>的價值<code translate="No">notifications</code>是通知目標對象的數組。您可以使用帶有 url 的簡單字符串：<code translate="No">"http://httpbin.org/post"</code>，或者您可以使用具有以下選項的對象：<code translate="No">{"url": "http://httpbin.org/post", "credentials": "reference_to_your_credentials"}</code> .當輸出更改其狀態時，將向您指定的目的地發送通知。如果將此參數應用於VOD輸出，則通知將僅與該VOD作業相關，而不與實時作業相關。</p>
+
+<aside class="bcls-aside bcls-aside--warning">請注意。每種事件類型只有一個通知 url ( <code translate="No">first_segment_uploaded</code> , <code translate="No">state_change</code>等）是允許的。</aside>
+
+<p>這裡有些例子：</p>
+
+<h3>現場工作通知</h3>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "live_stream": true,
+    "region": "us-west-2",
+    "reconnect_time": 20,
+    <span class="bcls-highlight">"notifications": [
+      {"url": "http://httpbin.org/post/URLA",
+        "credentials": "reference_to_your_credentials",
+        "event": "first_segment_uploaded"},
+      {"url": "http://httpbin.org/post/URLB",
+      "credentials": "reference_to_your_credentials",
+      "event": "state_changed"}
+      ]</span>,
+    "outputs": [
+    {
+        "label": "hls360p",
+        "live_stream": true,
+        "height": 360,
+        "video_bitrate": 650,
+        "segment_seconds": 6
+    },
+    {
+        "url":"s3://YOURBUCKET/path/filename.mp4",
+        "credentials": "accConfiguredCredsAWSIdSecret",
+        <span class="bcls-highlight">"notifications":    [
+        {
+            "url": "http://httpbin.org/post?vodStateChange"
+        },
+        {
+            "url": "http://httpbin.org/post?vodFinished",
+            "event": "output_finished"
+        }
+        ]</span>
+    }]
+}</code></pre>
+
+<h3>直播到VOD的通知（<code translate="No">output_finished</code>僅活動）</h3>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "videocloud": {
+    "video": {
+      "name": "video name"
+    }
+  },
+  "notifications": [{
+    "url": "http://httpbin.org/post?vodFinished",
+    "event": "output_finished"
+  }]
+}</code></pre>
+
+<h3>直播到VOD的通知（所有事件）</h3>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "videocloud": {
+    "video": {
+      "name": "video name"
+    }
+  },
+  "notifications": [{
+    "url": "http://httpbin.org/post"
+  }]
+}</code></pre>
+
+<h3>重試策略</h3>
+
+<p>如果發送通知的請求失敗，則默認重試策略是重試50次，兩次嘗試之間的間隔為指數延遲。</p>
+
+<pre>
+          <code translate="No">max_retry_times = 50
+          delay_delta_s = 5
+          next_retry = now_s + retry_count * delay_delta_s</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Events">大事記</h2>
+
+<p>以下是您可以聽取的工作生命週期中的事件。請注意，事件範圍是針對每個作業的，因此，基於相同的實時流，實時作業的事件生命週期將與VOD裁剪作業的生命週期分開。</p>
+
+<ul>
+	<li><code translate="No">state_changed</code> -現場工作的狀態已更改；有關詳細信息，請參見下表</li>
+	<li><code translate="No">first_segment_uploaded</code> -實時流的第一段上傳到原始位置</li>
+	<li><code translate="No">output_finished</code> -直播活動已經結束，並且VOD處理已創建至少一個音頻和一個視頻副本，或一個漸進式MP4副本</li>
+</ul>
+
+<p>這<code translate="No">state_changed</code>將通知下表中描述的以下狀態</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">現場工作狀態</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>狀態</th>
+			<th>描述</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td colspan="2" style="background-color:RGB(172, 202, 204);text-align: center;font-weight:bold;">工作狀態（在通知中報告為<code translate="No">state</code>）</td>
+		</tr>
+		<tr>
+			<td><code translate="No">error</code></td>
+			<td>發生了錯誤;該作業將不會被處理。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">standby</code></td>
+			<td>（僅適用於靜態入口點[SEP]作業。）作業已分配並準備好激活。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">waiting</code></td>
+			<td>作業已分配給流式工作器並準備好連接編碼器。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">processing</code></td>
+			<td>編碼器已連接且作業可用於播放。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">disconnected</code></td>
+			<td>編碼器已斷開連接，流工作器正在等待重新連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelling</code></td>
+			<td>作業已取消，工作人員正在停止作業，不會處理任何掛起的 VOD 輸出。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finishing</code></td>
+			<td>編碼器已斷開連接超過<code translate="No">reconnect_time</code>，並且流媒體工作者正在停止作業並創建任何關聯的 VOD 輸出。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelled</code></td>
+			<td>作業已成功取消。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finished</code></td>
+			<td>作業已成功完成。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">failed</code></td>
+			<td>由於系統錯誤，作業已停止。</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="background-color:RGB(172, 202, 204);text-align: center;font-weight:bold;">VOD 作業狀態（在通知中報告為<code translate="No">jvod_state</code> )</td>
+		</tr>
+		<tr>
+			<td><code translate="No">error</code></td>
+			<td>發生了錯誤;該作業將不會被處理。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">waiting</code></td>
+			<td>等待處理的作業。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">waiting_finish_live</code></td>
+			<td>等待實時作業完成的作業（如果剪輯取決於此）。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">processing</code></td>
+			<td>剪輯正在處理中。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">creating_asset</code></td>
+			<td>正在創建VOD資產。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelling</code></td>
+			<td>作業已取消，工作人員正在停止作業，不會處理任何掛起的 VOD 輸出。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelled</code></td>
+			<td>作業已成功取消。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finished</code></td>
+			<td>作業已成功完成。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">failed</code></td>
+			<td>由於系統錯誤，作業已停止。</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="background-color:RGB(172, 202, 204);text-align: center;font-weight:bold;">SSAI 國家（在通知中報告為<code translate="No">ssai_state</code> )</td>
+		</tr>
+		<tr>
+			<td><code translate="No">none</code></td>
+			<td>該工作不是 SSAI 工作。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">waiting_input</code></td>
+			<td>流工作者正在等待編碼器連接並提供流輸入信息。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">start_transcoding</code></td>
+			<td>編碼器已連接，SSAI slate 已根據流輸入數據和輸出數據排隊進行轉碼。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">transcoding</code></td>
+			<td>石板正在轉碼。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">error</code></td>
+			<td>無法下載或轉碼該平板。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ready</code></td>
+			<td>slate 已生成，作業已準備好用於 SSAI 播放。</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="background-color:RGB(172, 202, 204);text-align: center;font-weight:bold;">SEP 國家（在通知中報告為<code translate="No">sep_state</code> )</td>
+		</tr>
+		<tr>
+			<td><code translate="No">none</code></td>
+			<td>該作業不是 SEP 作業。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ready</code></td>
+			<td>入口點已激活並準備好連接編碼器。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">pending_activation</code></td>
+			<td>入口點已排隊等待流工作器分配。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">activation_in_progress</code></td>
+			<td>入口點正在更新以將連接路由到流工作器。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">pending_deactivation</code></td>
+			<td>入口點已排隊等待來自流處理程序的清理。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">deactivation_in_progress</code></td>
+			<td>入口點正在與流工作者斷開連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelled</code></td>
+			<td>入口點已被取消。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finished</code></td>
+			<td>入口點已成功完成。</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="background-color:RGB(172, 202, 204);text-align: center;font-weight:bold;">RTMP 輸出狀態（報告為<code translate="No">rtmp_output_state_changed</code>通知作為<code translate="No">state</code> )</td>
+		</tr>
+		<tr>
+			<td><code translate="No">starting</code></td>
+			<td>流開始了。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">connected</code></td>
+			<td>編碼器已連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">Disconnected</code></td>
+			<td>編碼器已斷開。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">error</code></td>
+			<td>流無法連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">pending_deactivation</code></td>
+			<td>入口點已排隊等待來自流處理程序的清理。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">deactivation_in_progress</code></td>
+			<td>入口點正在與流工作者斷開連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelled</code></td>
+			<td>入口點已被取消。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finished</code></td>
+			<td>入口點已成功完成。</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="sample_notification">示例通知</h2>
+
+<h3>直播通知</h3>
+
+<p>這是有關<code translate="No">state_changed</code>現場工作的活動：</p>
+
+<pre class="line-numbers">
+          <code class="language-json" translate="No">{
+              "outputs": [
+                  {
+                      "rfc_6381_video_codec": null,
+                      "finished_at": "2017-10-19T20:08:11.115Z",
+                      "segment_seconds": 4,
+                      "created_at": "2017-10-19T19:47:04.534Z",
+                      "privacy": false,
+                      "md5_checksum": null,
+                      "audio_codec": "AAC",
+                      "error_class": null,
+                      "updated_at": "2017-10-19T20:08:11.115Z",
+                      "video_bitrate_in_kbps": 2150.4,
+                      "id": "0-621669558be84a7da4ff20bccb9a6a1a",
+                      "state": "cancelled",
+                      "playback_url": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_0\/chunklist.m3u8",
+                      "duration_in_ms": 1156873,
+                      "file_size_bytes": null,
+                      "height": 720,
+                      "playback_url_dvr": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_0\/chunklist_dvr.m3u8",
+                      "error_message": null,
+                      "video_codec": "H.264",
+                      "audio_bitrate_in_kbps": 196.608,
+                      "fragment_duration_in_ms": null,
+                      "test": false,
+                      "playback_url_vod": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_0\/chunklist_vod.m3u8",
+                      "total_bitrate_in_kbps": 2347.008,
+                      "format": null,
+                      "label": "hls720p",
+                      "frame_rate": null,
+                      "video_codec_profile": "high",
+                      "keyframe_interval": 60,
+                      "keyframe_interval_follow_source": false,
+                      "live_stream": true,
+                      "channels": null,
+                      "playback_added_cdns": [
+
+                      ],
+                      "width": 1280,
+                      "rfc_6381_audio_codec": null,
+                      "audio_sample_rate": null
+                  },
+                  {
+                      "rfc_6381_video_codec": null,
+                      "finished_at": "2017-10-19T20:08:11.115Z",
+                      "segment_seconds": 4,
+                      "created_at": "2017-10-19T19:47:04.534Z",
+                      "privacy": false,
+                      "md5_checksum": null,
+                      "audio_codec": "AAC",
+                      "error_class": null,
+                      "updated_at": "2017-10-19T20:08:11.115Z",
+                      "video_bitrate_in_kbps": 1536,
+                      "id": "1-621669558be84a7da4ff20bccb9a6a1a",
+                      "state": "cancelled",
+                      "playback_url": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_1\/chunklist.m3u8",
+                      "duration_in_ms": 1156873,
+                      "file_size_bytes": null,
+                      "height": 540,
+                      "playback_url_dvr": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_1\/chunklist_dvr.m3u8",
+                      "error_message": null,
+                      "video_codec": "H.264",
+                      "audio_bitrate_in_kbps": 196.608,
+                      "fragment_duration_in_ms": null,
+                      "test": false,
+                      "playback_url_vod": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_1\/chunklist_vod.m3u8",
+                      "total_bitrate_in_kbps": 1732.608,
+                      "format": null,
+                      "label": "hls540p",
+                      "frame_rate": null,
+                      "video_codec_profile": "main",
+                      "keyframe_interval": 60,
+                      "keyframe_interval_follow_source": false,
+                      "live_stream": true,
+                      "channels": null,
+                      "playback_added_cdns": [
+
+                      ],
+                      "width": 960,
+                      "rfc_6381_audio_codec": null,
+                      "audio_sample_rate": null
+                  },
+                  {
+                      "rfc_6381_video_codec": null,
+                      "finished_at": "2017-10-19T20:08:11.115Z",
+                      "segment_seconds": 4,
+                      "created_at": "2017-10-19T19:47:04.534Z",
+                      "privacy": false,
+                      "md5_checksum": null,
+                      "audio_codec": "AAC",
+                      "error_class": null,
+                      "updated_at": "2017-10-19T20:08:11.115Z",
+                      "video_bitrate_in_kbps": 819.2,
+                      "id": "2-621669558be84a7da4ff20bccb9a6a1a",
+                      "state": "cancelled",
+                      "playback_url": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_2\/chunklist.m3u8",
+                      "duration_in_ms": 1156873,
+                      "file_size_bytes": null,
+                      "height": 360,
+                      "playback_url_dvr": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_2\/chunklist_dvr.m3u8",
+                      "error_message": null,
+                      "video_codec": "H.264",
+                      "audio_bitrate_in_kbps": 196.608,
+                      "fragment_duration_in_ms": null,
+                      "test": false,
+                      "playback_url_vod": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/profile_2\/chunklist_vod.m3u8",
+                      "total_bitrate_in_kbps": 1015.808,
+                      "format": null,
+                      "label": "hls360p",
+                      "frame_rate": null,
+                      "video_codec_profile": "main",
+                      "keyframe_interval": 60,
+                      "keyframe_interval_follow_source": false,
+                      "live_stream": true,
+                      "channels": null,
+                      "playback_added_cdns": [
+
+                      ],
+                      "width": 640,
+                      "rfc_6381_audio_codec": null,
+                      "audio_sample_rate": null
+                  },
+                  {
+                      "playlist_type": "defaultS3",
+                      "dvr_filename": "playlist_dvr.m3u8",
+                      "filename": "playlist.m3u8",
+                      "playback_url": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/playlist.m3u8",
+                      "type": "playlist",
+                      "playback_url_dvr": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/playlist_dvr.m3u8"
+                  }
+              ],
+              "input": {
+                  "finished_at": "2017-10-19T20:08:11.115Z",
+                  "created_at": "2017-10-19T19:47:04.534Z",
+                  "privacy": false,
+                  "md5_checksum": null,
+                  "audio_codec": null,
+                  "error_class": null,
+                  "updated_at": "2017-10-19T20:08:11.115Z",
+                  "video_bitrate_in_kbps": null,
+                  "id": "input-621669558be84a7da4ff20bccb9a6a1a",
+                  "state": "cancelled",
+                  "duration_in_ms": 1156873,
+                  "file_size_bytes": null,
+                  "audio_tracks": null,
+                  "height": null,
+                  "error_message": null,
+                  "video_codec": null,
+                  "audio_bitrate_in_kbps": null,
+                  "test": false,
+                  "total_bitrate_in_kbps": null,
+                  "format": null,
+                  "frame_rate": null,
+                  "url": null,
+                  "channels": null,
+                  "width": null,
+                  "audio_sample_rate": null
+              },
+              <span class="bcls-highlight">"event": "state_changed",</span>
+              "job": {
+                  "event_length": 0,
+                  "static": false,
+                  "finished_at": "2017-10-19T20:08:11.115Z",
+                  "test": false,
+                  "submitted_at": "2017-10-19T19:47:04.534Z",
+                  "created_at": "2017-10-19T19:47:04.534Z",
+                  "privacy": false,
+                  "out_worker_bytes_rate": 0,
+                  "ad_insertion": false,
+                  "metadata_passthrough": false,
+                  "live_stream": true,
+                  "out_worker_bytes": 147114065,
+                  "live_dvr_sliding_window_duration_ms": 57600000,
+                  "updated_at": "2017-10-19T20:08:11.115Z",
+                  "encryption": [
+
+                  ],
+                  "live_dvr_sliding_window_duration_ms": 57600000,
+                  "ssai_state": "none",
+                  "id": "621669558be84a7da4ff20bccb9a6a1a",
+                  "state": "cancelled",
+                  "playback_url": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/playlist.m3u8",
+                  "region": "us-west-2",
+                  "reconnect_time": 1800,
+                  "playback_url_dvr": "http:\/\/bcovlive-a.akamaihd.net\/621669558be84a7da4ff20bccb9a6a1a\/us-west-2\/NA\/playlist_dvr.m3u8"
+              }
+          }
+          </code></pre>
+
+<h3>裁剪到S3示例</h3>
+
+<p>下面是一個示例<code translate="No">state_changed</code>事件，用於創建剪輯並將其發送到S3存儲桶。請注意，它包含剪輯的S3地址為<code translate="No">jvod_url</code>。</p>
+
+<pre class="line-numbers">
+          <code class="language-json" translate="No">{
+              "jvod_id": "b750cce9e21a4cc894c4507208495b0c",
+              <span class="bcls-highlight">"jvod_url": "s3:\/\/learning-services-media.brightcove.com\/test_dur60.mp4",</span>
+              "jvod_created_at": 1517520650785,
+              "jvod_duration_s": 30,
+              "jvod_cancelling_flag": false,
+              "label": "last_30",
+              "jvod_reported_duration_s": null,
+              "jvod_finished_at": 0,
+              "jvod_type": "s3",
+              "account_id": "a95ac581551b4478b27910e5675db1f8",
+              "jvod_worker_id": "b55b6fec738e4d2788544d3233b5ecf6",
+              "user_id": "c2691d4d039040be96c190a949d754a7",
+              "job_id": "7005c6e07bc24ca7b69b6b9d24052720",
+              "jvod_last_state_change_at": 1517520652312,
+              "jvod_region": "us-west-2",
+              "cloud_id": "301c91a5d9254b5d944b108c355f12be",
+              "event": "state_changed",
+              "jvod_state": "processing"
+          }</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="handling_notifications">處理通知</h2>
+
+<p>要接收通知，您只需要一個可以接收 HTTP/HTTPS 的應用程序<code translate="No">POST</code>要求。然後，該應用程序可以解析 JSON 通知並根據其內容執行您想要的任何操作。</p>
+
+<p>舉一個簡單的例子，這是一個我們在Brightcove Learning Services中使用的PHP應用程序，用於接收通知並將它們寫入文本文件。</p>
+
+<pre class="line-numbers">
+          <code class="language-php">&lt;?php // POST 不適用於 JSON 數據 $problem = "No errors"; $notificationType = null;嘗試{ $json = file_get_contents('php://input'); $decoded = json_decode($json, true); // turn notification into pretty printed JSON $notification = json_encode($decoded, JSON_PRETTY_PRINT); }捕獲（異常 $e）{ $problem = $e---&gt;getMessage(); $notification = $json; } $logEntry = $notification."\\n \\n"; // 告訴 PHP 在哪裡可以找到日誌文件並告訴 PHP 打開它 // 並將我們之前創建的字符串添加到它。 $logFileLocation = "live-log.txt"; $fileHandle = fopen($logFileLocation, 'a') 或 die("-1"); fwrite($fileHandle, $logEntry); fclose($fileHandle); // 直接瀏覽應用時顯示下面一行 echo "Live callback app is running"; ?&gt;</code></pre>
+
+<h3>筆記</h3>
+
+<ul>
+	<li>在某些情況下，相同的通知將被發送多次。如果您的處理程序正在基於通知採取措施（除了簡單的日誌記錄），則應將其配置為檢查重複項（具有相同提示的多個通知）<code translate="No">id</code>和<code translate="No">status</code>）並忽略它們。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="notifications_in_live_module">在實時模塊中設置通知</h2>
+
+<p>要為在直播模塊中創建的直播活動設置通知，您需要執行以下操作：</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>創建一個可以接收POST請求的處理程序應用程序，如上一節中所示的PHP應用程序。</li>
+	<li>將應用託管在公共URL上。</li>
+	<li>在實時模塊中創建實時作業時，展開<strong>高級選項</strong> .</li>
+	<li>檢查<strong>啟用流狀態通知選項</strong>並輸入您的處理程序應用程序的網址：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Enable Notications in Live Module" src="/assets/images/live-api/18448/enable-notifications.png" />
+	<figcaption class="bcls-caption--image">在實時模塊中啟用通知</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+</article>

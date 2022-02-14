@@ -1,0 +1,244 @@
+---
+title: '激活/停用或安排視頻'
+description: '本主題介紹如何使用<span translate="No">內容管理系統 API</span> . '
+parent: Managing Videos/Assets 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+    <section id="intro" class="bcls-section">
+    <h2>介紹</h2>
+    
+    <p>您可能希望在一段時間後才能播放視頻的原因有很多。例如：</p>
+    <ul>
+      <li>還在審核中</li>
+      <li>這是尚未發布的電影預告片</li>
+      <li>它是尚未開始或結束的營銷活動的一部分</li>
+      <li>這是尚未發表的新聞報導的一部分</li>
+    </ul>
+
+    <p>如果您尚未將視頻嵌入代碼放入公共頁面或應用程序中，則當然無法查看，但是有一些方法可能會意外發布視頻，最明顯的是其標籤或其他屬性適合智能已發布的播放列表。</p>
+
+    <p>有兩種方法可以確保無法查看視頻雲視頻：</p>
+    <ul>
+      <li>停用它</li>
+      <li>安排它在未來的某個時間播放</li>
+    </ul>
+
+    <p>這兩項更改都可以通過 Studio 中的 Media 模塊實現，但在這裡我們將介紹如何使用<span translate="No">內容管理系統 API</span> .這兩個操作都是使用一個<a href="/cms/references/reference.html#operation/UpdateVideo">視頻更新請求</a> .</p>
+
+    <aside class="bcls-aside bcls-aside--warning">注意：激活/停用和調度機制是完全獨立的，因此您應該根據您的用例使用其中一種，但不能同時使用兩者。如果視頻可根據<code translate="no">日程</code>，但它的<code translate="no">狀態</code>是<code translate="no">不活動</code>，視頻將無法播放。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="authentication">驗證</h2>
+    <p>向<span translate="No">內容管理系統 API</span>需要包含您的訪問令牌的授權標頭。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .</p>
+    <p>您可以使用<a href="/getting-started/authentication-brightcove-api-requests.html">工作室管理頁面</a>或者<a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth API</a></p>
+
+    <p>您還可以使用<a href="/oauth/guides/getting-access-tokens.html">OAuth API</a>直接檢索訪問令牌，或者如果您正在使用<span class="”notranslate”">郵差</span>或者<span class="”notranslate”">失眠</span>應用程序或提出您的請求，請參閱我們的教程，了解如何設置這些以獲取訪問令牌：</p>
+    <ul>
+      <li><a href="/general/use-insomnia-api-requests.html">使用 Insomnia 進行 API 請求</a></li>
+      <li><a href="/general/use-postman-api-requests.html">使用 Postman 進行 API 請求</a></li>
+    </ul>
+  </section>
+    
+  <section class="bcls-section">
+    <h2 id="update_video">更新視頻請求</h2>
+    
+    <p>要更新視頻，請發送<code translate="no">修補</code>請求</p>
+
+<pre class="line-numbers"><code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video_id</span></code></pre>
+    
+    <p>通常，請求正文只需要包含您想要更新的那些字段，但您也可以包含其他字段以及當前值。我們將在接下來的部分中查看激活/停用和調度的請求主體。</p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Activate_deactivate_video">激活/停用視頻</h2>
+    <p>通過設置視頻可以使視頻處於活動狀態（可見）或非活動狀態（不可見）<code translate="no">狀態</code> .默認情況下，視頻是<code translate="no">積極的</code>一旦它們被攝取（除非在創建視頻或使用上傳模塊上傳時省略了必填字段）。</p>
+    <aside class="bcls-aside bcls-aside--information">請注意，該視頻仍可在 Studio Media 模塊視頻預覽中播放（如果您在查看視頻時停用該視頻，這會很方便）。</aside>
+    <p>要停用視頻，您只需發送以下請求正文和更新視頻請求：</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "state": "INACTIVE"
+}</code></pre>
+    <p>您可以通過檢查視頻來驗證視頻現在處於非活動狀態<code translate="no">狀態</code> API 響應中的字段</p>
+    <details>
+      <summary>樣本響應</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "1698990613556232930",
+  "account_id": "57838016001",
+  "ad_keys": null,
+  "clip_source_video_id": null,
+  "complete": true,
+  "created_at": "2021-05-06T06:48:31.963Z",
+  "created_by": {
+    "type": "unknown"
+  },
+  "cue_points": [
+  ],
+  "custom_fields": {
+  },
+  "delivery_type": "dynamic_origin",
+  "description": "Updated at: 2021-05-07T22:37:46.492Z",
+  "digital_master_id": null,
+  "duration": 41259,
+  "economics": "AD_SUPPORTED",
+  "folder_id": null,
+  "geo": null,
+  "has_digital_master": true,
+  "images": {
+    "poster": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+          "height": 720,
+          "width": 1280
+        }
+      ]
+    },
+    "thumbnail": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+          "height": 90,
+          "width": 160
+        }
+      ]
+    }
+  },
+  "link": null,
+  "long_description": null,
+  "name": "Great Horned Owl",
+  "original_filename": "greathornedowl.mp4",
+  "projection": null,
+  "published_at": "2021-05-06T06:48:31.963Z",
+  "reference_id": "greathornedowl.mp4_1620283704192",
+  "schedule": null,
+  "sharing": null,
+  <span class="bcls-highlight">"state": "INACTIVE"</span>,
+  "tags": [
+    "bird",
+    "air",
+    "nature"
+  ],
+  "text_tracks": [
+  ],
+  "updated_at": "2021-05-16T22:54:09.168Z",
+  "updated_by": {
+    "type": "api_key",
+    "email": "rcrooks@brightcove.com"
+  },
+  "offline_enabled": false,
+  "playback_rights_id": "primary"
+}</code></pre>
+    </details>
+
+    <p>要再次激活視頻，只需發送帶有請求正文的另一個更新視頻請求：</p>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "state": "ACTIVE"
+}</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Schedule_video">安排視頻</h2>
+    <p>使視頻可播放或不可播放的第二種方法是使用<code translate="no">日程</code>視頻更新請求中的對象。這<code translate="no">schedule 對像有兩個屬性：</code></p>
+    <ul>
+      <li><code translate="no">開始於</code>視頻可播放時的 ISO-8601 日期時間（必需）</li>
+      <li><code translate="no">結束時</code>視頻不再可播放時的 ISO-8601 日期時間（可選）</li>
+    </ul>
+
+    <p>這是一個示例請求正文，它使視頻可在 2021 年 5 月 16 日上午 6:00 (UTC) 播放，並使其在整整一年後再次無法播放：</p>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "schedule": {
+		"starts_at": "2021-05-16T06:00:00.000Z",
+		"ends_at": "2022-05-16T06:00:00.000Z"
+	}
+}</code></pre>
+
+    <details>
+      <summary>樣本響應</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "1698990613556232930",
+  "account_id": "57838016001",
+  "ad_keys": null,
+  "clip_source_video_id": null,
+  "complete": true,
+  "created_at": "2021-05-06T06:48:31.963Z",
+  "created_by": {
+    "type": "unknown"
+  },
+  "cue_points": [
+  ],
+  "custom_fields": {
+  },
+  "delivery_type": "dynamic_origin",
+  "description": "Updated at: 2021-05-07T22:37:46.492Z",
+  "digital_master_id": null,
+  "duration": 41259,
+  "economics": "AD_SUPPORTED",
+  "folder_id": null,
+  "geo": null,
+  "has_digital_master": true,
+  "images": {
+    "poster": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+          "height": 720,
+          "width": 1280
+        }
+      ]
+    },
+    "thumbnail": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+          "height": 90,
+          "width": 160
+        }
+      ]
+    }
+  },
+  "link": null,
+  "long_description": null,
+  "name": "Great Horned Owl",
+  "original_filename": "greathornedowl.mp4",
+  "projection": null,
+  "published_at": "2021-05-06T06:48:31.963Z",
+  "reference_id": "greathornedowl.mp4_1620283704192",
+  <span class="bcls-highlight">"schedule": {
+    "ends_at": "2022-05-16T06:00:00.000Z",
+    "starts_at": "2021-05-16T06:00:00.000Z"
+  }</span>,
+  "sharing": null,
+  "state": "ACTIVE",
+  "tags": [
+    "bird",
+    "air",
+    "nature"
+  ],
+  "text_tracks": [
+  ],
+  "updated_at": "2021-05-17T00:42:45.172Z",
+  "updated_by": {
+    "type": "api_key",
+    "email": "rcrooks@brightcove.com"
+  },
+  "offline_enabled": false,
+  "playback_rights_id": "primary"
+}</code></pre>
+    </details>
+  </section>
+  
+  <section class="bcls-section">
+    <h2 id="Related_topics">相關主題</h2>
+    <ul>
+      <li><a href="https://studio.support.brightcove.com/basics/video-cloud-basics-activating-and-deactivating-video.html">視頻雲基礎：激活和停用視頻</a></li>
+      <li><a href="https://studio.support.brightcove.com/media/configuring-video-availability.html">配置視頻可用性</a></li>
+    </ul>
+  </section>
+</article>

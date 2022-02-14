@@ -1,0 +1,542 @@
+---
+title: '使用身份驗證 API' 
+description:“在本主題中，您將了解在使用 Brightcove 播放限制時用於管理密鑰/許可證保護的 API。”
+parent: Guides 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <!-- <br />
+  <aside class="bcls-aside  bcls-aside--tip">
+    This feature is available for a specific set of customers with access to the
+    Limited Availability phase of the Playback Restrictions.
+  </aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+
+    <p>
+      當將動態傳送與受DRM保護或HTTP實時流加密（HLSe）內容一起使用時，Brightcove播放限制提供了更高級別的安全性。
+    </p>
+    <p>如果您不熟悉此功能，請參閱<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概述：Brightcove播放限制</a>文檔。</p>
+
+    <p>
+      以下是可用於管理密鑰/許可證保護的API：
+    </p>
+    <ul>
+      <li>
+        <a href="#Register_public_key">註冊公鑰</a>
+      </li>
+      <li>
+        <a href="#Blacklist_tokens">黑名單令牌</a>
+      </li>
+      <li>
+        <a href="#Audit_an_account">審核帳戶</a>
+      </li>
+    </ul>
+    <aside class="bcls-aside  bcls-aside--information">僅在使用播放限制管理 DRM 時才支持這些 API。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Register_public_key">註冊公鑰</h2>
+    <p>您擁有私鑰，您將使用它來生成簽名令牌。您將與 Brightcove 共享公鑰以驗證您的令牌。密鑰 API 允許您向 Brightcove 註冊您的公鑰。</p>
+    <h3>關鍵API</h3>
+    <p>
+      Key API 用於通過 Brightcove 管理您的公鑰。
+    </p>
+
+    <h3>基本網址</h3>
+    <p>
+      API 的基本 URL 是：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com</code></pre>
+
+    <h3>帳戶路徑</h3>
+    <p>
+      在任何情況下，都將請求特定的視頻雲帳戶。因此，您將始終將術語帳戶後跟您的帳戶 ID 添加到基本 URL：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}</code></pre>
+
+    <h3>授權</h3>
+    <p>
+      請求的訪問令牌是必需的，並且必須存在於Authorization標頭中：：
+    </p>
+    <pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+    <p>
+      訪問令牌是必須從 Brightcove OAuth 服務獲取的臨時 OAuth2 訪問令牌。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .
+    </p>
+
+    <h3>權限</h3>
+    <p>
+      對Key API的請求必須來自<a href="/oauth/getting-started/overview-oauth-api-v4.html#Get_Client_Credentials">客戶憑證</a>具有以下權限：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/key/read</code>
+      </li>
+      <li>
+        <code translate="No">video-cloud/playback-auth/key/write</code>
+      </li>
+    </ul>
+
+    <h3>管理金鑰</h3>
+    <p>
+      Key API 支持以下請求：
+    </p>
+    <aside class="bcls-aside bcls-aside--information">
+      <p>
+        筆記：
+      </p>
+      <ul>
+        <li>
+          無法編輯現有密鑰，但是您可以刪除並創建一個新密鑰。
+        </li>
+        <li>
+          一次最多可以註冊3個按鍵，並且可以刪除按鍵，以支持按鍵旋轉。實際上，最好只有一把鑰匙。
+        </li>
+      </ul>
+    </aside>
+
+    <h3>註冊新密鑰：</h3>
+    <p>
+      將您的公共密鑰的值放在API請求正文中。你可以在裡面找到鑰匙<strong>公鑰.txt</strong>文件。
+    </p>
+    <h4>API請求</h4>
+    <pre class="line-numbers"><code class="language-http" translate="No">POST /v1/accounts/{accountID}/keys
+    Content-Type: application/json
+    Body: {"value": "MFkwEwYHKoZIzj0CAQYIKoZIzj...MyeQviqploA=="}
+</code></pre>
+<details>
+  <summary>
+    <p id="Using_Curl">使用捲曲</p>
+  </summary>
+    <pre class="line-numbers"><code class="language-curl">curl -X POST \\ -H "Content-Type: application/json" \\ -H "授權：不記名{access_token}「-d」{"value": "{your_public_key_value}「} '  \ https://playback-auth.api.brightcove.com/v1/accounts/ {accountID} /按鍵</code> </pre>
+  </details>
+
+    <h4>API響應</h4>
+  <pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;id&quot;: &quot;{your_public_key_id}&quot;,
+    &quot;type&quot;: &quot;public&quot;,
+    &quot;algorithm&quot;: &quot;rsa&quot;,
+    &quot;value&quot;: &quot;{your_public_key_value}&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-03T20:30:36.488Z&quot;
+  }</code></pre>
+  
+    <h3>清單鍵：</h3>
+    <p>
+      獲取您帳戶中的公共密鑰列表。
+    </p>
+    <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys</code></pre>
+
+    <h3>取得一把鑰匙：</h3>
+    <p>
+      獲取您帳戶中公共密鑰的詳細信息。
+    </p>
+    <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
+
+    <h3>刪除一個鍵：</h3>
+    <p>
+      刪除您帳戶中的公鑰。
+    </p>
+    <pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Blacklist_tokens">黑名單令牌</h2>
+
+    <p>
+      被列入黑名單的令牌即使被批准也不會被視為對許可請求有效。客戶最多可以將100個令牌列入黑名單。如果已經將100個令牌列入黑名單，則客戶必須刪除一個或多個令牌以為其他條目留出空間。
+    </p>
+
+    <h3>黑名單API</h3>
+    <p>
+      Blacklist API 用於管理被列入黑名單並被視為對許可請求無效的令牌。
+    </p>
+
+    <h3>基本網址</h3>
+    <p>
+      Blacklist API 的基本 URL 是：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com</code></pre>
+
+    <h3>帳戶路徑</h3>
+    <p>
+      在任何情況下，都將請求特定的視頻雲帳戶。因此，您將始終將術語帳戶後跟您的帳戶 ID 添加到基本 URL：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/blacklist
+</code></pre>
+
+    <h3>授權</h3>
+    <p>
+      請求的訪問令牌是必需的，並且必須存在於Authorization標頭中：：
+    </p>
+    <pre><code class="language-http" translate="No">Authorization:  Bearer  {access_token}</code></pre>
+    <p>
+      訪問令牌是必須從 Brightcove OAuth 服務獲取的臨時 OAuth2 訪問令牌。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .
+    </p>
+
+    <h3>權限</h3>
+    <p>
+      向黑名單API的請求必須來自<a href="/oauth/index.html">客戶憑證</a>具有以下權限：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/blacklist</code>
+      </li>
+    </ul>
+
+    <h3>管理列入黑名單的令牌</h3>
+    <p>
+      對黑名單的更新最多可能需要一分鐘才能在系統中傳播。Blacklist API 支持以下請求：
+    </p>
+
+    <h4>將令牌添加到黑名單：</h4>
+    <pre><code class="language-http" translate="No">PUT  (no  req  body)/v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      整個編碼的 JWT 字符串包含在路徑中。
+    </p>
+
+    <h4>顯示當前黑名單：</h4>
+    <pre><code class="language-http" translate="No">GET  /v1/accounts/{accountId}/blacklist
+</code></pre>
+    <br />
+
+    <h4>檢查令牌是否在黑名單中：</h4>
+    <pre><code class="language-http" translate="No">GET  /v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      整個編碼的 JWT 字符串包含在路徑中。
+    </p>
+    <p>
+      回應：
+    </p>
+    <ul>
+      <li>
+        204-令牌已列入黑名單
+      </li>
+      <li>
+        404-令牌未列入黑名單
+      </li>
+    </ul>
+
+    <h4>從黑名單中刪除令牌：</h4>
+    <pre><code class="language-http" translate="No">DELETE  /v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      整個編碼的 JWT 字符串包含在路徑中。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Audit_an_account">審核帳戶</h2>
+
+    <p>
+      審計 API 允許您為您帳戶的播放授權服務使用情況生成每日訪問報告。此報告包括詳細信息以及每個會話的授權響應。
+    </p>
+
+    <h3>審核API</h3>
+    <p>
+      以下是Audit API的詳細信息：
+    </p>
+
+    <h3>基本網址</h3>
+    <p>
+      審計 API 的基本 URL 是：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com
+</code></pre>
+
+    <h3>帳戶路徑</h3>
+    <p>
+      在任何情況下，都將針對特定的Video Cloud帳戶進行請求。因此，您將始終將術語帳戶後跟您的帳戶 ID 添加到基本 URL：
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/audit/accounts/{accountID}
+</code></pre>
+
+    <h3>授權</h3>
+    <p>
+      請求的訪問令牌是必需的，並且必須存在於Authorization標頭中：：
+    </p>
+    <pre><code class="language-http" translate="No">Authorization:  Bearer  {access_token}
+</code></pre>
+    <p>
+      訪問令牌是必須從 Brightcove OAuth 服務獲取的臨時 OAuth2 訪問令牌。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .
+    </p>
+
+    <h3>權限</h3>
+    <p>
+      對Audit API的請求必須來自<a href="/oauth/index.html">客戶憑證</a>具有以下權限：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/audit</code>
+      </li>
+    </ul>
+
+    <h3>產生報告</h3>
+    <p>
+      按照以下步驟使用審計 API 生成包含會話詳細信息的每日訪問報告：
+    </p>
+    <aside class="bcls-aside  bcls-aside--information">
+      <p>
+        筆記：
+      </p>
+      <ul>
+        <li>
+          <p>
+            Brightcove的所有授權訪問日誌均位於UTC時區。請記住，當請求未顯示在報告中時，請考慮時區。
+          </p>
+        </li>
+        <li>
+          <p>
+            Brightcove建議在午夜後6個小時運行Audit API查詢報告，以便從所有區域進行處理，以完成前一天的所有授權數據。給定帳戶和給定日期的Audit API調用在API端進行緩存。如果您在建議的午夜+6小時之前運行報告，則可能會發現報告不正確或不完整。
+          </p>
+        </li>
+      </ul>
+    </aside>
+
+    <ol class="bcls-tasklist__restart">
+      <li>
+        <p>
+          索取每日使用情況報告
+        </p>
+
+        <h4>參數</h4>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>場地</th>
+              <th>類型</th>
+              <th>描述</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">accountID</code></td>
+              <td>細繩</td>
+              <td>您的 Video Cloud 帳戶 ID</td>
+            </tr>
+            <tr>
+              <td><code translate="No">date</code></td>
+              <td>細繩</td>
+              <td>
+                驗證：
+                <ul>
+                  <li>
+                    格式YYYY-MM-DD
+                  </li>
+                  <li>
+                    日期不能是今天（UTC時間）
+                  </li>
+                  <li>
+                    日期不能超過過去30天
+                  </li>
+                  <li>
+                    30天后，Brightcove將不保留授權服務使用情況報告以遵循GDPR
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>郵政</td>
+            </tr>
+            <tr>
+              <th>網址</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> /詢問/ <span class="bcls-input">{date}</span>
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">標頭</th>
+              <td>
+                授權：持票人<span class="bcls-input">您的訪問令牌</span>
+              </td>
+            </tr>
+            <tr>
+              <td>內容類型：application / json</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>回复</h4>
+        <p>響應示例（200 OK）：</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+	&quot;executionID&quot;:  &quot;abcdef-asfdag-dvsbcd&quot;
+}</code></pre>
+
+        <p>
+          細節：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>場地</th>
+              <th>類型</th>
+              <th>描述</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">executionID</code></td>
+              <td>細繩</td>
+              <td>
+                與指定的使用情況報告相關聯的唯一ID <code translate="No">accountID</code>和<code translate="No">date</code>。這個 id 被傳遞到下面的其他端點。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        <p>
+          檢查報告狀態
+        </p>
+
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>得到</td>
+            </tr>
+            <tr>
+              <th>網址</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> /執行/ <span class="bcls-input">{executionID}</span> /地位
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">標頭</th>
+              <td>
+                授權：持票人<span class="bcls-input">您的訪問令牌</span>
+              </td>
+            </tr>
+            <tr>
+              <td>內容類型：application / json</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>回复</h4>
+        <p>響應示例（200 OK）：</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+	&quot;status&quot;:  &quot;completed&quot;
+}
+</code></pre>
+
+        <p>
+          細節：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>場地</th>
+              <th>類型</th>
+              <th>描述</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">status</code></td>
+              <td>細繩</td>
+              <td>值：“完成”、“處理”、“失敗”</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        <p>
+          提取報告
+        </p>
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>得到</td>
+            </tr>
+            <tr>
+              <th>網址</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> /執行/ <span class="bcls-input">{executionID}</span> /報告
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">標頭</th>
+              <td>
+                授權：持票人<span class="bcls-input">您的訪問令牌</span>
+              </td>
+            </tr>
+            <tr>
+              <td>內容類型：application / json</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>回复</h4>
+        <p>響應示例（200 OK）：</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+    &quot;signedURL&quot;:  &quot;http://signed-url&quot;,
+    &quot;expirationTime&quot;:  1569219842
+}
+</code></pre>
+
+        <p>
+          細節：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>場地</th>
+              <th>類型</th>
+              <th>描述</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">SignedURL</code></td>
+              <td>細繩</td>
+              <td>
+                結果作為您可以下載的 S3 URL 返回
+              </td>
+            </tr>
+            <tr>
+              <td><code translate="No">expirationTime</code></td>
+              <td>時代時間戳記</td>
+              <td>簽名的 S3 URL 的有效期為 15 分鐘</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Limitations">局限性</h2>
+
+    <p>
+      以下限制適用於此功能的初始版本：
+    </p>
+    <ul>
+      <li>
+        列入黑名單的代幣數量上限為 100 個。之後，將引發錯誤。
+      </li>
+    </ul>
+  </section>
+
+</article>

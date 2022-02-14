@@ -1,0 +1,129 @@
+---
+title:減少直播的延遲
+description: '本主題介紹瞭如何減少 Brightcove Live 流的延遲。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+
+
+<h2 id="Introduction">介紹</h2>
+
+<p>延遲是指在現實生活中錄製某件事與在視頻播放器中看到某件事之間的時間間隔。當然，將信號從源通過互聯網傳輸到觀眾播放器需要一些實時時間。在線視頻以謹慎的塊（稱為段）傳輸的事實加劇了延遲。</p>
+
+<p>可以通過縮短視頻片段的長度來減少延遲，以下幾節將詳細介紹如何執行此操作。但是請注意，這是一個折衷方案：為了確保播放不間斷，播放器會在當前播放位置之前下載一些視頻片段（這稱為緩衝），以便在需要時可以準備就緒。如果縮短段的長度，則播放器將預取較少的視頻數據，並且在播放器緩衝其他段時，播放暫停的機會將增加。</p>
+
+<h3>其他限制</h3>
+
+<p>以下限制適用於使用減少延遲的直播流：</p>
+
+<ul>
+	<li>SSAI 是<strong>不是</strong>支持的</li>
+	<li>DRM是<strong>不是</strong>支持的</li>
+	<li>DVR 窗口必須小於<strong>5分鐘</strong></li>
+	<li>不超過<strong>4</strong>演繹</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Creating_Reduced_Latency_Live_Profile">創建減少延遲的實時配置文件</h2>
+
+<p>為了減少延遲，您需要創建一個自定義的 Live 配置文件。請按照以下步驟操作：</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>登錄工作室</li>
+	<li>去<strong>行政</strong> &gt; <strong>攝取個人資料</strong>：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Go to Ingest Profiles" src="/assets/images/general/18954/go-to-ingest-profiles.png" />
+	<figcaption class="bcls-caption--image">轉到提取配置文件</figcaption>
+	</figure>
+	</li>
+	<li>選擇其中之一<strong>居住</strong>攝取配置文件不超過<strong>4</strong>演繹：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select a Live Profile" src="/assets/images/general/18954/select_ingest_profile.png" />
+	<figcaption class="bcls-caption--image">選擇實時配置文件</figcaption>
+	</figure>
+	</li>
+	<li>單擊鏈接以打開配置文件</li>
+	<li>點擊<strong>複製</strong>按鈕可基於此按鈕創建一個新的配置文件</li>
+	<li>在新的配置文件中，更改<code translate="No">name</code>到“低延遲配置文件"（或任何您想調用的名稱）</li>
+	<li>對於每個<code translate="No">renditions</code>，更改<code translate="No">segment_seconds</code>至<code translate="No">2</code>將片段的長度減少到2秒</li>
+	<li>您的整個個人資料應如下所示：
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "model_version": 1,
+  "name": "<span class="bcls-highlight">Low Latency Profile</span>",
+  "description": "Deliver high-quality renditions to maximize quality for desktop and OTT.",
+  "account_id": "57838016001",
+  "renditions": [
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls1080p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 4000,
+      "keyframe_interval": 60,
+      "width": 1920,
+      "height": 1080,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls720p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 2400,
+      "keyframe_interval": 60,
+      "width": 1280,
+      "height": 720,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls540p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 1700,
+      "keyframe_interval": 60,
+      "width": 960,
+      "height": 540,
+      "h264_profile": "main"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls360p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 900,
+      "keyframe_interval": 60,
+      "width": 640,
+      "height": 360,
+      "h264_profile": "main"
+    }
+  ],
+  "packages": []
+}</code></pre>
+	</li>
+	<li>要使用此配置文件，請選擇在直播模塊中創建新直播事件的時間：
+	<figure class="bcls-figure"><img class="bcls-image" alt="Create Live Event" src="/assets/images/general/18954/create-live-event.png" />
+	<figcaption class="bcls-caption--image">建立現場活動</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Using_the_Live_API">使用實時 API</h2>
+
+<p>如果您希望減少延遲，並且使用Live API創建實時作業，則只需像平常一樣創建作業，但要包括<strong>不超過4個演繹</strong>，並設置<code translate="No">segment_seconds</code>對於每個演繹<code translate="No">2</code>。另外，請確保遵守以下內容中列出的其他限制<a href="#Introduction">介紹</a>。</p>
+</section>
+</article>

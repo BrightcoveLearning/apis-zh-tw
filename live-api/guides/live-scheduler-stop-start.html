@@ -1,0 +1,158 @@
+---
+title: '調度 SEP 流的激活/停用'
+description: '隨著<code translate="No">JobStartStop</code>端點，您可以安排現有直播的激活和停用<a href="/live-api/guides/live-api-static-entry-points.html">九月</a> .在指定的時間，我們的系統將進行必要的 API 呼叫，代表您啟動和取消作用中的工作。'
+parent: Guides 
+grandparent: Live API —
+
+<!-- Remember to change API reference links when going live -->
+
+<h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+	<section class="bcls-section">
+		<h2 id="Requirements">要求</h2>
+		<ul>
+			<li>您帳戶的實時 API 密鑰。</li>
+			<li>您的真實賬戶必須啟用調度程序覆蓋。</li>
+			<li>現有的實時作業<code translate="no">“靜態”：真</code>（看<a href="/live-api/guides/live-api-static-entry-points.html">靜態入口點作業</a>想要查詢更多的信息）。</li>
+		</ul>
+		<aside class="bcls-aside bcls-aside--information">請注意，您還可以在實時模塊中安排激活和停用 - 請參閱<a href="https://live.support.brightcove.com/live-module/scheduling-live-event.html">控制室中實時事件的自動開始/停止</a>詳情</aside>
+	</section>
+	<section class="bcls-section">
+		<h2 id="Create_a_scheduler">創建一個調度程序</h2>
+		<p>假設我們要安排一個 2 小時的活動，該活動將在<code translate="no">2021-04-02T14:00:00+00:00</code> .</p>
+
+		<p>時間戳必須採用 UTC 格式，格式為以秒為單位的 unix 時間戳。您可以使用<a href="https://www.unixtimestamp.com/" rel="nofollow">https://www.unixtimestamp.com/</a>用於轉換。</p>
+		<aside class="bcls-aside bcls-aside--information">請注意，描述的激活時間限制<a href="https://live.support.brightcove.com/live-api/guides/live-api-static-entry-points.html#Limitations" rel="nofollow">這裡</a>仍然適用於預定的激活，因此我們建議將時間安排在您想要的開始時間之前至少 60 秒。
+			<p>對於此示例，我們將選擇預期的開始時間之前的5分鐘：</p>
+			<pre><code translate="no">開始：2021-04-02T13:55:00+00:00 = 1617386100 停止：2021-04-02T16：下午四點以上</code> </pre>
+		</aside>
+		<p>要實現調度程序，請執行以下操作<code translate="No">POST</code>要求：</p>
+		<pre><code class="language-http" translate="No">https://api.bcovlive.io/v1/scheduler/jobstartstop</code></pre>
+		<h3>標頭</h3>
+		<pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+		X-API-KEY: <span class="bcls-input">{your API Key}</span></code></pre>
+		<h3>要求正文</h3>
+		<pre class="line-numbers"><code class="language-json" translate="No">{
+			"job_id": "your Job ID",
+			"activation": {
+				"time_utc": 1617386100
+			},
+			"deactivation": {
+				"time_utc": 1617393600
+			},
+			"description": "My Wednesday broadcast"
+		}</code></pre>
+			<details>
+				<summary><h3>樣本響應</h3></summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"account_id": "1752604059001",
+	"activation": {
+		"state": "pending",
+		"time_utc": 1617386100
+	},
+	"deactivation": {
+		"state": "pending",
+		"time_utc": 1617393600
+	},
+	"description": "My Wednesday broadcast",
+	"job_id": "15981d93877e490185e6ebc9af2c79a3",
+	"type": "jobstartstop",
+	"workflow_id": "d44cf29f4f184757ac0995beb8a0097e"
+}</code></pre>
+			</details>
+		</section>
+		<section class="bcls-section">
+			<h2 id="Update_a_scheduler">更新調度程序</h2>
+			<p>你可以更新<code translate="no">激活</code>和/或<code translate="no">停用</code>調度程序的時間，前提是作業處於<strong translate="no">待辦的</strong>狀態 （<code translate="no">“狀態”：“待定”</code>）。為此，請發送<code translate="no">放</code>請求：</p>
+<pre><code class="language-http" translate="No">https://api.bcovlive.io/v1/scheduler/jobstartstop/<span class="bcls-input">{workflow_id}</span></code></pre>
+			<p>標題與<code translate="no">郵政</code>請求如上所示。</p>
+			<h3>要求正文</h3>
+			<p>在請求正文對像中，僅包含<code translate="no">激活</code>和/或<code translate="no">停用</code>領域。</p>
+			<p>例如，要比計劃提前30分鐘停止活動：</p>
+			<h3>要求正文</h3>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"deactivation": {
+		"time_utc": 1617391800
+	}
+}</code></pre>
+<details>
+	<summary><h3>樣本響應</h3></summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"account_id": "1752604059001",
+	"activation": {
+		"state": "pending",
+		"time_utc": 1617386100
+	},
+	"deactivation": {
+		"state": "pending",
+		"time_utc": 1617391800
+	},
+	"description": "My Wednesday broadcast",
+	"job_id": "15981d93877e490185e6ebc9af2c79a3",
+	"type": "jobstartstop",
+	"workflow_id": "d44cf29f4f184757ac0995beb8a0097e"
+}</code></pre>
+</details>
+</section>
+<section class="bcls-section">
+  <h2 id="cancel_the_scheduler">取消調度程序</h2>
+  <p>您可以使用<code translate="no">刪除</code>要求：</p>
+	<pre><code class="language-http" translate="No">https://api.bcovlive.io/v1/scheduler/jobstartstop/<span class="bcls-input">{workflow_id}</span></code></pre>
+	<p>您也可以在激活後執行此操作以取消停用。</p>
+	<h3>標頭</h3>
+	<p>唯一需要的標題是：</p>
+	<pre class="line-numbers"><code class="language-bash" translate="No">X-API-KEY: <span class="bcls-input">your API Key</span></code></pre>
+	<h3>要求正文</h3>
+	<p>此請求沒有請求正文。</p>
+	<details>
+		<summary><h3>樣本響應</h3></summary>
+	<pre class="line-numbers"><code class="language-json" translate="No">{
+		"account_id": "1752604059001",
+		"activation": {
+			"state": "cancelled",
+			"time_utc": 1617386100
+		},
+		"deactivation": {
+			"state": "cancelled",
+			"time_utc": 1617391800
+		},
+		"description": "My Wednesday broadcast",
+		"job_id": "15981d93877e490185e6ebc9af2c79a3",
+		"type": "jobstartstop",
+		"workflow_id": "d44cf29f4f184757ac0995beb8a0097e"
+	}</code></pre>
+	</details>
+</section>
+<section class="bcls-section">
+  <h2 id="Notifications">通知 </h2>
+  <p>您可以選擇在創建工作流時配置通知。您需要為我們的服務提供一個 URL <code translate="no">郵政</code>到。當調度程序發出激活和停用調用時，我們將發送通知。您還可以配置接收通知<code translate="no">n</code>激活和/或停用前幾秒。見<a href="/live-api/guides/live-scheduler-notifications.html">實時調度程序通知</a>更多細節。</p>
+	<details>
+		<summary><h3>示例請求正文</h3></summary>
+	<pre class="line-numbers"><code class="language-json" translate="No">{
+		"job_id": "your Job ID",
+		"activation": {
+			"time_utc": 1612274100,
+			<span class="bcls-highlight">"notification": 600</span>
+		},
+		"deactivation": {
+			"time_utc": 1612281600,
+			<span class="bcls-highlight">"notification": 600</span>
+		},
+		"description": "My Tuesday broadcast",
+		<span class="bcls-highlight">"notification_url": "http://example.com/live/jobstartstop/callbacks"</span>
+	}</code></pre>
+	</details>
+</section>
+<section class="bcls-section">
+	<h2 id="related_topics">相關主題</h2>
+	<ul>
+		<li><a href="/live-api/guides/live-scheduler-stop-start.html">調度 SEP 流的激活/停用</a></li>
+		<li><a href="/live-api/guides/live-scheduler-clips.html">為實時流安排剪輯生成</a></li>
+		<li><a href="/live-api/guides/live-scheduler-notifications.html">實時調度程序通知</a></li>
+		<li><a href="/live-api/guides/live-api-static-entry-points.html">靜態入口點 (SEP) 作業</a></li>
+		<li><a href="/live-api/references/reference-staging.html">實時API參考</a></li>
+		<li><a href="https://live.support.brightcove.com/live-module/scheduling-live-event.html">自動開始/停止控制室中的現場活動</a></li>
+	</ul>
+</section>
+</article>

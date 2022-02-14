@@ -1,0 +1,701 @@
+---
+title: '實施交付規則' 
+description:“在本主題中，您將學習如何實施 Brightcove 的交付規則，這使您能夠自定義媒體的交付方式以滿足您的業務目標。”
+parent: Getting started 
+grandparent: Delivery Rules API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="Overview">概述</h2>
+
+<p>出版商出於技術和業務方面的原因，經常需要修改其媒體清單的內容特徵。為了滿足這些需求，Brightcove 創建了一個框架，在該框架中可以應用規則來修改從 Dynamic Delivery 返回的清單的內容。</p>
+
+<p>交付規則由條件和操作組成。</p>
+<ul>
+  <li>
+    <strong>使適應</strong> -觸發特定動作的“如果"條件
+  </li>
+  <li>
+    <strong>動作</strong> -定義清單修改方式的“然後"參數
+  </li>
+</ul>
+<p>有關傳遞規則的更多詳細信息，請參閱以下內容：</p>
+<ul>
+  <li>
+    <a href="/delivery-rules/getting-started/overview-delivery-rules.html">概述：交貨規則</a>
+  </li>
+  <li>
+    <a href="https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html">在 Brightcove Player 中使用傳送規則</a>
+  </li>
+  <li>
+    <a href="https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html">將傳遞規則與本機 SDK 結合使用</a>
+  </li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Account_setup">帳戶設定</h2>
+
+<p>請與您的客戶經理聯繫，以了解有關定價的信息並為您的帳戶啟用此功能。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Applying_rules">適用規則</h2>
+
+<p>以下流程圖顯示瞭如何應用傳遞規則。</p>
+<figure class="bcls-figure">
+  <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/delivery-rules/rules-diagram.png" alt="Delivery rules applied">
+  <figcaption class="bcls-caption--image">已應用投放規則</figcaption>
+</figure>
+</section>
+
+<section class="bcls-section">
+<h2 id="Conditions">使適應</h2>
+
+<p>第一階段支持的“if”條件包括：</p>
+
+<ul>
+  <li>
+    <p>
+      <strong>明確要求</strong> -配置ID是您創建的操作的ID。您將在運行時使用此 ID 傳遞給 Playback API。此 id 映射到配置值，允許底層服務通過 Playback API 做出決策以返回適當的響應數據。
+    </p>
+  </li>
+  <li>
+    <strong>設備組</strong> -用戶代理解析檢測到的設備類型。目前支持的組包括：
+    <ul>
+      <li>
+        安卓
+      </li>
+      <li>
+        蘋果電視
+      </li>
+      <li>
+        chromecast
+      </li>
+      <li>
+        平板電腦
+      </li>
+      <li>
+        蘋果手機
+      </li>
+      <li>
+        桌面鉻
+      </li>
+      <li>
+        桌面Firefox
+      </li>
+      <li>
+        桌面瀏覽器
+      </li>
+      <li>
+        抓取電視
+      </li>
+      <li>
+        ios-other
+      </li>
+      <li>
+        roku-7/8
+      </li>
+      <li>
+        智能手機通用
+      </li>
+      <li>
+        平板電腦
+      </li>
+      <li>
+        平板電腦
+      </li>
+      <li>
+        未知
+      </li>
+    </ul>
+    &nbsp;
+  </li>
+  <li>
+    <strong>地理</strong> -請求設備的物理位置：
+    <ul>
+      <li>
+        大陸
+      </li>
+      <li>
+        國家
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Actions">動作</h2>
+
+<p>第一階段支持的操作或“then”參數包括以下內容：</p>
+
+<ul>
+  <li>
+    <p>
+        <strong>媒體交付CDN</strong> -從配置用於給定動態交付帳戶中使用的CDN，該CDN用於交付媒體段。
+    </p>
+  </li>
+  <li>
+    <strong>渲染特徵</strong> -根據基礎媒體再現的特徵進行過濾。這些包括：
+    <ul>
+      <li>
+        最低視頻比特率
+      </li>
+      <li>
+        最大視頻比特率
+      </li>
+      <li>
+        最低視頻分辨率
+      </li>
+      <li>
+        最大視頻分辨率
+      </li>
+      <li>
+        音頻再現的最大數量
+      </li>
+      <li>
+        視頻再現的最大數量
+      </li>
+      <li>
+        第一個視頻比特率
+      </li>
+      <li>
+        間斷性
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Scope">範圍</h2>
+
+<p>可以在兩個級別上應用操作：</p>
+<ul>
+  <li>
+    <strong>帳戶</strong> -適用於對特定客戶帳戶的所有請求的操作
+  </li>
+  <li>
+    <strong>具體要求</strong> - 針對特定請求調用的操作
+  </li>
+</ul>
+
+<p>
+  將按照上面列出的順序執行操作。以後的動作將覆蓋以前的動作。
+</p>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Defining_rules">定義規則</h2>
+
+<p>使用交付規則 API 來自定義媒體交付。</p>
+
+<h3 id="Delivery_Rules_API">傳遞規則 API</h3>
+<p>
+  這<a href="https://apis.support.brightcove.com/delivery-rules/references/reference.html">傳遞規則 API</a>允許您定義條件和操作來控制您的媒體交付。
+</p>
+<p>這<a href="#API_Response">回复</a>來自傳遞規則 API 包含一個<code translate="No">conditions</code>大批。這個數組允許你創建多個<code translate="No">if</code> / <code translate="No">then</code>條件，其中每個<code translate="No">then</code>指向一個或多個<a href="#Response_body_for_actions">動作 ID</a> .</p>
+<p>即使沒有添加或刪除的方法<code translate="No">conditions</code>，您可以通過更新<code translate="No">conditions</code>大批。</p>
+
+<!-- <aside class="bcls-aside bcls-aside--tip">Since each account has one conditions block, you will update the block to add or remove conditions.</aside> -->
+
+<h3>基本網址</h3>
+<p>
+  API 的基本 URL 是：
+</p>
+<pre><code class="language-http" translate="No">https://delivery-rules.api.brightcove.com</code></pre>
+
+<h3>帳戶路徑</h3>
+<p>
+  在任何情況下，都將請求特定的視頻雲帳戶。因此，您將始終將術語帳戶後跟您的帳戶 ID 添加到基本 URL：
+</p>
+<pre><code class="language-http" translate="No">https://delivery-rules.api.brightcove.com/accounts/{accountID}</code></pre>
+
+<h3>授權</h3>
+<p>
+  請求的訪問令牌是必需的，並且必須存在於Authorization標頭中：：
+</p>
+<pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+<p>
+  訪問令牌是必須從 Brightcove OAuth 服務獲取的臨時 OAuth2 訪問令牌。有關如何獲取客戶端憑據並使用它們來檢索訪問令牌的詳細信息，請參閱<a href="/oauth/getting-started/overview-oauth-api-v4.html">Brightcove OAuth 概述</a> .
+</p>
+
+<h3>權限</h3>
+<p>
+  向Playback Rights API的請求必須來自<a href="/oauth/getting-started/overview-oauth-api-v4.html">客戶憑證</a>具有以下權限：
+</p>
+<ul>
+  <li>
+    <code translate="No">video-cloud/delivery-rules/read</code>
+  </li>
+  <li>
+    <code translate="No">video-cloud/delivery-rules/all</code>
+  </li>
+</ul>
+
+<h3>管理規則</h3>
+<p>
+  Delivery Rules API 支持以下請求。有關API的詳細信息，請參見<a href="https://apis.support.brightcove.com/delivery-rules/references/reference.html">投放規則API參考</a>。
+</p>
+
+<h4>獲取交貨規則</h4>
+<p>
+  使用以下 GET 請求為帳戶獲取最新版本的傳遞規則。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}</code></pre>
+
+<h5 id="API_Response">API響應</h5>
+<p>
+  這是響應正文。請注意，“交付規則"包含一組條件和一組操作。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;conditions&quot;: [
+    {
+      &quot;name&quot;: &quot;MyCondition1&quot;,
+      &quot;if&quot;: {
+        &quot;device_group&quot;: [
+          &quot;ipad&quot;
+        ],
+        &quot;request_country&quot;: [
+          &quot;string&quot;
+        ],
+        &quot;request_continent&quot;: [
+          &quot;AF&quot;
+        ]
+      },
+      &quot;then&quot;: [
+        &quot;MyAction1&quot;
+      ]
+    }
+  ],
+  &quot;actions&quot;: [
+    {
+      &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;,
+      &quot;properties&quot;: {
+        &quot;min_video_bitrate&quot;: 0,
+        &quot;max_video_bitrate&quot;: 0,
+        &quot;first_video_bitrate&quot;: 0,
+        &quot;min_video_resolution&quot;: &quot;string&quot;,
+        &quot;max_video_resolution&quot;: &quot;string&quot;,
+        &quot;max_video_renditions&quot;: 0,
+        &quot;max_audio_renditions&quot;: 0,
+        &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+        &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+        &quot;string&quot;
+      ]
+    }
+    }
+  ]
+}</code></pre>
+<br />
+
+<h4>獲取條件</h4>
+<p>
+  使用以下 GET 請求獲取帳戶的條件。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/conditions</code></pre>
+<h5>API響應</h5>
+<p>
+  這是響應正文。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">[
+  {
+    &quot;name&quot;: &quot;MyCondition1&quot;,
+    &quot;if&quot;: {
+      &quot;device_group&quot;: [
+        &quot;ipad&quot;
+      ],
+      &quot;request_country&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;request_continent&quot;: [
+        &quot;AF&quot;
+      ]
+    },
+    &quot;then&quot;: [
+      &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;
+    ]
+  }
+]</code></pre>
+<br />
+
+<h4>更新條件</h4>
+<p>
+  使用以下 PUT 請求來更新帳戶的條件。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">PUT /accounts/{accountID}/conditions
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {conditions object}
+</code></pre>
+<!-- <p>
+  For a list of valid fields, see the <a href="#Request_body_for_conditions">Request body for conditions</a> section.
+</p> -->
+<h4 id="Request_body_for_conditions">要求機構提供條件</h4>
+<p>
+  這是條件的請求正文。請注意，這是條件對象的數組。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">[
+  {
+    &quot;name&quot;: &quot;MyCondition1&quot;,
+    &quot;if&quot;: {
+      &quot;device_group&quot;: [
+        &quot;ipad&quot;
+      ],
+      &quot;request_country&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;request_continent&quot;: [
+        &quot;AF&quot;
+      ]
+    },
+    &quot;then&quot;: [
+      &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;
+    ]
+  }
+]</code></pre>
+<br />
+<p>
+  以下是條件的字段詳細信息：
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>場地</th>
+      <th>類型</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">name</code></td>
+      <td>細繩</td>
+      <td>條件的唯一標識符</td>
+    </tr>
+    <tr>
+      <td><code translate="No">device_group</code></td>
+      <td>細繩</td>
+      <td>用戶代理解析檢測到的設備類型數組</td>
+    </tr>
+    <tr>
+      <td><code translate="No">request_country</code></td>
+      <td>細繩</td>
+      <td>兩個字母國家/地區代碼的數組</td>
+    </tr>
+    <tr>
+      <td><code translate="No">request_continent</code></td>
+      <td>細繩</td>
+      <td>兩個字母洲代碼的數組</td>
+    </tr>
+    <tr>
+      <td><code translate="No">then</code></td>
+      <td>細繩</td>
+      <td>關聯操作的唯一標識符</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>創建動作</h4>
+<p>
+  使用以下 POST 請求為帳戶創建操作。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">POST /accounts/{accountID}/actions
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {actions object}
+</code></pre>
+<!-- <p>
+  For a list of valid fields, see the <a href="#Request_body_for_actions">Request body for actions</a> section.
+</p> -->
+<h4 id="Request_body_for_actions">要求機構採取行動</h4>
+<p>
+  這是動作的請求主體。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;properties&quot;: {
+      &quot;min_video_bitrate&quot;: 0,
+      &quot;max_video_bitrate&quot;: 0,
+      &quot;first_video_bitrate&quot;: 0,
+      &quot;min_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_renditions&quot;: 0,
+      &quot;max_audio_renditions&quot;: 0,
+      &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+      &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+        &quot;string&quot;
+      ]
+  }
+}</code></pre>
+
+<p>
+  以下是操作的字段詳細信息：
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>場地</th>
+      <th>類型</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">properties</code></td>
+      <td>物件</td>
+      <td>為特定動作定義屬性的對象</td>
+    </tr>
+    <tr>
+      <td>,<code translate="No">min_video_bitrate</code> <br/>
+      <code translate="No">max_video_bitrate</code></td>
+      <td>整數</td>
+      <td>設置允許的最小或最大視頻比特率 (kbps)</td>
+    </tr>
+    <tr>
+      <td><code translate="No">first_video_bitrate</code></td>
+      <td>整數</td>
+      <td>設置第一個視頻的比特率 (kbps)</td>
+    </tr>
+    <tr>
+      <td>,<code translate="No">min_video_resolution</code> <br/><code translate="No">max_video_resolution</code></td>
+      <td>細繩</td>
+      <td>設置允許的最小或最大視頻分辨率 (WxH)</td>
+    </tr>
+    <tr>
+      <td><code translate="No">max_video_renditions</code></td>
+      <td>整數</td>
+      <td>設置視頻播放的最大數量</td>
+    </tr>
+    <tr>
+      <td><code translate="No">max_audio_renditions</code></td>
+      <td>整數</td>
+      <td>設置音頻播放的最大數量</td>
+    </tr>
+    <tr>
+      <td><code translate="No">preferred_cdn_provider</code></td>
+      <td>細繩</td>
+      <td>設置首選 CDN 提供商</td>
+    </tr>
+    <tr>
+      <td><code translate="No">preferred_cdn_domain</code></td>
+      <td>細繩</td>
+      <td>設置首選 CDN 域</td>
+    </tr>
+    <tr>
+      <td><code translate="No">video_codecs</code></td>
+      <td>細繩</td>
+      <td>視頻編解碼器數組</td>
+    </tr>
+    <tr>
+      <td><code translate="No">audio_codecs</code></td>
+      <td>細繩</td>
+      <td>音頻編解碼器數組</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="Response_body_for_actions">API動作響應</h4>
+<p>
+  這是動作的請求主體。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;,
+    &quot;properties&quot;: {
+      &quot;min_video_bitrate&quot;: 0,
+      &quot;max_video_bitrate&quot;: 0,
+      &quot;first_video_bitrate&quot;: 0,
+      &quot;min_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_renditions&quot;: 0,
+      &quot;max_audio_renditions&quot;: 0,
+      &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+      &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+       &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+       &quot;string&quot;
+      ]
+  }
+}</code></pre>
+
+<p>
+  除了請求中的操作字段外，API響應還包含以下生成的字段：
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>場地</th>
+      <th>類型</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">id</code></td>
+      <td>細繩</td>
+       <td>系統為動作生成了唯一的標識符。這是<code translate="No">actionID</code>用於更新和刪除方法。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>採取行動</h4>
+<p>
+  使用以下 GET 請求獲取帳戶的操作。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/actions</code></pre>
+<h5>API響應</h5>
+<p>
+  見<a href="#Response_body_for_actions">操作的 API 響應</a> .
+</p>
+
+<h4>採取行動</h4>
+<p>
+  使用以下 GET 請求獲取帳戶的特定操作。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/actions/{actionID}</code></pre>
+<h5>API響應</h5>
+<p>
+  見<a href="#Response_body_for_actions">操作的 API 響應</a> .
+</p>
+
+<h4>更新操作</h4>
+<p>
+  使用以下 PUT 請求更新帳戶的操作。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">PUT /accounts/{accountID}/actions/{actionID}
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {actions object}
+</code></pre>
+<h5>API請求</h5>
+<p>
+  這是更新操作的示例請求正文。
+</p>
+<aside class="bcls-aside bcls-aside--information">這<code translate="No">id</code>在下面的 JSON 示例中是操作 ID。這必須與路徑中的操作 ID 匹配。</aside>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3edb94645943&quot;,
+  &quot;properties&quot;: {
+   &quot;custom_properties&quot;: {
+    &quot;generate_thumbnails&quot;: false,
+    &quot;hls_iframes&quot;: true
+   }
+  }
+ }</code></pre>
+<h5>API響應</h5>
+<p>
+  這是更新操作的示例響應。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3edb94645943&quot;,
+  &quot;properties&quot;: {
+   &quot;custom_properties&quot;: {
+    &quot;generate_thumbnails&quot;: false,
+    &quot;hls_iframes&quot;: true
+   }
+  }
+ }</code></pre>
+
+
+<h4>刪除動作</h4>
+<p>
+  使用以下 DELETE 請求刪除帳戶的操作。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">DELETE /accounts/{accountID}/actions/{actionID}</code></pre>
+
+
+<!-- <p>
+  Here is an example of all of the fields you can include in the request body:
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;geo&quot;: {
+  &quot;allowed_countries&quot;: [
+    &quot;MX&quot;,
+    &quot;US&quot;
+  ],
+  &quot;blocked_countries&quot;: [
+    &quot;JP&quot;,
+    &quot;CN&quot;
+  ],
+  &quot;allowed_zip_codes&quot;: [
+    &quot;US-90210&quot;
+  ],
+  &quot;blocked_zip_codes&quot;: [
+    &quot;US-72810&quot;
+  ],
+  &quot;allowed_dmas&quot;: [
+    501
+  ],
+  &quot;blocked_dmas&quot;: [
+    803
+  ]
+},
+&quot;allowed_domains&quot;: [
+  &quot;www.google.com&quot;,
+  &quot;www.brightcove.com&quot;
+],
+&quot;blocked_domains&quot;: [
+  &quot;www.ooyala.com&quot;
+],
+&quot;start_time&quot;: 1572905011,
+&quot;end_time&quot;: 1672905011,
+&quot;allowed_ips&quot;: [
+  &quot;192.168.1.1&quot;
+],
+&quot;blocked_ips&quot;: [
+  &quot;192.168.1.1&quot;
+],
+&quot;allowed_days&quot;: [
+  &quot;mon&quot;,
+  &quot;tue&quot;
+],
+&quot;allowed_hours&quot;: [
+  &quot;5-6&quot;
+],
+&quot;allow_insecure&quot;: true,
+&quot;disabled&quot;: false,
+&quot;name&quot;: &quot;Optional playback right name&quot;
+}
+</code></pre> -->
+
+
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">局限性</h2>
+
+<p>使用交付規則時存在一些已知限制：</p>
+<ul>
+  <!-- <li>
+    <strong>CDN Providers</strong> - A customer may only have one CDN configuration from a given provider. For instance, it will be possible to switch between Akamai and Cloudfront, but not between two separate Akamai configurations.
+  </li> -->
+  <li>
+    <strong>媒體內容</strong> -投放規則不適用於Smooth或pMP4視頻。
+  </li>
+  <li>
+    <strong>媒體內容</strong> -投放規則不適用於實時視頻。
+  </li>
+  <li>
+    <strong>僅音頻</strong> -啟用服務器端廣告（SSAI）的投放規則要求同時包含視頻和音頻內容。這是 SSAI 限制。
+  </li>
+</ul>
+
+</section>
+
+</article>

@@ -1,0 +1,84 @@
+---
+title: '視頻報告生成器'
+description: '這是一個簡化版<a href="/cms/code-samples/cms-api-sample-video-report-generator.html">視頻報告生成器示例</a> .這個返回的信息較少，因此運行速度更快。它還在日誌中報告視頻庫的總持續時間，並為您提供以 CSV 或 JSON 格式返回結果的選項。'
+parent: 'Code Samples' 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="limitations">局限性</h2>
+
+    <aside class="bcls-aside bcls-aside--information">提供此示例和相關代碼作為生產開發的指南。該代碼未經認證可用於生產用途，也未經官方支持。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="getCredentials">獲取憑證</h2>
+      </summary>
+      <p>要使用<span translate="No">內容管理系統 API</span>您將需要適當的憑據。</p>
+
+      <p>在大多數情況下，獲取憑據的最簡單方法是通過 Studio Admin API 身份驗證部分（需要您帳戶的管理員權限）。看<a href="/general/managing-api-authentication-credentials.html">管理 API 身份驗證憑據</a>詳情。在大多數情況下，您可能只想獲得所有權限<span translate="No">內容管理系統 API</span>手術：</p>
+
+      <figure class="bcls-figure"><img class="bcls-image" alt="CMS API Permissions" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/cms-permissions.png" />
+        <figcaption class="bcls-caption--image">CMS API權限</figcaption>
+      </figure>
+
+      <p>如果Studio中沒有所需的權限，或者您希望直接從OAuth API獲取權限，請選擇<strong>獲取客戶憑證</strong>下面列出的文件。無論您選擇哪個選項，您都需要請求正確的操作權限。以下內容可與 cURL 或 Postman 一起使用以獲取 CMS API 的所有權限：</p>
+
+      <pre class="line-numbers">
+            <code class="language-json" translate="No">"operations": [
+              "video-cloud/video/all",
+              "video-cloud/playlist/all",
+              "video-cloud/sharing-relationships/all",
+              "video-cloud/notifications/all"
+            ]</code></pre>
+
+      <ul>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth：使用cURL獲取客戶端憑據</a></li>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth：使用郵遞員獲取客戶憑證</a></li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="bcls-section" id="workingSample">
+    <h2>視頻報告生成器</h2>
+    <h3>源代碼</h3>
+    <p>
+      在此找到與此樣本相關的所有代碼<a href="https://github.com/BrightcoveLearning/18032-video-report-generator">GitHub資料庫</a>。
+    </p>
+    <h3>示例應用程序</h3>
+    <p data-height="1200" data-theme-id="34967" data-slug-hash="mxYYMR" data-default-tab="result" data-user="rcrooks1969" data-pen-title="CMS API Sample: Video Report Generator" class="codepen">看筆<a href="https://codepen.io/team/rcrooks1969/pen/mxYYMR/">CMS API 示例：視頻報告生成器</a>通過 Brightcove 學習服務 ( <a href="https://codepen.io/rcrooks1969"> @rcooks1969</a>） 在<a href="https://codepen.io">代碼筆</a> .</p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="Using_the_CodePen">使用代碼筆</h2>
+      </summary>
+      <p>以下是一些有效使用上述 CodePen 的提示：</p>
+
+      <ul>
+        <li>通過單擊切換播放器的實際顯示<strong>結果</strong>按鈕。</li>
+        <li>點擊<strong>HTML / CSS / JS</strong>按鈕顯示一種代碼類型。</li>
+        <li>點擊<strong>在CodePen上編輯</strong>在右上角將此CodePen分支到您自己的帳戶中。</li>
+        <li>在此找到與此樣本相關的所有代碼<a href="https://github.com/BrightcoveLearning/18032-video-report-generator">GitHub資料庫</a>。</li>
+      </ul>
+    </details>
+
+  </section>
+
+    <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="proxy">代理代理代碼</h2>
+      </summary>
+
+      <p>為了建立您自己的版本此頁面上的範例應用程式，您必須建立並裝載您自己的 Proxy。（布萊特灣學習服務所使用的代理只接受來自布萊特灣域的請求。）可以在以下位置找到一個示例代理，該代理與我們使用的代理代理非常相似，但是沒有檢查阻止來自非Brightcove域的請求。<a href="https://github.com/BrightcoveLearning/sample-proxy-apps">這個GitHub倉庫</a>。您還將在那裡找到使用它的基本說明，以及圍繞代理構建應用程序的更詳細指南<a href="/getting-started/learning-guide-using-rest-apis.html">使用 REST API</a> .</p>
+    </details>
+  </section>
+
+</article>

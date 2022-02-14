@@ -1,0 +1,198 @@
+---
+title: '實時 API：RTMP 輸出'
+description: '本主題說明如何使用 Live API 輸出 RTMP。當您將流式傳輸到不支持 HLS 實時流的平台時，RTMP 輸出很有用。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="general_information">一般信息</h2>
+
+<p>要使用 RTMP 輸出，請注意以下事項</p>
+
+<ul>
+	<li>您一定已經購買了<strong>活動時間</strong>，或任何數字營銷包</li>
+	<li>RTMP 輸出時間將根據事件時間計費</li>
+	<li>每個實時作業僅限於 5 個輸出</li>
+	<li>你可以定義一個<code translate="No">label</code>其中標籤可以選擇為流選擇的輸出格式之一。如果<code translate="No">label</code>如果未設置，則輸出將默認為輸入源。</li>
+	<li>它們可用於標準作業和重複事件 (SEP)。</li>
+	<li>它們可用於事件或 24/7 流。</li>
+	<li>它們可以獨立於任何實時流啟動和停止。</li>
+	<li>對於在實施RTMP輸出功能之前創建的SEP作業，該功能將無法完全使用：在API上，即使實際創建了RTMP輸出，它也會顯示失敗。為了獲得最佳結果，請創建一個新的SEP作業以使用RTMP輸出功能。</li>
+	<li>將 RTMP 輸出與標準作業（非 SEP）一起使用時，RTMP 輸出流將在作業結束時結束。</li>
+  <li>RTMP 輸出<strong>做</strong>支持<code translate="No">rtmps</code> url，如果社交媒體平台支持它們，我們建議使用它們。另請注意，自2019年5月1日起，Facebook將僅允許RTMPS。</li>
+  <li>這<strong>僅當前支持 RTMP URL 的格式</strong>是<code translate="No">rtmps://host:port/application/streamName</code> .</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="notifications">通知 </h2>
+
+<p>您可以設置通知<code translate="No">rtmp_output_state_changed</code>事件。將發送以下狀態的通知：</p>
+
+b<table class="bcls-table">
+  <caption class="bcls-caption--table">RTMP 輸出狀態</caption>
+  <thead class="bcls-table__head">
+      <tr>
+          <th>RTMP 輸出狀態</th>
+          <th>（報告為<code translate="No">rtmp_output_state_changed</code>通知為<code translate="No">state</code>）</th>
+      </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">starting</code></td>
+			<td>流開始了。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">connected</code></td>
+			<td>編碼器已連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">Disconnected</code></td>
+			<td>編碼器已斷開。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">error</code></td>
+			<td>流無法連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">pending_deactivation</code></td>
+			<td>入口點已排隊等待來自流處理程序的清理。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">deactivation_in_progress</code></td>
+			<td>入口點正在與流工作者斷開連接。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">cancelled</code></td>
+			<td>入口點已被取消。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">finished</code></td>
+			<td>入口點已成功完成。</td>
+		</tr>
+  </tbody>
+</table>
+
+<p>RTMP輸出的通知必須在<strong><a href="/live-api/references/reference.html#operation/CreateALiveJob">職業等級</a></strong>當您創建現場作業時。</p>
+
+<p>看到不同的<code translate="No">state</code>為 RTMP 輸出報告的值，請參閱<a href="/live-api/guides/live-api-notifications.html">實時通知</a> .</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="creating_rtmp_outputs">創建RTMP輸出</h2>
+
+<p>您首先需要像往常一樣創建一個實時作業，然後發出一個額外的請求來創建 RTMP 端點。</p>
+
+<p>注意：在某些情況下，例如激活/停用作業，此API調用將返回錯誤，如果發生這種情況，請在暫停後重試。</p>
+
+<h3>終點</h3>
+
+<pre>
+	<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/{jobId}/rtmpouts</code></pre>
+
+<h3>方法</h3>
+
+<p><code translate="No">POST</code></p>
+
+<h3>要求正文</h3>
+
+<pre class="line-numbers">
+	<code class="language-json" translate="No">{
+		"url": "rtmps://host:port/application/streamName",
+		"output_label": "480p"
+	}</code></pre>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">請求正文字段</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>欄位名稱</th>
+			<th>必要</th>
+			<th>類型</th>
+			<th>描述</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">url</code></td>
+			<td>是的</td>
+			<td>細繩</td>
+			<td>RTMP 輸出的 URL - 示例<code translate="No">rtmp://live-api-s.facebook.com:80/rtmp/my_stream</code></td>
+		</tr>
+		<tr>
+			<td><code translate="No">output_label</code></td>
+			<td>不</td>
+			<td>細繩</td>
+			<td>用作 RTMP 輸出源的作業輸出的標籤。忽略此參數可以簡單地使用RTMP輸入。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>樣本響應</h3>
+
+<pre class="line-numbers">
+	<code class="language-json" translate="No">{
+		"host": "live-api-s.facebook.com",
+		"port": 80,
+		"application": "rtmp",
+		"streamName": "my_stream",
+		"rtmp_out_id": "asdfg-lkjh"
+	}</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="get_rtmp_outputs">獲取RTMP輸出</h2>
+
+<h3>終點</h3>
+
+<pre>
+	<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/{jobId}/rtmpouts</code></pre>
+
+<h3>方法</h3>
+
+<p><code translate="No">GET</code></p>
+
+<h3>樣本響應</h3>
+
+<pre class="line-numbers">
+	<code class="language-json" translate="No">[
+		{
+			"rtmp_out_id": "asdfg-lkjh",
+			"stream_start": 1538746255247,
+			"connection_info": {
+				"host": "a.rtmp.youtube.com",
+				"port": 1935,
+				"application": "live2",
+				"streamName": "my_stream",
+				"sessionStatus": "Active"
+			}
+		}
+	]</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="stop_rtmp_output">停止 RTMP 輸出</h2>
+
+<h3>終點</h3>
+
+<pre>
+	<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/{jobId}/rtmpouts/{rtmp_out_id}/stop</code></pre>
+
+<h3>方法</h3>
+
+<p><code translate="No">PUT</code></p>
+
+<aside class="bcls-aside bcls-aside--information">請注意，作業需要至少啟動一次才能獲得<code translate="No">job_id</code> .</aside>
+
+<h3>樣本響應</h3>
+
+<pre class="line-numbers">
+	<code class="language-json" translate="No">{
+		"message": "RTMP out asdfg-lkjh deleted successfully"
+	}</code></pre>
+</section>
+</article>

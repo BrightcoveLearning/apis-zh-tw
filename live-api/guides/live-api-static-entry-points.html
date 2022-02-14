@@ -1,0 +1,165 @@
+---
+title: '實時 API：靜態入口點'
+description: '本主題介紹靜態入口點以及如何使用 Live API 實現它們。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Introduction">介紹</h2>
+
+<p>靜態入口點 (SEP) 功能允許長時間運行的實時作業可以激活和停用，同時保持入口點 URL 和播放 URL 靜態和可重用。此功能允許客戶在他們的設施或現場配置他們的編碼器，並允許客戶為直播頻道或節目創建他們自己的調度邏輯。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="dvr_and_sep">DVR和SEP</h2>
+
+<p>DVR功能可用於靜態入口點，但僅當SEP為<strong>活性</strong>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Creating_a_static_entry_point">創建一個靜態入口點</h2>
+
+<p>標準<a href="/live-api/references/reference.html#api-Live_Jobs-Create_a_Live_Job">創建工作</a>將使用操作，但要添加靜態入口點，需要將屬性添加到作業請求中：</p>
+
+<pre>
+<code class="language-json" translate="No">"static": true</code></pre>
+
+<p>此作業的響應 RTMP URL 將是靜態的，然後可以通過使用以下部分中描述的操作激活/停用作業來重新使用。請閱讀並理解本文檔末尾列出的限制。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="max_waiting_time">最長等待時間</h2>
+
+<p>激活SEP作業後，如果未啟動編碼器，它將在一段時間後自動停用。規則如下：</p>
+
+<ul>
+	<li>如果<code translate="No">event_length</code>值大於30分鐘，則默認情況下作業將在30分鐘後自動終止-如果您希望更改等待時間，則需要與支持人員聯繫。無法禁用自動停用功能。</li>
+	<li>如果<code translate="No">event_length&nbsp;</code>值小於<code translate="No">reconnect_time</code>，作業將在為設置的時間終止<code translate="No">event_length</code>。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Activate_static_entry_point_stream">激活SEP直播</h2>
+
+<p>要激活靜態入口點直播流，請將以下請求發送到 Live API：</p>
+
+<aside class="bcls-aside bcls-aside--information">為了能夠攝取到靜態入口點，您必須使<code translate="No">activate</code> API 請求。</aside>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">活動SEP流</caption>
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td><code translate="No">PUT</code></td>
+		</tr>
+		<tr>
+			<th>終點</th>
+			<td>
+			<pre>
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">{jobID}</span>/<strong>activate</strong></code></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>不需要請求正文。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Deactivate_static_entry_point_stream">停用SEP直播</h2>
+
+<aside class="bcls-aside bcls-aside--warning">在停用流之前始終停止編碼器。停用可能不會立即發生，因此您可以準確控制觀看者何時停止接收內容。</aside>
+
+<p>要停用靜態入口點直播流，請將以下請求發送到 Live API：</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">活動SEP流</caption>
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td><code translate="No">PUT</code></td>
+		</tr>
+		<tr>
+			<th>終點</th>
+			<td>
+			<pre>
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">{jobID}</span>/<strong>deactivate</strong></code></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<aside class="bcls-aside bcls-aside--information">當您停用靜態入口點時，流的最後幾秒仍可播放。</aside>
+
+<p>不需要請求正文。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Cancel_sep_job">取消SEP作業</h2>
+
+<p>要永久停止靜態入口點作業，您可以像取消任何實時作業一樣取消該作業，方法是發送<code translate="No">PUT</code>請求端點<code translate="No">/jobs/{job_id}/cancel</code> .見<a href="/live-api/references/reference.html#operation/CancelLiveJob">API參考</a>詳細信息。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">局限性</h2>
+
+<ul>
+	<li>不能將Live to VOD設置為在完成時將流存檔。
+	<p style="font-weight:bold;">備擇方案：</p>
+
+	<ul>
+		<li>用<a href="/live-api/guides/live-api-creating-vod-clips.html">剪裁</a>將完整的現場活動存檔為 VOD。在事件發生後或直到下次激活 SEP（以較短者為準）的標準持續時間內，剪輯窗口可用。</li>
+	</ul>
+	</li>
+	<li>作業設置無法修改。它們當前與最初創建 SEP 的設置相關聯。</li>
+	<li>激活流最多可能需要60秒才能使入口點可用。
+	<p style="font-weight:bold;">最佳實踐：</p>
+
+	<p>從Live平台實施通知以更改作業狀態，以獲取SEP作業實際準備就緒時的實時更新。</p>
+
+	<p style="font-weight:bold;">備擇方案：</p>
+
+	<ol>
+		<li>在啟動編碼器之前至少60秒激活流。</li>
+		<li>如果編碼器具有內置的重試功能（有線，元素等），則可以立即連接流（儘管可能會出現一些錯誤），並且只要有可用的入口點，編碼器就會重新連接。</li>
+	</ol>
+	</li>
+	<li>Reconnect_time仍然適用於編碼器斷開連接時的SEP作業。如果達到了重新連接時間，則SEP作業將回到停用狀態。
+	<p style="font-weight:bold;">最佳實踐：</p>
+
+	<p>作業完成後，請務必通過API停用流，並將重新連接時間設置為可接受的時間範圍以備斷開連接（在此等待期間會產生輸入小時成本）。</p>
+	</li>
+	<li>每個賬戶只會分配 3 個可用的 SEP 職位 <em>每個地區</em>.如果達到極限，則需要<a href="/live-api/references/reference.html#operation/CancelLiveJob">取消</a>您可以先創建一項SEP作業，然後才能創建新的SEP作業。
+	<p>如果您已達到SEP作業的最大數量並嘗試創建另一個作業，則將返回以下錯誤：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "error": "You've reached the number of static entry points jobs you can create for your account"
+}</code></pre>
+      </li>
+      <li>如果您嘗試一次激活5個以上的SEP作業，則會收到類似以下的錯誤消息：
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  “message”:“Allocating additional streaming capacity to the region. Please retry your request.: no_streaming_capacity_in_region”,
+  “statusCode”:500,
+  “name”:“ApiError”,
+  “isApiError”:true
+}</code></pre>
+        <p>在重試請求之前，您需要等待一些作業完成激活。</p>
+      </li>
+    </ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Notes">筆記</h2>
+
+<dl>
+	<dt>停用後剪切SEP作業</dt>
+	<dd>用戶可以在下一次激活流之前或 7 天內創建剪輯，以較短者為準。重新激活流後，以前的錄製會話將從服務器中刪除，並且無法再剪輯。</dd>
+	<dt>使用 SEP 時 stream_start_time 字段的時間是什麼？</dt>
+	<dd>當 SEP 被激活時，這將被視為開始時間。</dd>
+</dl>
+</section>
+</article>

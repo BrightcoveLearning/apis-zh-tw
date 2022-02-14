@@ -1,0 +1,287 @@
+---
+title: '快速開始：將 RTMP 輸出用於實時事件'
+description: '本教程將引導您創建 RTMP 輸出，以在 YouTube Live 和 Facebook Live 上設置實時事件。'
+parent: Code Samples 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Overview">概述</h2>
+
+<figure class="bcls-figure"><img alt="general-block-diagram" title="Block diagram" src="/assets/images/live-api/18697/block-diagram-small.png" />
+<figcaption class="bcls-caption--image">框圖</figcaption>
+</figure>
+
+<p>本教程在 API 級別解釋瞭如何在<a href="/">Brightcove 現場直播</a>然後創建<a href="https://en.wikipedia.org/wiki/Real-Time_Messaging_Protocol">RTMP</a>輸出並將它們重新流式傳輸到 YouTube Live 和 Facebook Live。</p>
+
+<aside class="BCL-bcls-aside bcls-aside--information">筆記：
+<ul>
+	<li>有關如何在實時模塊中使用RTMP輸出的信息，請參見<a href="https://live.support.brightcove.com/live-module/using-live-rtmp-outputs-stream-facebook-and-youtube.html">使用實時RTMP輸出流式傳輸到Facebook和YouTube</a>。</li>
+  <li>RTMP 輸出<strong>做</strong>支持<code translate="No">rtmps</code>網址 - 你應該使用<code translate="No">rtmps</code>如果社交平台支持。</li>
+  <li>請注意，Facebook終止了對的支持<code translate="No">rtmp</code>截至2019年5月1日的.streams，對於Facebook，您<strong>必須</strong>用<code translate="No">RTMPS</code>。</li>
+  <li>這<strong>僅當前支持 RTMP URL 的格式</strong>是<code translate="No">rtmps://host:port/application/streamName</code> .</li>
+</ul>
+</aside>
+
+<p>本教程將使用<a translate="No" href="https://general.support.brightcove.com/developer/concepts-set-curl.html">捲曲</a>發出 API 請求，但您可以輕鬆地在<a translate="No" href="https://apis.support.brightcove.com/general/use-insomnia-api-requests.html">失眠</a> , <a translate="No" href="https://apis.support.brightcove.com/general/use-postman-api-requests.html">郵差</a>或其他 REST 客戶端。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="create_a_live_job">創建現場工作</h2>
+
+<p>首先，我們將創建一個現場工作。你需要一個<code translate="No">API-KEY</code>用於實時 API。如果您不這樣做，並且對獲得訪問權限感興趣，請與您的客戶經理聯繫。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>
+	<p>複製並粘貼以下內容<span translate="No">捲曲</span>命令進入文本編輯器：</p>
+
+	<pre class="line-numbers">
+<code class="language-bash" translate="No">curl -X POST \
+  https://api.bcovlive.io/v1/jobs \
+  -H 'Content-Type: application/json' \
+  -H 'x-api-key: {{bcov-live-api-key}}' \
+  -d '{
+    "live_stream": true,
+    "region": "{{closest-region-encoder}}",
+    "outputs": [{
+      "label": "hls360p",
+      "live_stream": true,
+      "height": 360,
+      "video_bitrate": 365,
+      "segment_seconds": 6,
+      "keyframe_interval": 60
+    },
+    {
+      "label": "hls432p",
+      "live_stream": true,
+      "height": 432,
+      "video_bitrate": 730,
+      "segment_seconds": 6,
+      "keyframe_interval": 60
+    },
+    {
+      "label": "hls540p",
+      "live_stream": true,
+      "height": 540,
+      "video_bitrate": 2000,
+      "segment_seconds": 6,
+      "keyframe_interval": 60
+    },
+    {
+      "label": "hls720p3M",
+      "live_stream": true,
+      "height": 540,
+      "video_bitrate": 2000,
+      "segment_seconds": 6,
+      "keyframe_interval": 60
+    },
+    {
+      "label": "hls720p4.5M",
+      "live_stream": true,
+      "height": 540,
+      "video_bitrate": 4500,
+      "segment_seconds": 6,
+      "keyframe_interval": 60
+    }]
+  }'
+</code></pre>
+	</li>
+	<li>
+	<p><strong>代替：</strong></p>
+
+	<ul>
+		<li><code translate="No">{{closest-region-encoder}}</code>距離編碼器最近的可用區域，請參見<a href="/live-api/getting-started/overview-brightcove-live-api.html#Support_aws_regions">最近可用區域</a>到您的編碼器。例如：<code translate="No">us-west-2</code></li>
+		<li><code translate="No">{{bcov-live-api-key}}</code>使用您的Brightcove實時API密鑰。例如：<code translate="No">abcdfeg-this-is-a-fake-api-key-FgJajjasd12hJHsZ</code></li>
+	</ul>
+	</li>
+	<li>進行了這些更改之後，將代碼複製並粘貼到Terminal或您使用的任何命令行應用程序中，然後運行它。</li>
+	<li>
+	<p>響應應該是這樣的：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "id": "3b6871bf2f344acaa6b397d09b476018",
+    "outputs": [... removed for simplicity ...],
+    "stream_url": "rtmp://ep1-usw2.bcovlive.io:1935/3b6871bf2f344acaa6b397d09b476018",
+    "stream_name": "alive",
+    "static": false,
+    "encryption": {},
+    "playback_url": "https://bcovlive-a.akamaihd.net/3b6871bf2f344acaa6b397d09b476018/us-west-2/NA/playlist.m3u8",
+    "playback_url_dvr": "https://bcovlive-a.akamaihd.net/3b6871bf2f344acaa6b397d09b476018/us-west-2/NA/playlist_dvr.m3u8"
+}</code></pre>
+	</li>
+</ol>
+
+<p>此作業將創建 5 個再現<strong>基於</strong>在<a href="https://developer.apple.com/documentation/http_live_streaming/hls_authoring_specification_for_apple_devices">蘋果推薦</a> .</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Configure_your_encoder">配置編碼器</h2>
+
+<p>此處顯示的步驟將假定<a href="https://www.elemental.com/products/aws-elemental-live">元素活盒</a>編碼器，用於測試本教程的步驟。如果您使用其他編碼器，則設置應相似。</p>
+
+<p>這種情況下最重要的設置是：</p>
+
+<ul>
+	<li>將時間碼源配置為“系統時鐘"</li>
+	<li>將“OnFi 時間碼頻率”設置為 1</li>
+	<li>檢查視頻中的“時間碼插入"</li>
+	<li>強力推薦：幀率=跟隨來源</li>
+</ul>
+
+<p>這是我們用於此實驗的配置：</p>
+
+<figure class="bcls-figure"><img alt="elemental-live-job-config" title="Elemental live config" src="/assets/images/live-api/18697/elemental-live-job-config-v1-small.png" />
+<figcaption class="bcls-caption--image">元素實時配置</figcaption>
+</figure>
+</section>
+
+<section class="bcls-section">
+<h2 id="test_playback">測試回放</h2>
+
+<p>你可以用這個<a href="https://videojs.github.io/videojs-contrib-hls/">VideoJS HLS 演示頁面</a>要測試播放，只需粘貼值<code translate="No">playback_url</code>在創建作業響應中返回：</p>
+
+<figure class="bcls-figure"><img alt="videojs-hls-playback" title="VideoJS HLS playback demo page" src="/assets/images/live-api/18697/videojs-hls-playback-small.png" />
+<figcaption class="bcls-caption--image">VideoJS HLS 播放演示頁面</figcaption>
+</figure>
+</section>
+
+<section class="bcls-section">
+<h2 id="Youtube_live">將直播添加到YouTube直播中</h2>
+
+<p>我們在這裡假設您有一個啟用直播的 YouTube 帳戶。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>
+	<p>點擊<strong>上線</strong>，您應該看到：</p>
+
+	<figure class="bcls-figure"><img alt="youtube-go-live" title="YouTube go live" src="/assets/images/live-api/18697/youtube-go-live-small.png" />
+	<figcaption class="bcls-caption--image">YouTube 上線</figcaption>
+	</figure>
+	</li>
+	<li>
+	<p>點擊“編碼器實時流式傳輸"：</p>
+
+	<figure class="bcls-figure"><img alt="youtube-encoder-live" title="YouTube encoder live source" src="/assets/images/live-api/18697/youtube-encoder-live-small.png" />
+	<figcaption class="bcls-caption--image">YouTube 編碼器直播源</figcaption>
+	</figure>
+	</li>
+	<li>
+	<p>配置現場直播YouTube元數據，並使用“編碼器設置"數據將Brightcove實時流連接到YouTube：</p>
+
+	<figure class="bcls-figure"><img alt="youtube-encoder-setup" title="YouTube encoder setup" src="/assets/images/live-api/18697/youtube-encoder-setup-small.png" />
+	<figcaption class="bcls-caption--image">YouTube 編碼器設置</figcaption>
+	</figure>
+	</li>
+	<li>
+	<p>現在我們已經建立了YouTube直播，我們將通過Live作業為其創建RTMP輸出。</p>
+	</li>
+	<li>
+	<p>複製<span translate="No">捲曲</span>下面的命令進入文本編輯器：</p>
+
+	<pre class="line-numbers">
+<code class="language-bash" translate="No">curl -X POST \
+  https://api.bcovlive.io/v1/jobs/{{bcov-live-job-id}}/rtmpouts \
+  -H 'Content-Type: application/json' \
+  -H 'x-api-key: {{bcov-live-api-key}}' \
+  -d '{
+  "url": "rtmp://a.rtmp.youtube.com/live2/{{youtube-secret-stream-name}}"
+}'</code></pre>
+	</li>
+	<li>
+	<p><strong>代替：</strong></p>
+
+	<ul>
+		<li><code translate="No">{{bcov-live-job-id}}</code>與您的Brightcove現場工作ID。在我們的示例中，該值為<code translate="No">3b6871bf2f344acaa6b397d09b476018</code> -從響應到創建現場工作的請求，您的價值將有所不同。</li>
+		<li><code translate="No">{{bcov-live-api-key}}</code>為您的Brightcove實時API密鑰。例如：<code translate="No">abcdfeg-this-is-a-fake-api-key-FgJajjasd12hJHsZ</code></li>
+		<li><code translate="No">{{youtube-secret-stream-name}}</code> YouTube提供的流名稱/密鑰</li>
+	</ul>
+	</li>
+	<li>將編輯後的代碼粘貼到您的命令行應用程序中並運行它。</li>
+	<li>
+	<p>響應應該是這樣的：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+          "connection_info": {
+            "host": "a.rtmp.youtube.com",
+            "port": 1935,
+            "application": "live2",
+            "streamName": "{{youtube-secret-stream-name}}"
+          },
+          "duration_history": [],
+          "rtmp_out_id": "27aacdfa5bcf4436ade0519e6a748aba",
+          "stream_start": 1542902218238
+        }</code></pre>
+	</li>
+	<li>
+	<p>要測試 YouTube 播放，您可以轉到 YouTube <strong>我的頻道</strong>：</p>
+
+	<figure class="bcls-figure"><img alt="youtube-my-channel-playback" title="YouTube my channel playback" src="/assets/images/live-api/18697/youtube-my-channel-playback-small.png" />
+	<figcaption class="bcls-caption--image">YouTube 我的頻道播放</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="facebook_live">將實時流添加到Facebook live</h2>
+
+<p>我們在此假設您已啟用 Facebook 帳戶進行直播。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>
+	<p>點擊<strong>實況視頻</strong></p>
+	</li>
+	<li>
+	<p>點擊<strong>連接</strong>和流密鑰以獲取連接Brightcove實時作業所需的數據：</p>
+
+	<figure class="bcls-figure"><img alt="facebook-live-config" title="Facebook live config" src="/assets/images/live-api/18697/facebook-live-config-small.png" />
+	<figcaption class="bcls-caption--image">Facebook實時配置</figcaption>
+	</figure>
+	</li>
+	<li>
+	<p>接下來，使用Facebook上的“服務器URL"和“流密鑰"為Brightcove實時作業創建實時輸出。複製<span translate="No">捲曲</span>下面的命令並將其粘貼到文本編輯器中：</p>
+
+	<pre class="line-numbers">
+<code class="language-bash" translate="No">curl -X POST \
+  https://api.bcovlive.io/v1/jobs/{{bcov-live-job-id}}/rtmpouts \
+  -H 'Content-Type: application/json' \
+  -H 'x-api-key: {{bcov-live-api-key}}' \
+  -d '{
+  "url": "rtmp://live-api-s.facebook.com:80/rtmp/{{facebook-secret-stream-name}}"
+}'</code></pre>
+	</li>
+	<li>
+	<p><strong>代替：</strong></p>
+
+	<ul>
+		<li><code translate="No">{{bcov-live-job-id}}</code>與您的Brightcove現場工作ID。在我們的示例中，該值為<code translate="No">3b6871bf2f344acaa6b397d09b476018</code> -從響應到創建現場工作的請求，您的價值將有所不同。</li>
+		<li><code translate="No">{{bcov-live-api-key}}</code>使用您的Brightcove實時API密鑰。例如：<code translate="No">abcdfeg-this-is-a-fake-api-key-FgJajjasd12hJHsZ</code></li>
+		<li><code translate="No">{{facebook-secret-stream-name}}</code>與您串流給Facebook提供的名稱</li>
+	</ul>
+	</li>
+	<li>
+	<p>響應應該是這樣的：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "connection_info": {
+      "host": "live-api-s.facebook.com",
+      "port": 80,
+      "application": "rtmp",
+      "streamName": "{{facebook-secret-stream-name}}"
+  },
+  "duration_history": [],
+  "rtmp_out_id": "59323c3d1e2b44748755853193fb126c",
+  "stream_start": 1542904101097
+}</code></pre>
+	</li>
+	<li>
+	<p>要測試您的 Facebook Live 流，請單擊 Facebook 網頁上的“Go Live”。</p>
+	<img alt="facebook-playback" title="Facebook playback" src="/assets/images/live-api/18697/facebook-playback-small.png" /></li>
+</ol>
+</section>
+</article>

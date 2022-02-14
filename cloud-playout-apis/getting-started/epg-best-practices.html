@@ -1,0 +1,95 @@
+---
+title: '電子節目單API：最佳實踐'
+parent: Getting Started 
+grandparent: Cloud Playout APIs
+description: This topic provides best practices for working with the Cloud Playout EPG API.
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+	<summary>{{page.description}}</summary>
+	<section class="bcls-section">
+		<h2 id="Introduction">介紹</h2>
+		<p>EPG API 返回 Cloud Playout 頻道的 XML 電子編程指南，可用於在您的網頁或應用程序中顯示節目信息。本主題提供了 API 工作原理的一些說明以及最有效使用它的建議。</p>
+	</section>
+	<section class="bcls-section">
+		<h2 id="channel_states">頻道狀態</h2>
+		<h3>活躍國家</h3>
+		<ul>
+			<li><code translate="no">草案</code>（當頻道的預定開始時間/停止時間在未來時）</li>
+			<li><code translate="no">重新安排</code></li>
+			<li><code translate="no">預定</code></li>
+			<li><code translate="no">開始</code></li>
+			<li>START_ERROR<code translate="no"></code></li>
+			<li><code translate="no">創造</code></li>
+			<li>CREATE_ERROR<code translate="no"></code></li>
+			<li><code translate="no">跑步</code></li>
+		</ul>
+		<h3>無效狀態</h3>
+		<ul>
+			<li><code translate="no">草案</code>（停止的頻道將再次進入 DRAFT 狀態）</li>
+			<li><code translate="no">閒置的</code></li>
+			<li><code translate="no">停止</code></li>
+			<li><code translate="no">停止_錯誤</code></li>
+			<li>START_ERROR<code translate="no"></code></li>
+			<li><code translate="no">刪除</code>（將沒有 EPG 記錄 - 這可能會導致 EPG API 返回 500 響應代碼）</li>
+			<li><code translate="no">DELETE_ERROR</code>（將沒有 EPG 記錄 - 這可能會導致 EPG API 返回 500 響應代碼）</li>
+		</ul>
+	</section>
+	<section class="bcls-section">
+		<h2 id="EPG_Query_Recommendation">EPG查詢建議</h2>
+		<ul>
+			<li>默認情況下的 EPG 查詢（沒有任何查詢參數）<code translate="No">start</code> , <code translate="No">stop</code>， 或者<code translate="No"></code>限制</code>提供）將返回 100 條 EPG 記錄（或所有記錄，如果少於 100 條）。返回的數字可以通過將其設置在<code translate="no">限制</code>範圍。</li>
+			<li>通過提供明確的開始時間和結束時間以及EPG查詢的更高限制值，仍然可以提供長達14天的記錄。</li>
+			<li>由於處理時間隨要處理的記錄數呈指數增長，因此我們建議使用分頁方式查詢EPG記錄（請參閱<a href="#pagination">分頁</a>下方）以獲取批量數據。</li>
+		</ul>
+	</section>
+	<section class="bcls-section">
+		<h2 id="pagination">分頁</h2>
+		<p>以下是我們建議您對大量記錄進行分頁查詢以獲得最佳性能的方法：</p>
+		<ol class="bcls-tasklist-restart">
+			<li>
+				從不使用查詢參數的請求開始：
+<pre><code class="language-http" translate="No">https://sm.cloudplayout.brightcove.com/accounts/<span class="bcls-input">{account_id}</span>/channels/<span class="bcls-input">{channel_id}</span>/epg
+				</code></pre>
+				<ul>
+					<li>如果通道未運行，則將從通道開始時間或當前時間（以較晚者為準）返回100條記錄。</li>
+					<li>如果頻道正在運行，則100條記錄將是歷史節目和未來節目的50/50組合</li>
+				</ul>
+			</li>
+			<li>對於其他數據頁，請提交請求<code translate="no">開始</code>參數集等於<code translate="no">停止</code>中的屬性值<code translate="no">程序</code>上一個響應中返回的最後一條記錄的標記 - <strong>加 1 秒</strong> .</li>
+	</ol>
+	<h3>例子</h3>
+	<p>假設您的第一個查詢返回的響應如下：</p>
+<pre class="line-numbers"><code class="language-xml">&lt;tv&gt; ... &lt;programme channel="channel_id" start="20210228000457" stop=" <span class="bcls-highlight"> 20210228001457</span> "&gt; &lt;title&gt;live&lt;/title&gt; &lt;desc&gt;live&lt;/desc&gt; &lt;length units="seconds"&gt;600.0&lt;/length&gt; &lt;icon src="https://img.brightcove.com/cloudplayout/live- icon.jpg“寬度=”“高度=”“/&gt; &lt;類別&gt;活&lt;/類別&gt; &lt;關鍵字&gt; eyJ2aWRlb19pZCI6IjcwNzAxMjE2NDgyMjAyIiwib3JkZXIiOjMsInRhZ3MiOiJyb21hbmNlIiwiY3VzdG9tX21ldGFkYXRhIjp7InJlZ2lvbiI6ImFzaWEiLCJzb25ncyI6NX19 &lt;/關鍵字&gt; &lt;/程序&gt; &lt;/電視&gt;</code></pre>
+		<p>突出顯示的<code translate="no">停止</code>最後一條記錄中的值是格式中的時間戳<code translate="no">YYYYMMDDhhmmss</code>，所以在 ISO 8601 格式中：<code translate="No">2021-02-28 00:14:57</code> .</p>
+		<p>將這個值加一秒，我們得到<code translate="No">2021-02-28 00:14:58</code>。</p>
+		<p>下一個請求的查詢參數將是：<code translate="no"> start=2021-02-28%2000%3A14%3A57 - 記住開始（和<code translate="no">結尾</code> ) 參數必須是 URI 編碼的。</code></p>
+		<p>要檢索所有記錄，請繼續發送請求並增加<code translate="no">開始</code>值，直到您收到帶有消息“通道在請求的時間窗口中不會處於運行狀態”的 HTTP 422 響應。</p>
+	</section>
+	<section class="bcls-section">
+		<h2 id="Additional_notes">有關EPG響應行為的其他說明</h2>
+		<p>以下有關 EPG API 工作原理的說明旨在幫助您創建將獲得所需響應的請求。</p>
+		<ul>
+			<li>EPG 是根據頻道的當前狀態動態構建的，因此如果頻道處於任何活動狀態，除了<code translate="No">RUNNING</code>，那麼 EPG 將從預定的頻道開始時間產生未來的數據。</li>
+			<li>如果頻道在<code translate="No">RUNNING</code>狀態，沒有任何查詢參數的情況下調用的EPG將提供過去和將來時間表數據的混合（50％拆分-限制為100，這將最多生成50個過去記錄和50個將來記錄）。</li>
+			<li>當您停止或刪除頻道時，它會在<code translate="No">INACTIVE</code>狀態;由於頻道已完成運行，未來的 EPG 記錄將不可用。
+				<ul>
+					<li>在這種情況下，EPG將返回空數據集或422錯誤代碼。</li>
+					<li>如果任何非活動狀態都需要歷史數據，則EPG請求的查詢參數中必須具有過去的開始/結束時間。</li>
+				</ul>
+			</li>
+			<li>如果EPG請求同時具有<code translate="No">end</code>時間和<code translate="No">limit</code>，<code translate="No">limit</code>將被賦予優先級，並且將生成許多記錄-在這種情況下，您可能會在給定的結束時間之後收到記錄。</li>
+			<li>這<code translate="No">start</code> / <code translate="No">end</code>窗口不能超過 14 天。<code translate="No">start</code>可以比當前日期時間早 14 天來檢索歷史 EPG。您還可以查詢當前日期時間之後最多 14 天的未來 EPG 數據。</li>
+			<li>如果提供的結束時間和開始時間之間的差異大於14天，則API只會從請求時間到計劃的頻道停止時間之間的14天或14天（以較早者為準）生成時間表數據。</li>
+			<li>兩個都<code translate="No">start</code>和<code translate="No">end</code>可以接受帶有或不帶有時區偏移量的日期時間值-如果不包括時區偏移量，則採用UTC</li>
+			<li>兩個都<code translate="No">start</code>和<code translate="No">end</code>值必須經過URI編碼。</li>
+		</ul>
+		<h3>EPG API會返回422錯誤代碼的原因</h3>
+		<ul>
+			<li>EPG開始時間距頻道開始時間或當前時間不能超過14天，以較大的時間為準</li>
+			<li>EPG開始時間不能早於當前時間的14天</li>
+			<li>EPG間隔必須小於或等於14天（開始時間和結束時間應在14天以內）</li>
+			<li>頻道將在請求的時間窗口中處於運行狀態（EPG 請求的開始時間超出計劃的頻道停止時間）需要提供開始時間或應小於結束時間（開始時間 &lt; 結束時間）</li>
+		</ul>
+	</section>
+</article>

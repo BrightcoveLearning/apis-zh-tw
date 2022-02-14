@@ -1,0 +1,750 @@
+---
+title: '實時 API：提示點與 SSAI ' 說明的廣告信標：在本主題中，您將了解如何在將 Brightcove 的服務器端廣告插入 (SSAI) 用於直播作業時管理提示點和廣告信標。
+parent: SSAI 
+grandparent: Live API 
+---
+
+
+<article class="bcls-article">
+ <h1>{{ page.title }}</h1>
+ <summary>{{ page.description }}</summary>
+{% raw %}
+ <section class="bcls-section">
+  <h2 id="Overview">概述</h2>
+  
+  <p>服務器端廣告插入<span translate="No">(SSAI)</span>允許您在直播活動期間的指定時間展示廣告。有關一般信息，請參見<a href="/live-api/ssai/live-api-server-side-ad-insertion-ssai.html">實時API：服務器端廣告插入<span translate="No">(SSAI)</span></a>文檔。</p>
+  
+  <aside class="bcls-aside bcls-aside--information">
+    
+    <ul>
+      <li>在您可以使用之前<span translate="No">SSAI</span>，必須為您的帳戶啟用它。有關詳細信息，請聯繫您的客戶經理。</li>
+   </ul>
+  
+  </aside>
+  </section>
+  
+  <section class="bcls-section">
+  <h2 id="Cue_points">提示點</h2>
+  
+  <p>廣告休息時間由提示點觸發，可以通過兩種方式指定：</p>
+  
+  <ul>
+    <li>由編碼器發送到 Brightcove</li>
+    <li>通過創建的即時提示點<span translate="No">實時 API</span></li>
+  </ul>
+  
+  <h3>從編碼器</h3>
+  
+  <p>Brightcove 實時交付系統可以解釋編碼器提交的 AMF 格式的提示點：</p>
+  
+  <pre class="line-numbers">
+  <code class="language-bash" translate="No">AMFDataList
+  [0]:onCuePoint
+  [1]:{Obj[]:
+    time: 1.9889, //Difference from PTS of THIS packet to the first PTS of the 1st video frame in the adbreak
+    name: "scte35",
+    type: "event",
+    ad_server_data: "eyJrZXkiOiJ2YWx1ZSJ9",	// optional introduced by Brightcove. It is a base64 encoded json map of parameters e.g. {"key":"value"}
+    parameters: {Obj[]:
+      type: "avail_in",
+      duration: 12.0
+    }
+  }</code></pre>
+  
+  <h4>筆記：</h4>
+  
+  <ul>
+    <li>僅有的<code translate="No">avail_in</code> RTMP輸入當前支持類型提示點。</li>
+    <li>RTP 和 SRT 輸入支持 SCTE-35 提示點。</li>
+  </ul>
+  
+  <aside class="bcls-aside bcls-aside--information">見<a href="#Appendix">下面的附錄</a>有關 Elemental 編碼器的示例提示點設置的屏幕截圖。</aside>
+  </section>
+  
+  <section class="bcls-section">
+  <h2 id="Manual_cue_point_insertion">手動插入提示點</h2>
+  
+  <p>您可以使用<span translate="No">實時 API</span>通過發送一個<code translate="No">POST</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">POST</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">Job_ID</span>/cuepoint</code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p>包括一個指定以下內容的請求主體：</p>
+  
+  <table class="bcls-table">
+    <thead class="bcls-table__head">
+      <tr>
+        <th>場地</th>
+        <th>類型</th>
+        <th>描述</th>
+      </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+      <tr>
+        <td><code translate="No">duration</code></td>
+        <td>整數</td>
+        <td>休息時間（以秒為單位）。<br />
+        <br />
+        插入提示點的持續時間需要是<strong>至少是線段長度的兩倍</strong>在工作。見<a href="#Duration_example">持續時間示例</a> .</td>
+      </tr>
+      <tr>
+        <td><code translate="No">timecode</code></td>
+        <td>SMPTE 格式</td>
+        <td><strong>可選的：</strong>SMPTE格式的時間碼，<strong> HH：MM：SS：FF</strong>（FF =幀），以指定何時應將一組任何變量（鍵/值對）傳遞給adServer。<br />
+        <br />
+        如果省略，將立即插入提示點。<br />
+        <br />
+        如果您使用時間碼屬性，則編碼器必鬚髮送 SMPTE 格式的 ( <code translate="No">HH:MM:SS:FF</code> ) 時間碼存儲在<code translate="No">tc</code>財產通過<code translate="No">OnFI</code> .時間碼從直播開始。</td>
+      </tr>
+      <tr>
+        <td><code translate="No">ad_server_data</code></td>
+        <td>物件</td>
+        <td><strong>可選的：</strong>您傳遞的鍵/值對取決於您使用的廣告服務器。有關更多詳細信息，請參見您的廣告服務器文檔和<a href="/live-api/ssai/live-api-server-side-ad-insertion-ssai.html#Targeting_ads_using_ad_macros">使用廣告宏定位廣告</a>部分。</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4 id="Duration_example">持續時間示例</h4>
+  
+  <p>插入提示點的持續時間需要是<strong>至少是線段長度的兩倍</strong>在工作。</p>
+  
+  <p>例如，插入一個<strong>10秒提示點</strong>在工作中<code translate="No">"segment_seconds"=4</code>，可以正常工作。但是，在具有以下內容的作業中插入相同的提示點<code translate="No">"segment_seconds"=6</code>將導致以下錯誤：</p>
+  
+  <pre>
+  <code class="language-json" translate="No">"error": "The parameter duration should be greater than
+    or equal to (2 * target duration) of the job"
+ </code></pre>
+  &nbsp;
+  
+  <h3>示例請求正文</h3>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "duration": 30,
+    "timecode": "15:50:49:16",
+    "ad_server_data" : {
+    "adbreakid": 12312
+    "breaktheme": "fitness"
+    }
+  }</code></pre>
+  
+  <h4>筆記</h4>
+  
+  <ol>
+    <li>Wirecast 和 OBS 等軟件編碼器不支持通過以下方式發送時間碼<code translate="No">OnFI</code> RTMP 流中的數據包</li>
+    <li>基本硬件編碼器確實支持通過以下方式發送時間代碼<code translate="No">OnFI</code> RTMP流中的數據包</li>
+  </ol>
+  
+  <h3>樣本響應</h3>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "id": "Job_ID",
+    "cue_point": {
+      "id": "adBreak-2f58393ada1442d98eca0817fa565ba4",
+      "duration": 30,
+      "accuracy": "segment", [Can be <code translate="No">segment</code> or <code translate="No">frame</code> ]
+      "inserted_at": "2017-07-21T09:30:46.307Z" [ Time when the cue point was inserted in the stream]
+    },
+  }</code></pre>
+  </section>
+  
+  <section class="bcls-section">
+  <h2 id="Beacons">信標</h2>
+  
+  <p>信標是發送到第三方分析的播放數據點，以跟踪是否播放了廣告以及播放了多少廣告。在本節中，我們將查看可以使用<span translate="No">實時 API</span>，以及可用於提供數據的變量。下一節將詳細介紹用於創建和管理信標集的 API 請求。</p>
+  
+  <h3>信標類型</h3>
+  
+  <table class="bcls-table">
+    <caption class="bcls-caption--table">信標類型</caption>
+    <thead class="bcls-table__head">
+      <tr>
+        <th style="width:20%;">信標類型</th>
+        <th style="width:60%;word-wrap:break-word">描述</th>
+      </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+      <tr>
+        <td style="width:20%"><code translate="No">Load</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">每個會話觸發一次，僅在請求頂級清單時觸發</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">Play</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">已請求內容，並且返回了第一段</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">Heartbeat</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">目標持續時間（段秒）</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdStart</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">個別廣告已開始</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdFirstQuartile</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">前四分位（25％）</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdMidpoint</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">第二個廣告四分位數 (50%)</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdThirdQuartile</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">第三個廣告四分位數 (75%)</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdComplete</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">個別廣告已完成</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdBreakStart</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">廣告中斷已開始</td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">AdBreakComplete</code></td>
+        <td style="text-align:left;width:60%;word-wrap:break-word">廣告中斷已結束</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h3>信標/廣告變量</h3>
+  
+  <p>下表顯示了可用於為信標 URL 提供數據的變量。要包含變量，請用雙花括號括起來，如下所示：<code translate="No"><span class="bcls-highlight">{{</span>job.job_id<span class="bcls-highlight">}}</span></code> .有關完整示例，請參閱有關管理信標集的下一節。</p>
+  <aside class="bcls-aside bcls-aside--information">筆記：
+    <ul>
+      <li>​變量名稱允許的最大長度為 256，而值則為 1024。</li>
+    </ul>
+  </aside>
+  
+  <table class="bcls-table">
+    <caption class="bcls-caption--table">廣告配置變量</caption>
+    <thead class="bcls-table__head">
+      <tr>
+        <th style="width:20%;">多變的</th>
+        <th style="width:60%;">
+        <div style="word-wrap:break-word;">描述</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+      <tr>
+        <td style="width:20%"><code translate="No">session.session_id</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">唯一的會話 ID</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">job.job_id</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">唯一的工作 ID</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">videocloud.video_id</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">僅適用於使用VideoCloud視頻創建的作業。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">application_ad_configuration.description</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">會話創建時應用程序的價值</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">random.int32</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨機的32位有符號整數</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">random.int64</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨機的64位有符號整數</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">random.uint32</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨機32位無符號整數</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">random.uint64</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨機的64位無符號整數</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">random.uuid</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨機uuid</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">server.timestamputc</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">調用ads-api的時間間隔（以毫秒為單位）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">client.useragent</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">會話創建時的http用戶代理標頭值</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">client.ipaddress</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">會話創建時的http x-forwarded-for標頭值（如果提供），否則為遠程地址</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">client.referrer</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">會話創建時的http Referer標頭值（注意：這是正確的拼寫）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">client.referer</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">會話創建時的http Referer標頭值（http拼寫）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">client.ipuaid</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">client.ipaddress和client.useragent的哈希值</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreak</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">（當前未使用）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreakdurationms</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告休息時間（以毫秒為單位）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreakduration</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告中斷持續時間（以雙精度浮點秒為單位）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreakdurationint</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告休息時間（以整數秒為單位）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreak.timestamputc.wallclock</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">調用廣告服務器後的紀元時間（以毫秒為單位）</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreak.timestamputc.origin</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">從原始塊列表開始的時間（以毫秒為單位）。該值表示在源塊列表中創建提示塊的時間。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">live.adbreak.timestamputc.session</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">ssai塊列表中的時間間隔（以毫秒為單位）。此值指示 ssai 塊列表中的提示塊的時間。由於廣告中斷內容和廣告中斷間隔通常不相同，因此在第一個廣告中斷之後<code translate="No">live.adbreak.timestamputc.origin</code>不同於<code translate="No">live.adbreak.timestamputc.session</code> .該值考慮了在<span translate="No">SSAI</span>塊列表。</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h3>SCTE-35 廣告變量</h3>
+  
+  <p>這<a href="https://www.scte.org/">有線電信工程師協會 (SCTE)</a>定義了實時流的動態廣告插入標準。下表總結了 SCTE-35 廣告配置變量。</p>
+  
+  <aside class="bcls-aside bcls-aside--information">
+  <p>SCTE-35 廣告參數當前支持帶有或不帶有前向糾錯 (FEC) 的實時傳輸協議 (RTP) 和基於傳輸流 (TS) 的安全可靠傳輸 (SRT) 輸入源。請注意，強烈建議將FEC用於RTP。</p>
+  這些廣告參數不適用於使用實時消息傳遞協議 (RTMP) 的輸入流。</aside>
+  
+  <table class="bcls-table">
+    <caption class="bcls-caption--table">SCTE-35 廣告配置變量</caption>
+    <thead class="bcls-table__head">
+      <tr>
+        <th style="width:20%;">多變的</th>
+        <th style="width:60%;">
+        <div style="word-wrap:break-word;">描述</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+      <tr>
+        <td style="width:20%"><code translate="No">scte35_eventID</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨SCTE35消息傳遞的唯一事件ID。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">scte35_programID</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">隨SCTE35消息傳遞的唯一程序ID。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">scte35_availNum</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告可用的特定拼接時間的ID，通過SCTE35消息發送。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">scte35_breakDuration</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告中斷的中斷時間（以程序的90 kHz時鐘的滴答度表示）隨SCTE35消息傳遞。</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%"><code translate="No">scte35_spliceTime</code></td>
+        <td style="text-align:left;width:60%;">
+        <div style="word-wrap:break-word;">廣告插播的拼接時間，根據程序 90 kHz 時鐘的滴答聲，通過 SCTE35 消息傳遞。</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </section>
+  
+  <section class="bcls-section">
+  <h2 id="Managing_beacon_sets">管理信標集</h2>
+  
+  <p>本節提供有關管理信標集的 API 請求的詳細信息。有關信標類型和變量的信息，請參閱上一節。</p>
+  
+  <p>要將信標集添加到實時作業，首先創建信標集，然後在創建作業時包含 id，如下所示：</p>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "reconnect_time": 30,
+  "ad_insertion": true,
+  "beacon_set": "<span class="bcls-input">beacon_set_id</span>", ...</code></pre>
+  
+  <h3>創建信標集</h3>
+  
+  <p>要創建信標集，請發送<code translate="No">POST</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">POST</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets</code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4>示例請求正文</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "account_id": "<span class="bcls-input">User's Account ID [Optional]</span>",
+    "beacon_urls": [
+      {
+        "beacon_url": "https://myserver.com/beaconRX/{{job.job_id}}/load?position=load&amp;sid={{session.session_id}}&amp;jid={{job.job_id}}&amp;app={{application_ad_configuration.description}}&amp;rnd32={{random.int32}}&amp;rnd64={{random.int64}}&amp;bid={{random.uuid}}&amp;t={{server.timestamputc}}&amp;ua={{client.useragent}}&amp;ip={{client.ipaddress}}&amp;ref={{client.referrer}}&amp;ref={{client.referer}}&amp;ab={{live.adbreak}}&amp;abd={{live.adbreakduration}}&amp;abdi={{live.adbreakdurationint}}",
+        "beacon_type": "Load"
+      },
+      {
+        "beacon_url": "https://myserver.com/beaconRX/{{job.job_id}}/play?position=play&amp;sid={{session.session_id}}&amp;jid={{job.job_id}}&amp;app={{application_ad_configuration.description}}&amp;rnd32={{random.int32}}&amp;rnd64={{random.int64}}&amp;bid={{random.uuid}}&amp;t={{server.timestamputc}}&amp;ua={{client.useragent}}&amp;ip={{client.ipaddress}}&amp;ref={{client.referrer}}&amp;ref={{client.referer}}&amp;ab={{live.adbreak}}&amp;abd={{live.adbreakduration}}&amp;abdi={{live.adbreakdurationint}}",
+        "beacon_type": "Play"
+      }
+    ]
+  }</code></pre>
+  
+  <aside class="bcls-aside bcls-aside--information">這<code translate="No">account_id</code>字段是真實賬戶 ID。如果省略，則使用請求用戶的帳戶 ID。</aside>
+  
+  <h4>樣本響應</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "beacon_set": {
+      "beacon_urls": [{
+      "beacon_url": "https://myserver.com/beaconRX/{{job.job_id}}/load?position=load&amp;sid={{session.session_id}}&amp;jid={{job.job_id}}&amp;app={{application_ad_configuration.description}}&amp;rnd32={{random.int32}}&amp;rnd64={{random.int64}}&amp;bid={{random.uuid}}&amp;t={{server.timestamputc}}&amp;ua={{client.useragent}}&amp;ip={{client.ipaddress}}&amp;ref={{client.referrer}}&amp;ref={{client.referer}}&amp;ab={{live.adbreak}}&amp;abd={{live.adbreakduration}}&amp;abdi={{live.adbreakdurationint}}",
+      "beacon_type": "Load"
+    },
+    {
+      "beacon_url": "https://myserver.com/beaconRX/{{job.job_id}}/play?position=play&amp;sid={{session.session_id}}&amp;jid={{job.job_id}}&amp;app={{application_ad_configuration.description}}&amp;rnd32={{random.int32}}&amp;rnd64={{random.int64}}&amp;bid={{random.uuid}}&amp;t={{server.timestamputc}}&amp;ua={{client.useragent}}&amp;ip={{client.ipaddress}}&amp;ref={{client.referrer}}&amp;ref={{client.referer}}&amp;ab={{live.adbreak}}&amp;abd={{live.adbreakduration}}&amp;abdi={{live.adbreakdurationint}}",
+      "beacon_type": "Play"
+    }],
+    "beacon_set_id": "Inserted Beacon Set ID",
+    "account_id": "USER's ACCOUNT ID"
+    }
+    "inserted": true
+  }</code></pre>
+  
+  <h3>更新信標集</h3>
+  
+  <p>更新信標集類似於創建信標集。提交一個<code translate="No">PUT</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">PUT</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets/beaconset/<span class="bcls-input">beacon_set_id</span></code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4>示例請求正文</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "account_id": "<span class="bcls-input">User's Account ID [Optional]</span>",
+    "beacon_urls": [
+      {
+      "beacon_url": "https://myserver.com/beaconRX/load",
+      "beacon_type": "Load"
+      },
+      {
+      "beacon_url": "https://myserver.com/beaconRX/play",
+      "beacon_type": "Play"
+      }
+    ]
+  }</code></pre>
+  
+  <aside class="bcls-aside bcls-aside--information">這<code translate="No">account_id</code>字段是真實賬戶 ID。如果省略，則使用請求用戶的帳戶 ID。</aside>
+  
+  <h4>樣本響應</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "beacon_set": {
+      "account_id": "User's Account ID",
+      "beacon_set_id": "Beacon set ID",
+      "beacon_urls": [{
+        "beacon_url": "https://myserver.com/beaconRX/load",
+        "beacon_type": "Load"
+        },
+        {
+        "beacon_url": "https://myserver.com/beaconRX/play",
+        "beacon_type": "Play"
+      }],
+      "updated_beacon_set": {
+        "beacon_set_id": "Beacon set ID",
+        "beacon_urls": [{
+          "beacon_url": "https://myserver.com/beaconRX/load",
+          "beacon_type": "Load"
+        },
+        {
+          "beacon_url": "https://myserver.com/beaconRX/play",
+          "beacon_type": "Play"
+        }],
+        "account_id": "User's Account ID"
+      }
+    }
+  }</code></pre>
+  
+  <h3>獲取信標集</h3>
+  
+  <p>要檢索帳戶的信標集，請提交<code translate="No">GET</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets/account/<span class="bcls-input">Account ID</span></code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <aside class="bcls-aside bcls-aside--information">請注意，此處的帳戶 ID 是真實帳戶 ID。</aside>
+  
+  <h4>樣本響應</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">[{
+      "account_id": "User's Account ID",
+      "beacon_set_id": "Beacon set ID1",
+      "beacon_urls": [{
+      "beacon_url": "https://myserver.com/beaconRX/load",
+      "beacon_type": "Load"
+    }]
+    },
+    {
+      "account_id": "User's Account ID",
+      "beacon_set_id": "Beacon set ID2",
+      "beacon_urls": [{
+      "beacon_url": "https://myserver.com/beaconRX2/load",
+      "beacon_type": "Load"
+      },
+      {
+      "beacon_url": "https://myserver.com/beaconRX2/play",
+      "beacon_type": "Play"
+      }]
+  }]</code></pre>
+  
+  <h3>獲取請求用戶的信標集</h3>
+  
+  <p>您還可以獲取請求用戶帳戶的信標集，而無需在請求 URL 中包含帳戶 ID：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets</code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4>樣本響應</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">[{
+      "account_id": "User's Account ID",
+      "beacon_set_id": "Beacon set ID1",
+      "beacon_urls": [{
+      "beacon_url": "https://myserver.com/beaconRX/load",
+      "beacon_type": "Load"
+    }]
+    },
+    {
+      "account_id": "User's Account ID",
+      "beacon_set_id": "Beacon set ID2",
+      "beacon_urls": [{
+      "beacon_url": "https://myserver.com/beaconRX2/load",
+      "beacon_type": "Load"
+      },
+      {
+      "beacon_url": "https://myserver.com/beaconRX2/play",
+      "beacon_type": "Play"
+      }]
+  }]</code></pre>
+  
+  <h3>獲取按ID設置的信標</h3>
+  
+  <p>要檢索由其 id 設置的單個信標，請提交<code translate="No">GET</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets/beaconset/<span class="bcls-input">beacon_set_id</span></code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4>樣本響應</h4>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+      "account_id": "User account ID",
+      "beacon_set_id": "Beacon set ID",
+      "beacon_urls": [{
+        "beacon_type": "Load",
+        "beacon_url": "https://myserver.com/beaconRX2/load"
+    },
+    {
+      "beacon_type": "Play",
+      "beacon_url": "https://myserver.com/beaconRX2/play"
+    }]
+  }</code></pre>
+  
+  <h3>刪除信標集</h3>
+  
+  <p>最後，要刪除信標集，請發送一個<code translate="No">DELETE</code>要求：</p>
+  
+  <table class="bcls-table">
+    <tbody class="bcls-table__body">
+      <tr>
+        <th>方法</th>
+        <td style="width:80em;"><code class="language-http" translate="No">DELETE</code></td>
+      </tr>
+      <tr>
+        <th>網址</th>
+        <td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/beaconsets/beaconset/<span class="bcls-input">beacon_set_id</span></code></td>
+      </tr>
+      <tr>
+        <th>標頭</th>
+        <td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h4>樣本響應</h4>
+  
+  <p>響應將如下所示：</p>
+  
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "beacon_set_id": "Beacon set ID",
+    "deleted": true
+  }</code></pre>
+  </section>
+  
+  <section class="bcls-section">
+  <h2 id="Appendix">附錄</h2>
+  
+  <p>下面的屏幕截圖顯示了Elemental編碼器的示例提示點設置。</p>
+  
+  <figure class="bcls-figure"><img class="bcls-image" alt="Elemental Cue Point Setup" src="/assets/images/live-api/18835/elemental-screenshot.png" />
+  <figcaption class="bcls-caption--image">元素提示點設置</figcaption>
+  </figure>
+  </section>
+  {% endraw %}
+  </article>
+  
+ 

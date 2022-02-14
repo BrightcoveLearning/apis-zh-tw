@@ -1,0 +1,51 @@
+---
+title: '快速開始：頁內體驗平台 (REST) API'
+description: '快速入門提供了一些用於管理頁內體驗的 API 請求的示例，並提供了使用它們的示例界面。'
+parent: Getting Started 
+grandparent: In-Page Experience API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">介紹</h2>
+    <p>In-Page Experience API 允許您以編程方式管理頁內體驗，使其對 CMS 集成特別有用，允許用戶從他們自己的 CMS 創建管理體驗，而不是轉到 Studio 中的庫。</p>
+    <p>此快速入門提供了一個示例實現，允許用戶：</p>
+    <ol>
+      <li>取得帳戶的所有頁面內體驗範本</li>
+      <li>從選取的範本建立基本體驗</li>
+      <li>選擇要添加到體驗中的播放列表或視頻列表</li>
+      <li>更新所選視頻/播放列表的體驗</li>
+      <li>發布經驗</li>
+    </ol>
+    <p>下面是應用程序邏輯的高級視圖。</p>
+    <figure class="bcls-figure"><img class="bcls-image" alt="App Logic" src="/assets/images/ipx/Quick_Start_ In-Page_Experience_API_Application_Logic.svg" />
+      <figcaption class="bcls-caption--image">應用程式邏輯</figcaption>
+    </figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="the_app">該應用程序</h2>
+    <p>您可以在以下位置找到此應用程序的所有代碼<a href="https://github.com/BrightcoveLearning/18683-quick-start-page-experience-platform-rest-api">這個 GitHub 存儲庫</a> .</p>
+    <p data-height="1200" data-theme-id="dark" data-slug-hash="Bqzqre" data-default-tab="result" data-user="rcrooks1969" data-pen-title="Quick Start: In-Page Experience Platform API" class="codepen">看筆<a href="https://codepen.io/team/rcrooks1969/pen/Bqzqre/">快速開始：頁內體驗平台API</a>通過Brightcove學習服務（<a href="https://codepen.io/rcrooks1969"> @ rcrooks1969</a>） 上<a href="https://codepen.io">密碼筆</a>。</p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script></section>
+  <details>
+    <summary>
+			<h2 id="Using_the_CodePen">使用代碼筆</h2>
+		</summary>
+      <p>以下是一些有效使用上述 CodePen 的提示：</p>
+      <ul>
+        <li>通過單擊切換播放器的實際顯示<strong>結果</strong>按鈕。</li>
+        <li>點擊<strong>HTML / CSS / JS</strong>按鈕顯示一種代碼類型。</li>
+        <li>點擊<strong>在CodePen上編輯</strong>在右上角將此CodePen分支到您自己的帳戶中。</li>
+        <li>在此找到與此樣本相關的所有代碼<a href="https://github.com/BrightcoveLearning/18598-dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery">GitHub資料庫</a>。</li>
+      </ul>
+  </details>
+  <section class="bcls-section">
+    <h2 id="proxy">代理代理代碼</h2>
+    <p>為了建立您自己的版本此頁面上的範例應用程式，您必須建立並裝載您自己的 Proxy。（布萊特灣學習服務所使用的代理只接受來自布萊特灣域的請求。）您可以下載我們的代理代碼的兩個版本：</p>
+    <ul>
+      <li><a href="https://apis.support.brightcove.com/assets/downloads/bcls-proxy-for-distribution.php.zip">這是一個通用版本，期望客戶端憑據隨請求一起傳遞</a></li>
+      <li><a href="https://apis.support.brightcove.com/assets/downloads/doc-samples-proxy.php.zip">此版本允許您將客戶端憑據保存在代理本身的第 25-26 行（推薦）</a></li>
+    </ul>
+  </section>
+</article>

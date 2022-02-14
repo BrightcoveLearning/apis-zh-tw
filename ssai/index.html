@@ -1,0 +1,24 @@
+---
+title:應用程序接口
+parent: Home
+description: 'Brightcove SSAI stitches ads right into the video content stream, so it works on any device that can play streaming video, along with per-session ad targeting, client-side beaconing, viewability reporting, and compatibility with popular ad services. Note that this API applies to SSAI for Video-on-Demand (VOD) only.'
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary style="display: block;">{{ page.description }}</summary>
+  <aside class="bcls-aside bcls-aside--information">請注意，此處僅提供 SSAI API 的文檔。有關 SSAI 的一般文檔，請訪問<a href="https://ssai.support.brightcove.com/index.html">SSAI 網站</a> .</aside>
+	<section class="card-wrapper">
+    {% for item in site.data.navigation %} {% if item.name == page.title %} {% for subsection in item.docs %}
+            <section class="bcls-card-small" onclick="window.location.href='{{subsection.url}}'">
+              <div class="card-content">
+                <h2>{{ subsection.name }}</h2>
+                <ul>
+                  {% for doc in subsection.docs %}
+                        <li><a href="{{ doc.url }}">{{ doc.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </section>
+        {% endfor %} {% endif %} {% endfor %}
+  </section>
+</article>

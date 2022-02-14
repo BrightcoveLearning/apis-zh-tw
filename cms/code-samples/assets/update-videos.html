@@ -1,0 +1,55 @@
+
+<h2 id="sample_app">更新影片</h2>
+
+<fieldset class="bcls-fieldset"><legend>帳戶信息</legend>
+
+<p>默認情況下，您將從Brightcove示例帳戶獲取結果。</p>
+
+<p><button class="bcls-button" id="use_my_account">改用我的帳戶</button></p>
+
+<div id="basic_info" style="display:none;">
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>視頻雲帳戶（發布商 ID）：</td>
+			<td><input id="account" type="text" size="55" /></td>
+		</tr>
+		<tr>
+			<td class="align-top no-wrap">客戶編號：</td>
+			<td><input id="cid" type="text" size="100" value="" /> （必須包含以下權限：<code translate="No">video-cloud/video/update</code>和<code translate="No">video-cloud/video/read</code>或者<code translate="No">video-cloud/video/all</code>）</td>
+		</tr>
+		<tr>
+			<td class="align-top no-wrap">客戶機密：</td>
+			<td><input id="secret" type="text" size="100" value="" /> （必須包含以下權限：<code translate="No">video-cloud/video/update</code>和<code translate="No">video-cloud/video/read</code>或者<code translate="No">video-cloud/video/all</code>）</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><button id="get_videos" class="bcls-button">刷新視頻列表新帳戶信息</button></p>
+</div>
+</fieldset>
+
+<fieldset class="bcls-fieldset"><legend>輸入項</legend>
+
+  <div class="item-list" id="video_list"></div>
+  <div class="item-list" id="field_list"></div>
+
+<p><button id="update_videos" class="bcls-button">更新影片</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="get_next_videos" class="bcls-button">獲取下25個視頻</button></p>
+</fieldset>
+
+<h2 id="outputLog">結果</h2>
+
+<fieldset class="bcls-fieldset"><legend>產出</legend>
+
+<p>API請求：
+  <br>
+  <textarea id="api_request" class="bcls-code" style="min-height:2em;max-height: 2em;"></textarea></p>
+
+<p>API 請求正文：
+  <br>
+  <textarea id="request_data" class="bcls-code"></textarea></p>
+
+<pre class="line-numbers">
+<code class="language-json" id="results">回應將出現在這裡...</code></pre>
+</fieldset>
+

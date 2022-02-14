@@ -1,0 +1,362 @@
+---
+title: '概述：受眾 API'
+description: '在本主題中，您將了解 Audience API。Audience API 允許您檢索查看事件和潛在客戶數據。'
+parent: Getting Started 
+grandparent: Audience API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="api-reference">API參考</h2>
+    <p>另請參閱<a href="/audience/references/reference.html">API參考</a>。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Base_URL">基本網址</h2>
+    <p>Audience API 的基本 URL 是：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">https://audience.api.brightcove.com/v1</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Account_path">帳戶路徑</h2>
+    <p>在任何情況下，都將請求特定的視頻雲帳戶。您始終需要在基本 URL 中添加“帳戶”一詞，後跟您的帳戶 ID：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">https://audience.api.brightcove.com/v1/accounts/<span class="bcls-input">{account_id}</span> </code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Authentication">驗證</h2>
+    <p>Audience API 使用 Brightcove <a href="/oauth/getting-started/overview-oauth-api-v4.html"> OAuth 服務</a>驗證呼叫。</p>
+    <p>您首先需要獲取客戶端憑據（一個<code translate="No">client_id</code>和<code translate="No">client_secret</code>）。這是一種一次性操作，可以使用<a href="https://studio.support.brightcove.com/admin/managing-api-authentication-credentials.html">OAuth 憑據 UI</a> .您將需要受眾/閱讀操作的權限：</p>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Required Permissions" src="/assets/images/audience/operations.png" />
+      <figcaption class="bcls-caption--image">所需權限</figcaption>
+    </figure>
+    <p>您可以使用直接從 Brightcove OAuth 服務獲取客戶端憑據<a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">捲曲</a>或者<a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">郵差</a> .</p>
+    <p>您還需要一個<code translate="No">access_token</code>，這是使用<code translate="No">client_id</code>和<code translate="No">client_secret</code>並在您的 API 請求中傳入 Authorization 標頭：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">Authorization: Bearer <em>{access_token}</em></code></pre>
+    <p>這<code translate="No">access_token</code>五分鐘後過期，因此您必須為每個請求獲取一個，或者檢查以確保您的令牌仍然有效。看<a href="/oauth/guides/getting-access-tokens.html">獲取訪問令牌</a>有關如何獲取訪問令牌的詳細說明，包括代碼示例。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Error_handling">錯誤處理</h2>
+    <p>如果發生錯誤，API將在響應正文中使用以下狀態代碼之一和相應的錯誤代碼進行響應：</p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>狀態碼</th>
+          <th>錯誤代碼</th>
+          <th>描述</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>400</td>
+          <td><code translate="No">BAD_REQUEST_ERROR</code></td>
+          <td>查詢參數無效</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td><code translate="No">UNAUTHORIZED_ERROR</code></td>
+          <td>訪問令牌不存在、已過期或無效</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td><code translate="No">RESOURCE_NOT_FOUND</code></td>
+          <td>網址不存在</td>
+        </tr>
+        <tr>
+          <td>429</td>
+          <td><code translate="No">REQUEST_THROTTLED_ERROR</code></td>
+          <td>用戶已超出限速策略</td>
+        </tr>
+        <tr>
+          <td>500</td>
+          <td><code translate="No">INTERNAL_ERROR</code></td>
+          <td>發生了一個內部的錯誤</td>
+        </tr>
+        <tr>
+          <td>504</td>
+          <td><code translate="No">GATEWAY_TIMEOUT_ERROR</code></td>
+          <td>服務器在滿足您的請求時超時</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>以下是錯誤的示例響應正文：</p>
+    <pre class="line-numbers">
+<code class="language-json" translate="No">[
+	{
+	"error_code": "UNAUTHORIZED_ERROR",
+	"message": "Permission denied"
+	}
+]</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Parameters">參數</h2>
+    <p>您可以向請求添加多個參數來限制和過濾檢索到的數據。這些適用於以下部分中描述的所有請求類型。</p>
+    <h3 id="Filtering_results">篩選結果</h3>
+    <p>您可以使用<code translate="No">where</code>範圍。過濾器的語法是：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">where=field1==value1;field2==value2</code></pre>
+    <p>例如：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">where=video_id==123456789;video_name==test</code></pre>
+    <p>逗號被視為邏輯“或"，分號被視為邏輯“與"。例如，<code translate="No">where=video_id==1234,5678;video_name=test</code>被解釋為“其中video_id = 1234或5678，而video_name =測試"。</p>
+    <h3>選擇要返回的字段</h3>
+    <p>可以在請求中指定字段列表，以將結果限制為該字段子集。字段的語法是：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">fields=field1,field4</code></pre>
+    <p>例如：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">fields=video_id,video_name</code></pre>
+    <p>您可以過濾和排序的字段在後面的部分中針對每種請求類型進行了詳細說明。</p>
+    <h3 id="Date_ranges">日期範圍</h3>
+    <p>日期範圍可以在<code translate="No">from</code>和<code translate="No">to</code>參數，並應用於視圖事件的最後更新日期（updated_at字段）。日期範圍可以採用以下格式表示：</p>
+    <ul>
+      <li>文本值<code translate="No">now</code>代表當前時間</li>
+      <li>紀元時間值（以毫秒為單位），例如<code translate="No">1377047323000</code></li>
+      <li>以ISO 8601標準國際日期格式表示的日期：<code translate="No">YYYY-MM-DD</code>格式，例如<code translate="No">2013-09-12</code>。對於以這種格式表示的日期：
+        <ul>
+          <li>指定的任何日期範圍將以UTC解釋</li>
+          <li>日期給出的時間將被解釋為午夜 ( <code translate="No">00:00:00</code> ) 在指定的日期</li>
+        </ul>
+      </li>
+      <li>相對日期：您可以表達<code translate="No">to</code>和<code translate="No">from</code>相對於另一個值<code translate="No">d</code>（天），<code translate="No">h</code>（小時），<code translate="No">m</code>（分鐘），或<code translate="No">s</code>（秒）。例如：
+        <ul>
+          <li><code class="language-http" translate="No">from=2015-01-01&amp;to=31d</code></li>
+          <li><code class="language-http" translate="No">from=-48h&amp;to=now</code></li>
+          <li><code class="language-http" translate="No">from=-2d&amp;to=now</code>（將提供與前面的示例相同的結果）</li>
+          <li><code class="language-http" translate="No">from=-365d&amp;to=2015-12-31</code></li>
+          <li><code class="language-http" translate="No">from=-10m&amp;to=now</code></li>
+        </ul>
+      </li>
+    </ul>
+    <h3 id="Paging_results">分頁結果</h3>
+    <p>這<code translate="No">limit</code>是要返回的項目數（默認值：25；最大值：200）。<code translate="No">offset</code>是要跳過的項目數（默認值：0）。您可以使用<code translate="No">limit</code>和<code translate="No">offset</code>一起創建一個應用程序來瀏覽結果。每個都包括<code translate="No">limit</code>，<code translate="No">offset</code>， 和<code translate="No">count.</code>，您可以用來在總結果上設置迭代。例如，在JavaScript中，您可以像這樣獲得所需的總迭代次數：</p>
+    <pre class="line-numbers">
+<code class="language-javascript" translate="No">// response is the JSON-parsed response from the first request
+var totalRequests = Math.ceil(response.count / response.limit)</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Retrieving_view_events">檢索視圖事件</h2>
+    <p>要檢索帳戶中的查看事件，請執行<code translate="No">GET</code>對 view_events 資源的請求：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">https://audience.api.brightcove.com/v1/accounts/{account_id}/view_events</code></pre>
+    <aside class="bcls-aside bcls-aside--warning">僅查看已發生的事件 <em>處理</em> 將出現在響應中。</aside>
+    <p>這是cURL中的示例請求</p>
+    <pre class="line-numbers">
+<code class="language-bash" translate="No">curl -i https://audience.api.brightcove.com/v1/accounts/{account_id}/view_events?where=video_id==123&amp;from=-5d&amp;to=now&amp;sort=-created_at \
+  -H "Authorization: Bearer {token}"</code></pre>
+
+    <details>
+			<summary>樣本響應</summary>
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+"count": 27,
+"limit": 25,
+"offset": 0,
+"result": [
+		{
+				"created_at": "2016-04-25T18:30:21.651Z",
+				"page_url": "http://players.brightcove.net/1486906377/V1s6NOwRx_default/index.html?videoId=4842718056001",
+				"player_id": "V1s6NOwRx",
+				"time_watched": 2,
+				"updated_at": "2016-04-25T18:30:21.651Z",
+				"video_id": "4842718056001",
+				"video_name": "Horses Heading to the Track",
+				"watched": 19
+		},
+		{
+				"created_at": "2016-04-25T18:31:55.071Z",
+				"page_url": "http://players.brightcove.net/1486906377/BkgFuzyhg_default/index.html?videoId=4842718056001",
+				"player_id": "BkgFuzyhg",
+				"time_watched": 15,
+				"updated_at": "2016-04-25T18:32:00.879Z",
+				"video_id": "4842718056001",
+				"video_name": "Horses Heading to the Track",
+				"watched": 99
+		}, ...
+}
+]</code></pre>
+		</details>
+    <h3 id="fieldsForViewEvents">篩选和選擇字段</h3>
+    <p>所有<a href="#Parameters">參數</a>可以與<code translate="No">view_event</code>要求。</p>
+    <p>這是使用參數的cURL中的示例請求：</p>
+    <pre class="line-numbers">
+<code class="language-bash" translate="No">curl -i https://audience.api.brightcove.com/v1/accounts/{account_id}/view_events?where=video_id==123&amp;from=-5d&amp;to=now&amp;sort=-created_at \
+  -H "Authorization: Bearer {token}"</code></pre>
+    <p>支持以下字段<code translate="No">view_event</code>使用 a 過濾時的請求<code translate="No">where</code>條款或在選擇期間<code translate="No">fields</code>條款：</p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>場地</th>
+          <th>描述</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video_id</code></td>
+          <td>Brightcove視頻ID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_name</code></td>
+          <td>Brightcove影片名稱</td>
+        </tr>
+        <tr>
+          <td><code translate="No">tracking_id</code></td>
+          <td>自定義跟踪ID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">external_id</code></td>
+          <td>Marketo、Eloqua 或自定義 GUID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">player_id</code></td>
+          <td>創建視圖事件的 Brightcove 玩家的 ID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">page_url</code></td>
+          <td>創建視圖事件的頁面的 URL</td>
+        </tr>
+        <tr>
+          <td><code translate="No">watched</code></td>
+          <td>觀看百分比</td>
+        </tr>
+        <tr>
+          <td><code translate="No">time_watched</code></td>
+          <td>觀看視頻的秒數</td>
+        </tr>
+        <tr>
+          <td><code translate="No">created_at</code></td>
+          <td>創建日期</td>
+        </tr>
+        <tr>
+          <td><code translate="No">updated_at</code></td>
+          <td>最後更新日期</td>
+        </tr>
+        <tr>
+          <td><code translate="No">is_synced</code></td>
+          <td>表示查看事件是否已同步的布爾值</td>
+        </tr>
+        <tr>
+          <td><code translate="No">event_1</code></td>
+          <td rowspan="3">自定義事件</td>
+        </tr>
+        <tr>
+          <td><code translate="No">event_2</code></td>
+        </tr>
+        <tr>
+          <td><code translate="No">event_3</code></td>
+        </tr>
+        <tr>
+          <td><code translate="No">metric_1</code></td>
+          <td rowspan="3">自定義指標</td>
+        </tr>
+        <tr>
+          <td><code translate="No">metric_2</code></td>
+        </tr>
+        <tr>
+          <td><code translate="No">metric_3</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Retrieving_Leads">檢索線索</h2>
+    <p>要檢索帳戶中的查看事件，請執行<code translate="No">GET</code>向<code translate="No">view_events</code>資源：</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">https://audience.api.brightcove.com/v1/accounts/{account_id}/leads</code></pre>
+    <details>
+			<summary>示例響應：</summary>
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+"count": 2,
+"limit": 25,
+"offset": 0,
+"result": [
+		{
+				"created_at": "2016-06-30T12:57:11.283Z",
+				"email_address": "bbailey@brightcove.com",
+				"first_name": "Bob",
+				"last_name": "Bailey",
+				"page_url": "http://players.brightcove.net/1486906377/Hk4TBqzL_default/index.html?videoId=4997275041001",
+				"player_id": "Hk4TBqzL",
+				"video_id": "4997275041001"
+		},
+		{
+				"created_at": "2016-06-30T12:57:33.301Z",
+				"email_address": "rcrooks@brightcove.com",
+				"first_name": "Robert",
+				"last_name": "Crooks",
+				"page_url": "http://players.brightcove.net/1486906377/Hk4TBqzL_default/index.html?videoId=4997275041001",
+				"player_id": "Hk4TBqzL",
+				"video_id": "4997275041001"
+		}
+]
+}</code></pre>
+		</details>
+    <h3 id="fieldsForLeads">篩选和選擇字段</h3>
+    <p>所有<a href="#Parameters">參數</a>可以與<code translate="No">leads</code>要求。</p>
+    <p>這是使用參數的cURL中的示例請求：</p>
+    <pre class="line-numbers">
+<code class="language-bash" translate="No">curl -i https://audience.api.brightcove.com/v1/accounts/{account_id}/leads?where=video_id==123&amp;from=-5d&amp;to=now&amp;sort=-created_at \
+  -H "Authorization: Bearer {token}"</code></pre>
+    <p>支持以下字段<code translate="No">leads</code>使用 a 過濾時的請求<code translate="No">where</code>條款或在選擇期間<code translate="No">fields</code>條款：</p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>場地</th>
+          <th>描述</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video_id</code></td>
+          <td>Brightcove視頻ID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">external_id</code></td>
+          <td>Marketo、Eloqua 或自定義 GUID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">player_id</code></td>
+          <td>創建視圖事件的 Brightcove 玩家的 ID</td>
+        </tr>
+        <tr>
+          <td><code translate="No">page_url</code></td>
+          <td>創建視圖事件的頁面的 URL</td>
+        </tr>
+        <tr>
+          <td><code translate="No">created_at</code></td>
+          <td>創建日期</td>
+        </tr>
+        <tr>
+          <td><code translate="No">email_address</code></td>
+          <td>潛在客戶的電子郵件地址</td>
+        </tr>
+        <tr>
+          <td><code translate="No">first_name</code></td>
+          <td>潛在客戶的名字（如果提供）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">last_name</code></td>
+          <td>潛在客戶的姓氏（如果提供）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">business_phone</code></td>
+          <td>潛在客戶的電話號碼（如果提供）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">country</code></td>
+          <td>潛在客戶所在的國家/地區（如果提供）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">company_name</code></td>
+          <td>潛在客戶的公司（如果提供）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">industry</code></td>
+          <td>如果提供線索所屬的行業</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</article>
