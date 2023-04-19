@@ -1,0 +1,4087 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW"> 
+    <head>
+        <title>布萊特灣直播：最佳實務</title>
+        
+        <!-- Meta -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="本主題提供使用即時 API 建立即時串流的最佳作法指南。">
+        
+        <!-- Google Font -->
+        <link href="/assets/s-site-assets-stylesheets/fonts/poppins.css" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/s-site-assets-stylesheets/fonts/articulat-site.css">
+        <link href="/assets/s-site-assets-stylesheets/fonts/source-code-pro.css" rel="stylesheet">
+        
+        <!-- FontAwesome JS-->
+        
+        <script src="https://kit.fontawesome.com/d67c74a882.js" crossorigin="anonymous"></script>  
+        
+        <!-- Plugins CSS -->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.2/styles/atom-one-dark.min.css">
+        <link rel="stylesheet" href="/assets/s-site-assets-template-stylesheets/plugins/simplelightbox/simple-lightbox.min.css">
+
+        <!-- Theme CSS -->  
+        <link id="theme-style" rel="stylesheet" href="/assets/s-site-assets-template-stylesheets/css/theme.css">
+        <link rel="stylesheet" href="/assets/s-site-assets-stylesheets/prism.css">
+        <link rel="stylesheet" href="/assets/s-site-assets-template-stylesheets/custom-css/styles.css">
+
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XBJC11HF8Z"></script>
+        <script translate="no">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XBJC11HF8Z');
+        </script>
+        <script src="/assets/s-site-assets-scripts/sixth-sense.js"></script>
+        <script src="/assets/s-site-assets-scripts/sajari-head.js"></script>
+        <script src="/assets/s-site-assets-scripts/feather.min.js"></script>
+
+    </head> 
+
+    <body class="docs-page">
+        
+
+<header class="header fixed-top">
+  <div class="branding docs-branding">
+    <div class="container-fluid position-relative py-2">
+      <div class="docs-logo-wrapper">
+        <button id="docs-sidebar-toggler" class="docs-sidebar-toggler"
+          type="button">
+          <span></span> <span></span> <span></span>
+        </button>
+        <div class="site-logo"><a class="navbar-brand" href="https://support.brightcove.com/" style="margin-left: 15px;"> <img class="logo-icon me-2" src="/assets/s-site-assets-template-stylesheets/images/bc_logo_black_1@1x.png" alt="商標" style="margin-bottom: 9px;"/>
+            <!-- <span class="logo-text">BRIGHTCOVE</span> -->
+          </a></div>
+      </div><!--//docs-logo-wrapper-->
+
+      <div class="docs-top-utilities d-flex justify-content-end
+        align-items-center">
+        
+        <!-- Search bar -->
+        <div id="nav-search-box" class="top-search-box d-none d-lg-flex" style="margin-right: 10px ;"></div>
+
+<select id="site_select" class="form-select select-focus" style="width:
+          20%; margin-right: 10px;" translate="no">
+          <option value="">Other Brightcove Docs</option>
+          
+          
+          <option value="https://support.brightcove.com" translate="no">Documentation Home</option>
+          
+          
+          
+          <option value="https://support.brightcove.com/" translate="no">-- VIDEO CLOUD --</option>
+          
+          
+          
+          <option value="https://studio.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Video Cloud Studio</option>
+          
+          
+          
+          <option value="https://mstudio.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Marketing Studio</option>
+          
+          
+          
+          <option value="https://player.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Player Development</option>
+          
+          
+          
+          <option value="https://apis.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Video Cloud Platform APIs</option>
+          
+          
+          
+          <option value="https://sdks.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Video Cloud Device SDKs</option>
+          
+          
+          
+          <option value="https://integrations.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Integrations and CMS Connectors</option>
+          
+          
+          
+          <option value="https://general.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Video Cloud General Information</option>
+          
+          
+          
+          <option value="https://support.brightcove.com/" translate="no">-- VIDEO ESSENTIALS --</option>
+          
+          
+          
+          <option value="https://audience-insights.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Audience Insights</option>
+          
+          
+          
+          <option value="https://beacon-help.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Beacon Studio</option>
+          
+          
+          
+          <option value="https://beacon.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Beacon Classic</option>
+          
+          
+          
+          <option value="https://corptv.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;CorpTV</option>
+          
+          
+          
+          <option value="https://live.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Live</option>
+          
+          
+          
+          <option value="https://zencoder.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Zencoder</option>
+          
+          
+          
+          <option value="https://support.brightcove.com/" translate="no">-- VIDEO CLOUD ADD-ONS --</option>
+          
+          
+          
+          <option value="https://gallery.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Gallery</option>
+          
+          
+          
+          <option value="https://studio.support.brightcove.com/social/index.html" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Social</option>
+          
+          
+          
+          <option value="https://interactivity.support.brightcove.com/index.html" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Interactivity</option>
+          
+          
+          
+          <option value="https://ssai.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove SSAI</option>
+          
+          
+          
+          <option value="https://campaign.support.brightcove.com" translate="no">&nbsp;&nbsp;&nbsp;&nbsp;Brightcove Campaign</option>
+          
+          
+        </select>
+
+        <select id="language_select" class="form-select select-focus" style="width: 10%;"
+          onchange="doGTranslate(this);" translate="no">
+          <!-- <option value="">Select Language</option> -->
+          <option value="en|en" translate="No">English</option>
+          <option value="en|zh-TW" translate="No">繁體中文</option>
+          <option value="en|fr" translate="No">Français</option>
+          <option value="en|de" translate="No">Deutsche</option>
+          <option value="en|ja" translate="No">日本語</option>
+          <option value="en|ko" translate="No">한국어</option>
+          <option value="en|es" translate="No">Español</option>
+        </select>
+
+        <script translate="no">
+          /* <![CDATA[ */
+          function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];var plang=location.hostname.split('.')[0];if(plang.length !=2 && plang.toLowerCase() != 'zh-cn' && plang.toLowerCase() != 'zh-tw')plang='en';location.href=location.protocol+'//'+(lang == 'en' ? '' : lang+'.')+location.hostname.replace('www.', '').replace(RegExp('^' + plang + '\\.'), '')+location.pathname+location.search;}
+          /* ]]> */
+        </script>
+      </div>
+    </div>
+  </div>
+</header><!--//header-->
+
+<div class="docs-wrapper">
+  <div id="docs-sidebar" class="docs-sidebar" style="padding-right: 15px;">
+    <div id="nav-search-box" class="top-search-box d-lg-none p-3"></div>
+    <div class="row">
+      
+        <div id="side_nav" style="margin-left: 1em; display: inline-block; border-right: 1px solid #e5e5e6; padding-right: 1em;">
+          
+          <nav class="docs-nav sidenav" aria-label="Main">
+            <ul class="site-nav" style="list-style-type: none;">
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/index.html">首頁</a></li>
+            
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;入門</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/getting-started/getting-started-brightcove-apis.html">概述：平台 API </a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/getting-started/authentication-brightcove-api-requests.html">API 請求的身份驗證</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/getting-started/concepts-testing-tools-brightcove-apis.html">布萊特灣 API 的測試工具</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/getting-started/learning-guide-using-rest-apis.html">學習指南：使用其他應用程式介</a>面</li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/general/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;一般信息</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/integrating-your-cms-video-cloud.html">將CMS與Video Cloud集成</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/managing-api-authentication-credentials.html">管理 API 身份驗證憑證</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/all-api-references.html">所有 API 參考</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/platform-api-code-samples.html">平台 API 程式碼範例</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/video-cloud-api-training-videos.html">平台 API 訓練影片</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/general/known-issues.html">平台 API 已知問題</a></li>
+              
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/general/developer-tools/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;開發者工具</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-cors.html">了解 CORS </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-introducing-json.html">JSON 簡介</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-javascript-module-design-pattern.html">概念：模塊設計模式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-using-javascript-promises.html">概念：使用</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-set-curl.html">概念：設定捲曲</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-api-tester.html">線上 API 測試儀</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/use-insomnia-api-requests.html">針對 API 請求使用失眠</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/use-postman-api-requests.html">使用郵遞員進行 API 請求</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/using-mtr-to-look-at-network-traffic.html">使用港鐵 (我的追蹤) </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/using-wireshark-track-network-traffic-debugging.html">使用 Wireshark 來追蹤網路流量</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/general/features/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;特徵</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/audio-content.html">音訊內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/features/create-json-web-token.html">創建一個 JSON 網絡令牌（JWT）</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/features/debugging-mobile-devices.html">行動裝置上的除錯</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/developer-tools/concepts-javascript-debugging-basics.html">調試基礎知識</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/overview-forensic-watermarking.html">概述：取證水印</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/faq-forensic-watermarking.html">常見問題集：取證水印</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/overview-context-aware-encoding.html">上下文感知編碼概述</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/tls-media-player-and-api-urls.html">媒體、播放程式和 API 網址的 TLS </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/general/utilities/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;公用事業</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/utilities/string-encoder.html">字串編碼器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/utilities/date-converter.html">日期轉換器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/utilities/base-64-encoding-tool.html">基本 64 編碼工具</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/analytics/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;分析API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/analytics/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/getting-started/overview-analytics-api-v1.html">概述：分析 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/getting-started/analytics-api-explorer.html">分析 API 資源管理器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/getting-started/overview-video-data-endpoint.html">概述：視訊資料端點</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html">概述：標註、欄位和參數</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/analytics/general/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;一般信息</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/general/faq-analytics-api.html">常見問題集：分析 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/general/analytics-api-glossary.html">分析 API 詞彙</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/general/data-sent-from-brightcove-player.html">Brightcove Player 發送到 Analytics 的數據</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/general/analytics-api-unique-users.html">唯一使用者</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/general/live-metrics.html">即時測量結果</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/analytics/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/references/reference.html">分析 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/references/analytics-api-release-notes.html">版本資訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/references/known-issues.html">已知問題</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/references/analytics-api-error-reference.html">錯誤參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/analytics/dimension-guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;尺寸指南</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-account.html">方面：<code translate="No">account</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-browsertype.html">方面：<code translate="No">browser_type</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-date.html">方面：<code translate="No">date</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-datehour.html">方面：<code translate="No">date_hour</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-destinationdomain.html">方面：<code translate="No">destination_domain</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-destinationpath.html">方面：<code translate="No">destination_path</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-devicemanufacturer.html">方面：<code translate="No">device_manufacturer</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-devicetype.html">方面：<code translate="No">device_type</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-deviceos.html">方面：<code translate="No">device_os</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-city.html">方面：<code translate="No">city</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-country.html">方面：<code translate="No">country</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-region.html">方面：<code translate="No">region</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-livestream.html">方面：<code translate="No">live_stream</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-referrerdomain.html">方面：<code translate="No">referrer_domain</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-sourcetype.html">方面：<code translate="No">source_type</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-searchterms.html">方面：<code translate="No">search_terms</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-socialplatform.html">方面：<code translate="No">social_platform</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-player.html">方面：<code translate="No">player</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-video.html">方面：<code translate="No">video</code></a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/dimension-guides/dimension-viewer.html">方面：<code translate="No">viewer</code></a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/analytics/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html">現場活動的同時觀眾</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html">每日分析報表產生器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-destinations-report.html">目的地報表</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html">地理分析報表</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-unique-users-day.html">每天的獨特使用者</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-video-engagement-graph.html">視訊參與圖表</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html">按玩家和日期分類的影片報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-video-report-reference-id.html">依參考 ID 分類的影片報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analytics-api-sample-video-report-tags.html">依標籤分類的視訊報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html">按播放清單分析</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html">最近新增的影片</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html">視訊分析報表 (按國家/地區和日期</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/aspera/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;阿斯佩拉</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/aspera/overview.html">概述：使用 Aspera 提取視頻雲</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/aspera/manifest-metadata-reference.html">清單/元數據參考</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/audience/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;觀眾API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href=" /audience/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/audience/getting-started/overview-audience-api.html">概述：受眾群體API</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/audience/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/audience/references/reference.html">受眾 API 參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/cloud-playout-apis/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;雲播放API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href=" /cloud-playout-apis/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/getting-started/overview-channel-api.html">概述：渠道API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/getting-started/overview-epg-api.html">概述：EPG API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/getting-started/epg-best-practices.html">電子節目 API：最佳實務</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/guides/search-channels-api.html">搜索頻道</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cloud-playout-apis/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/references/reference-epg.html">EPG API參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/references/reference-channels.html">頻道 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/references/reference-cms-interactions.html">雲播放的 CMS API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cloud-playout-apis/references/release-notes.html">Cloud Playout API 發行說明</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/cms/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;內容管理系統接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cms/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/overview-cms-api.html">概述：CMS 應用程式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/practice-area-cms-api.html">練習區域：CMS 應用程式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/cms-api-notifications.html">CMS 應用程式介面通知</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cms/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/reference.html">CMS 應用程式介面參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/known-issues.html">已知問題</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/cms-api-video-fields-reference.html">CMS 應用程式介面影片欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/cms-api-playlist-fields-reference.html">CMS API 播放清單欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/cms-api-custom-fields-reference.html">CMS API 自訂欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/cms-api-folder-fields-reference.html">CMS API 文件夾字段參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/cms-api-error-message-reference.html">CMS 應用程式介面錯誤訊息參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cms/searching/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;搜索中</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 應用程式介面：視訊搜尋 v2 </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/cms-api-playlists-search.html">CMS 應用程式介面：播放清單搜尋</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/using-cms-api-page-search-results.html">網頁搜尋結果</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋 v1 </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/guides/catalog-search-architecture.html">目錄搜尋架構</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cms/managing-videos/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;管理視頻/資產</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/activate-deactivate-videos.html">激活/停用或安排視頻</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/audio-content.html">音頻內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/using-cms-api-add-geo-filtering.html">新增地理篩選</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/digital-master-delete-api.html">數位主版刪除 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/deleting-videos.html">刪除視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/getting-counts-videos-and-playlists.html">取得影片和播放清單的計數</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/managing-custom-fields.html">管理自定義字段</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/managing-audio-tracks.html">使用 CMS API 管理音軌</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/managing-playlists-using-cms-api.html">使用 CMS API 管理播放清單</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/using-cms-api-managing-clips.html">管理剪輯片段</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/media-sharing-cms-api.html">媒體分享</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/multilingual-metadata.html">多語言元資料</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/using-cms-api-retrieve-video-data.html">擷取視訊資料</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/setting-360-degree-video-properties-cms-api.html">設定 360 度視訊屬性</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/using-cms-api-remote-assets.html">遠端資產</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">新增 WebVTT 字幕 (文字曲目) </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/managing-text-tracks.html">使用 CMS API 管理文本軌道</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/managing-transcripts.html">使用 CMS API 管理成績單</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/generate-video-sitemaps.html">產生視訊網站地圖</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/identifying-low-performing-content.html">識別效能低的內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/cms-api-working-folders.html">使用資料夾</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/working-with-labels.html">使用標示</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html">連結 ZenCoder 與視訊雲端</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/cms/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html">新增多個聯盟帳戶</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-share-multiple-videos.html">分享多個視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-media-sharing-report.html">媒體分享報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-shared-media-report.html">共用媒體報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-update-videos.html">更新視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html">將自訂欄位新增至多個視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-update-geo-properties.html">更新地理內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-add-cue-points.html">新增提示點</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-report-generator.html">視訊報告產生器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-videos-delivery-type.html">按傳送類型劃分的影片</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-download-links.html">下載連結</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-sitemap-generator.html">視訊網站地圖產生</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-mrss-generator.html">MRSS 產生器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">播放清單中的 MRSS 摘要</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html">適用於 iTunes 的 RSS 播客摘要</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-schema-builder.html">視訊架構建置器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-python-code-get-request.html">一個 GET 請求的 Python 代碼</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-report-audio-only-content.html">僅限音訊內容的報告</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-renditions-inspector.html">視訊轉譯檢查器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-search-app.html">視訊搜尋應用程式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-videos-with-text-tracks.html">帶文字軌道的視頻</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/code-samples/cms-api-sample-video-custom-fields-report.html">視頻自定義字段報告</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/xdr/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;跨設備恢復 (XDR) API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/xdr/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/xdr/getting-started/xdr-overview.html">概述：跨裝置繼續</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/xdr/getting-started/get-playback-position.html">從 XDR API 獲取播放位置</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/xdr/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html">與布萊特灣播放器的跨裝置履歷</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html">使用原生 SDK 進行跨裝置恢復</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/xdr/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/xdr/references/reference.html">跨裝置履歷 API 參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/data-collection/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;數據收集接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/data-collection/getting-started/overview-data-collection-api-v2.html">概述：資料收集 API </a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/data-collection/getting-started/data-collection-api-sample.html">資料收集 API 範例</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/data-collection/references/reference.html">資料收集 API 參考</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/delivery-rules/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;交付規則API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/delivery-rules/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/delivery-rules/getting-started/overview-delivery-rules.html">概述：傳送規則</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/delivery-rules/getting-started/implementing-delivery-rules.html">實行傳送規則</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/delivery-rules/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html">與布萊特灣玩家一起使用交付規則</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html">將傳遞規則與原生 SDK 搭配使用</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/delivery-rules/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/delivery-rules/references/reference.html">投放規則API參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/delivery-system/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;交付系統API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/delivery-system/overview-delivery-system-api.html">概述：傳送系統 API </a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/delivery-system/step-step-delivery-system-api.html">逐步：傳送系統 API </a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/delivery-system/delivery-system-api-git-overview.html">Git 概述</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/delivery-system/references/reference.html">傳送系統 API 參考</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/dynamic-ingest/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;動態攝取 API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/dynamic-ingest/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">概述：動態內嵌 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html">快速入門：動態內嵌 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動態內嵌的來源檔案上傳 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動態傳遞概觀</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/dynamic-ingest/general/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;一般信息</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動態內嵌 API：最佳實務</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html">動態內嵌通知</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html">取得動態內嵌要求的狀態</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/fallback-retry-strategy.html">後備/試策略</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">與 S3 搭配使用動態內嵌</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/general/ugc-strategies.html">教資會策略</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/dynamic-ingest/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/references/reference.html">動態內嵌 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動態內嵌 API 版本資訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/references/known-issues.html">已知問題</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">內嵌欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動態內嵌錯誤訊息參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/dynamic-ingest/ingest-guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;攝取指南</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/managing-videos/audio-content.html">音訊內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html">動態傳遞內嵌優先順序佇列</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">透過媒體分享進行動態內嵌</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">影像和動態內嵌 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html">實作多個音軌</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">使用 DRM 擷取內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/ingesting-videos-multiple-audio-tracks.html">攝取帶有多語言音軌的視頻</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">擷取網頁 VTT 檔案</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/ingesting-transcriptions.html">攝取成績單文件</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/requesting-auto-captions.html">請求自動字幕</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">使用上下文感知編碼</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/dynamic-ingest/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html">動態內嵌 API 測試儀</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html">內嵌視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html">重新轉碼視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html">取代視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">新增排程視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">新增文字軌</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html">擷取低優先順序視訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">蟒蛇代碼</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/images/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;圖片接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/images/getting-started/overview.html">概述：圖片接口</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/images/references/reference.html">圖片 API 參考</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/images/references/image-token-api-reference.html">圖像令牌 API 參考</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/ingest-profiles/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;攝取配置文件 API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ingest-profiles/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">概述：內嵌設定檔 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html">練習區域：內嵌設定檔 API </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ingest-profiles/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/archiving-masters.html">封存主版</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/general/audio-content.html">音訊內容</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://studio.support.brightcove.com/admin/ingest-profiles/ingest-profiles-best-practices.html">最佳實務</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/cae-fast-publish.html">CAE 快速發佈</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/dolby-atmos-audio.html">杜比全景聲音頻</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/hevc-video.html">HEVC 影片</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/guides/mp4s-dynamic-delivery.html">動態傳遞中的 MP3 </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ingest-profiles/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/references/reference.html">內嵌設定檔 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html">內嵌設定檔欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">標準內嵌設定檔</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準即時擷取設定檔</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/references/fields-custom-live-ingest-profiles.html">自訂即時擷取設定檔的欄位</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ingest-profiles/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html">建立自訂動態傳送設定檔</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html">建立自訂 CAE 設定檔</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">將設定檔新增至多個帳戶</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">取得帳戶的所有設定檔</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html">設定預設設定檔</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/mrss-ingestion/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;通過 MRSS 攝取</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/mrss-ingestion/getting-started/ingesting_from_a_remotely_hosted_mrss_feed.html">透過 MRSS 摘要擷取</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/mrss-ingestion/getting-started/xml-manifest-for-ingestion-via-mrss.html">透過 MRSS 擷取的 XML 資訊清單</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/interactivity/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp; Brightcove 交互 API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/interactivity/addon-api/reference.html">插件接口</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/interactivity/annotation-api/reference.html">註釋API</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/interactivity/embed-api/reference.html">嵌入API</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/interactivity/extension-api/reference.html">擴展接口</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/interactivity/accessing-reporting-endpoints.html">訪問報告端點</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/ipx/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;頁面內體驗 API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href=" /ipx/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ipx/getting-started/overview-page-experience-api.html">概述：頁內體驗API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ipx/getting-started/quick-start-page-experience-platform-rest-api.html">快速入門：頁面內體驗平台 (REST) API </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ipx/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ipx/references/reference.html">頁內體驗API參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ipx/references/page-experience-api-error-reference.html">頁面內體驗 API 錯誤參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/in-page-exerience-client-api/index.html">頁面內體驗客戶端 API</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/live-api/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;實時API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/live-api/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/getting-started/overview-brightcove-live-api.html">概述：實時API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html">使用 API 建立即時串流</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/live-api/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html">布萊特灣現場最佳實踐</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/brightcove-live-program-ad-metadata-api.html">布萊特灣直播計畫廣告中繼資料 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-creating-frame-accurate-clip.html">建立精確影格的剪輯</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-creating-vod-clips.html">建立點播剪輯</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/getting-list-live-or-vod-jobs.html">取得即時或 VOD 工作清單</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-insert-id3-timed-metadata.html">插入 ID3 計時的詮釋資料</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-drm-live-api.html">透過即時 API 即時 DRM </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/managing-credentials-live-api.html">管理即時 API 的認證</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-multi-language-audio.html">帶實時 API 的多語言音頻</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-notifications.html">通知</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-playback-restrictions.html">直播流的播放限制</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/reducing-latency-live-streams.html">減少即時串流的延遲</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-rtmp-outputs.html">RTMP 輸出</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-static-entry-points.html">靜態進入點</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/signed-urls-and-token-auth-live-stream.html">具有即時串流的已簽署 URL 和權杖驗證</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/using-live-redundancy.html">使用即時備援</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-api-vod-live-event.html">直播活動的 VOD </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-scheduler.html">概述：實時調度程序</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-scheduler-stop-start.html">計劃 SEP 流的激活/停用</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-scheduler-clips.html">為實時流安排剪輯生成</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-scheduler-notifications.html">實時調度程序通知</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/live-api/ssai/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp; SSAI</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html">提示點和廣告信標與 SSAI </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/ssai/live-api-server-side-ad-insertion-ssai.html">伺服器端廣告插入 (SSAI) </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/ssai/overview-player-enhancements-live-ssai.html">概述：即時 SSAI 的玩家增強功能</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/live-api/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/code-samples/live-api-sample-create-live-job.html">建立即時工作</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/code-samples/quick-start-create-live-job-mpeg2-ts-input.html">為 MPEG2-TS 輸入建立即時工作</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/code-samples/quick-start-using-rtmp-outputs-live-events.html">使用即時事件的 RTMP 輸出</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/live-api/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/references/live-api-error-messages.html">錯誤訊息</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/references/live-api-release-notes.html">版本資訊</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/references/reference.html">即時 API 參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/oauth/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp; OAuth API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/oauth/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/getting-started/overview-oauth-api-v4.html">概述：OAuth 應用程式介面</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/getting-started/quick-start-oauth.html">快速入門：OAuth 應用程式介面</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/oauth/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/guides/oauth-create-client-credentials-using-curl.html">創建客戶端憑據：cURL </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/guides/oauth-create-client-credentials-using-postman.html">建立用戶端認證：郵遞員</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/guides/getting-access-tokens.html">取得存取權杖</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/guides/api-operations-client-credentials-requests.html">用戶端認證要求的 API 作業</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/guides/get-your-bc-token.html">取得您的 BC_Token </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/oauth/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/references/reference.html">OAuth 應用程式介面參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/references/oauth-api-error-message-reference.html">OAuth API 錯誤消息參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/oauth/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">建立用戶端認證</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/oauth/code-samples/oauth-api-sample-get-access-token.html">取得存取權杖</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/playback/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;播放接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/getting-started/overview-playback-api.html">概述：播放API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/getting-started/quick-start-playback-api.html">快速入門：播放API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/best-practices-cms-and-playback-apis.html">最佳實務：CMS 和播放應用程式介面</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/cmsplayback-api-videos-search.html">CMS 和播放應用程式：視訊搜尋</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/getting-started/best-practices-cms-and-playback-apis.html">目錄搜尋架構</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/guides/short-manifest-ttl.html">短清單 TTL</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/guides/static-url-delivery.html">靜態 URL 傳送</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/references/reference_v2.html">播放 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/references/playback-api-video-fields-reference.html">視訊欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/references/playback-api-playlist-fields-reference.html">播放清單欄位參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/references/playback-api-error-reference.html">錯誤參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CM/播放API 發行資訊</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/code-samples/thumbnail-grid.html">視訊縮圖格點</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/code-samples/playback-api-sample-mrss-generator.html">MRSS 產生器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html">從播放清單中的JSON/MRSS 摘要</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback/code-samples/itunes-roku-feed-php-samples.html">iTunes 和 Roku Feed 生成器</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/player-management/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;播放器管理API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/player-management/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/getting-started/overview-player-management-api.html">概述：玩家管理 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/getting-started/step-step-player-management.html">逐步：玩家管理</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/getting-started/training-demand-quick-start-player-management.html">隨選訓練：玩家管理快速入門</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/getting-started/oauth-guide.html">OAuth 指南</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/player-management/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/player-configuration-guide.html">播放程式組態指南</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/plugin-registry.html">外掛程式登錄</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/pre-release-player.html">發行前播放程式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/player-repositories.html">播放程式儲存庫</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/guide-embed-apis.html">內嵌 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/opting-out-automatic-player-updates.html">選擇退出玩家自動更新</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/guides/embedding-brightcove-players-cms.html">在 CMS 中嵌入布萊特灣玩家</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/player-management/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/references/reference.html">玩家管理 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/references/player-management-api-release-notes.html">版本資訊</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/player-management/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/setup-player-management-samples.html">玩家管理範例的設定</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/bulk-updating-brightcove-default-player.html">大量更新預設播放程式</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-management-api-sample-create-player.html">建立玩家</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-managment-api-update-player-version.html">更新播放器版本</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-management-api-sample-display-players.html">顯示播放器</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-management-api-sample-delete-players.html">刪除玩家</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html">使用上次檢視的資料 (_L) </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/player-management/code-samples/player-management-api-sample-programmatically-update-players.html">以編程方式更新播放器</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/playback-restrictions/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;播放限制</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback-restrictions/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概述：Brightcove 播放限制</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/getting-started/implementing-playback-rights.html">實作播放權限</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://studio.support.brightcove.com/admin/general/managing-playback-rights.html">視頻雲工作室：播放權</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback-restrictions/guides/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;導遊</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://general.support.brightcove.com/developer/create-json-web-token.html">創建一個 JSON 網絡令牌（JWT）</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/guides/authentication-apis.html">使用身份驗證 API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/guides/fallback-hdcp.html">回退 HDCP</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/guides/generic-stream-concurrency.html">通用流並發</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/guides/stream-concurrency.html">限制每個查看器的並發流</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/guides/device-limits.html">實施設備限制</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://player.support.brightcove.com/playback/playback-restrictions-with-bcp.html">Brightcove Player 的播放限制</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="https://sdks.support.brightcove.com/features/playback-restrictions-with-sdks.html">原生 SDK 的播放限制</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/live-api/guides/live-playback-restrictions.html">直播流的播放限制</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback-restrictions/references/auth-index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;驗證</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/key-api/reference.html">關鍵 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/blacklist-api/reference.html">黑名單 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/audit-api/reference.html">稽核 API 參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/playback-restrictions/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/playback-rights/reference.html">播放權限API參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/references/reference.html">CMS 應用程式介面參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/devices-api/reference.html">設備API參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/concurrency-service-api/reference.html">並發服務 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/playback-restrictions/references/playback-rights-errors.html">播放限制錯誤</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/policy/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;策略接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/policy/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/getting-started/overview-policy-api.html">概述：政策 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/getting-started/quick-start-policy-api.html">程式碼範例：產生原則金鑰</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/getting-started/policy-keys.html">玩家的策略金鑰</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/policy/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/references/reference.html">政策 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/social/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;社交API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/social/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social/getting-started/overview-social-api.html">概述：社交API</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social/getting-started/quick-start-social-api.html">快速入門：社交API</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/social/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social/references/reference.html">社交 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social/references/social-api-error-reference.html">社交 API：錯誤參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/social-syndication/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;社會聯合 API</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/social-syndication/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/getting-started/public-syndication-api-overview.html">概述：聯合發行項目設定 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/getting-started/feed-syndication-api-overview.html">概述：聯合發行摘要 API </a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/getting-started/sample-templates-universal-syndication.html">通用聯合發行項目範本</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS 和播放應用程式：視訊搜尋 v2 </a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/social-syndication/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/references/configuration-reference.html">聯合發行項目設定 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/references/feed-reference.html">聯合發行摘要 API 參考</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/policy/references/policy-api-release-notes.html">版本資訊</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/social-syndication/code-samples/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;代碼示例</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/social-syndication/code-samples/sitemap-generator-sample.html">視頻站點地圖生成器</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/ssai/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;應用接口</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ssai/getting-started/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;入門</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ssai/getting-started/video-cloud-ssai-ad-config-api.html">視頻雲 SSAI API</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+              
+
+              <li class="nav-item subsection-title">
+                
+                <a class="nav-link" href="/ssai/references/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-minus"></i></span>&nbsp;參考</a>
+                
+
+                <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ssai/references/reference.html">SAI API 參考資料</a></li>
+                  
+                  
+                  
+                  
+                  
+                  <li class="nav-item"><a class="nav-link" href="/ssai/references/ssai-api-error-reference.html">SAI API 錯誤參考</a></li>
+                  
+                  
+                  
+                </ul>
+              </li>
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/training/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;訓練</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/training/online-training-courses.html">線上訓練課程</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/training/register-training.html">註冊參加講師指導訓練</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/training/brightcove-university.html">布萊特灣大學培訓課程</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+            
+            <li class="nav-item section-title"><a class="nav-link" href="/support/index.html"><span class="theme-icon-holder me-2"><i class="fa-solid fa-plus"></i></span>&nbsp;支持</a>
+              <ul role="list" class="section-items list-unstyled nav flex-column pb-3" style="display:none;">
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/support/contact-sales.html">聯絡銷售人員</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/support/viewing-brightcove-system-status-page.html">檢視布萊特灣系統狀態頁面</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/support/known-issues-studio-brightcove-player-and-apis.html">已知問題</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/support/opening-case-with-brightcove-support.html">開啟支援案例</a></li>
+              
+              
+              
+              
+              
+              <li class="nav-item"><a class="nav-link" href="/support/reset-support-portal-password.html">重置您的支持門戶密碼</a></li>
+              
+              
+              
+            </ul>
+            </li>
+            
+            
+          </ul>
+          </nav>
+        </div>
+      </div>
+    </div><!--//docs-sidebar-->
+  </div>
+</div>
+
+<div style="margin-top: 20px;">
+  <div class="docs-content" style="padding-bottom: 0px;">
+    <div class="container">
+      <div class="docs-overview">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            
+            <li class="breadcrumb-item"><a class="theme-link" href="/">首頁</a></li>
+            
+            
+            <li class="breadcrumb-item"><a class="theme-link" href="/live-api/">直播接口</a></li>
+            
+            
+            
+            <li class="breadcrumb-item"><a class="theme-link" href="/live-api/guides/">導遊</a></li>
+            
+            
+            
+            <li class="breadcrumb-item active" aria-current="page">布萊特灣直播：最佳實務</li>
+            
+            
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="docs-content">
+  <div class="container">
+    <div class="docs-overview py-5">
+      
+      <div class="centered-inpage-nav" id="centered_inpage_nav">
+        <nav id="centered_toc">
+          <select id="centered_in_page_toc" class="form-select select-focus"></select>
+        </nav>
+      </div>
+      <br/>
+      
+      
+<h1>此頁面已移動 - 您將在 3 秒內轉到 <a href="https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html">新位置</a> 。請更新您的書籤！</h1>
+<script type="text/javascript">
+var t = setTimeout(function() {
+    window.location.href = 'https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html';
+}, 3000);
+</script>
+
+<h1>布萊特灣直播：最佳實務</h1>
+<article class="bcls-article">
+  <summary>本主題提供使用即時 API 建立即時串流的最佳作法指南。</summary>
+  <section class="bcls-section">
+<h2 id="Overview">概覽</h2>
+
+<p>Brightcove 直播提供了一個強大的服務，用於創建直播活動或全天候直播。本指南概述最佳化直播的最佳做法</p>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Content_context">內容上下文</h2>
+  <p>需要考慮流式傳輸的內容類型，因為它會影響維持輸入質量所需的設置。請注意，需要權衡取捨，使用盡可能高的設置可能會導致諸如跳幀之類的問題。</p>
+  <p>根據以下信息，我們建議您在直播活動開始前測試不同設置組合的質量和性能。</p>
+	<p>下表概述了關鍵輸入參數：</p>
+	<table class="bcls-table">
+    <caption class="bcls-caption--table">直播的關鍵輸入參數</caption>
+    <thead class="bcls-table__head">
+        <tr>
+            <th>參數</th>
+            <th>注意事項</th>
+        </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+        <tr>
+            <td>輸入比特率</td>
+            <td>編碼器發送的比特率。較高的速率更容易受到網絡丟失的影響，因此應盡可能低。</td>
+        </tr>
+        <tr>
+            <td>輸入分辨率</td>
+            <td>這應該與源內容匹配。使其大於原始源沒有任何好處，並且該值越高，支持它所需的比特率就越高。</td>
+        </tr>
+        <tr>
+            <td>輸入比特率與頂級配置文件的比率</td>
+            <td>
+              輸入比特率應高於頂級配置文件的速率，但高太多可能會導致丟幀或其他問題 - 例如，如果您的最高速率是 1080p 30fps，則理想情況下輸入應約為 4 MBPS。請注意，這受配置文件的影響。
+              <p>如果您需要高比特率的頂級輸出，則值得測試<code translate="no">copy_video</code>設置只會將您的輸入編碼複製到輸出。</p>
+            </td>
+        </tr>
+        <tr>
+          <td>設定檔</td>
+          <td>
+            不同的配置文件（基線、主要、高）按升序壓縮數據（基線：最低，高：最高）。更高的壓縮率提高了傳輸速率，但也需要更多的 CPU 資源來解碼數據。除非編碼器在可用資源方面受到高度限制，否則應避免使用基線配置文件。另一方面，由於所需的解碼 CPU 資源增加，在高比特率下使用 high profile 更有可能導致跳幀。
+            <p>另見下面的 <a href="#gop_structure">GOP 結構</a> 。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>影格速率</td>
+          <td>
+            這應該與來源相符。
+            <p>更高的速率將需要成比例地更高的輸入比特率，例如對於極限運動內容，60fps 的輸入流比 30fps 的流攜帶更多的數據。</p>
+            <p>60fps 等高速率更有可能在高比特率的複雜內容上出現跳幀問題。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>關鍵影格速率</td>
+          <td>
+            最有效的設置是片段持續時間 x 幀速率 - 例如，如果您有 6 秒片段和 30fps，則使關鍵幀速率 180 (6x30) 將導致解碼器負載最低。
+            <p>但是，為了解決任何波動，將其設置為幀速率的 2 倍 - 例如，對於 30 fps 的幀速率，設置為 60。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>共和黨結構</td>
+          <td>請參閱下面的 <a href="#gop_structure">GOP 結構</a> 。</td>
+        </tr>
+    </tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Key_issues">流媒體的關鍵問題</h2>
+  <p>通常會遇到幾個與從編碼器到 Brightcove 的流媒體體驗相關的問題：</p>
+  <ol>
+    <li>
+      網絡不穩定影響輸入：
+      <ol>
+        <li>雖然互聯網通常非常可靠，但它並非萬無一失，而且確實會出現問題。比特率越高，問題就越容易被注意到。</li>
+        <li>如果上傳視頻的時間比實時時間長，那麼這可能會導致輸入漂移（接收視頻的時間比發送視頻的時間要晚很多）</li>
+      </ol>
+    </li>
+    <li>
+      轉碼器過載導致跳幀：雖然我們盡一切努力確保我們的轉碼器有足夠的開銷，但有時內容複雜性、網絡中斷/捕獲或轉碼器的其他中斷突然出現峰值可能會導致跳幀。輸入越複雜，遇到跳幀的可能性就越大。還有一個已知問題，即從靜止圖像更改持續時間較長（例如超過 5 分鐘）和突然更改動作內容可能會導致過載。
+    </li>
+    <li>編碼器發送可變幀持續時間：幀速率應該是恆定的，並且應該允許關鍵幀間隔是恆定的。例如，對於諸如 29.97 又名 30000/1001 或 23.976 又名 24000/1001 之類的幀率，不可能以固定間隔設置關鍵幀，因此應避免這樣做。</li>
+    <li>編碼器發送持續時間不一致的關鍵幀，關鍵幀速率應至少為以秒為單位的幀速率的 2 倍。例如，對於 30fps 的幀速率，關鍵幀間隔應為 60 幀，即 2 秒，並且每個片段的最大間隔應為一次 - 例如，如果您有一個 6 秒的片段，則最大間隔為 180 幀30 幀/秒</li>
+  </ol>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Content_types">內容類型</h2>
+  <p>通常，更複雜的內容需要使用這些設置中的較高者，因此更容易出現跳幀。下表按複雜性順序顯示了一些示例。請注意，這些只是示例，幾乎每個編碼器設置都是不同的。應進行測試和驗證。</p>
+  <table class="bcls-table">
+    <caption class="bcls-caption--table">內容類型示例</caption>
+    <thead class="bcls-table__head">
+        <tr>
+            <th>內容類型</th>
+            <th>範例設定</th>
+        </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+        <tr>
+            <td>攝像頭</td>
+            <td>
+              <ul>
+                <li>解決：360p</li>
+                <li>比特率：1兆每秒</li>
+                <li>輪廓：基線</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>網絡會議</td>
+            <td>
+              <ul>
+                <li>解決：480p</li>
+                <li>比特率：2.5兆每秒</li>
+                <li>輪廓：主要的</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>動畫片</td>
+            <td>
+              <ul>
+                <li>解決：720p</li>
+                <li>比特率：2.5兆每秒</li>
+                <li>輪廓：主要的</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>會說話的頭/新聞</td>
+            <td>
+              <ul>
+                <li>解決：720p</li>
+                <li>比特率：4兆每秒</li>
+                <li>輪廓：主要的</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>現場音樂會</td>
+            <td>
+              <ul>
+                <li>解決：1080p（或來源）</li>
+                <li>比特率：5兆每秒</li>
+                <li>輪廓：高的</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>體育直播</td>
+            <td>
+              <ul>
+                <li>解決：1080p（或來源）</li>
+                <li>比特率：6兆每秒</li>
+                <li>輪廓：高的</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>現場運動高 FPS</td>
+            <td>
+              <ul>
+                <li>解決：1080p（或來源）</li>
+                <li>比特率：10兆每秒</li>
+                <li>輪廓：高的</li>
+              </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+  <h2 id="verification">驗證和測試</h2>
+  <p>理想情況下，客戶應該從他們最複雜（變化最大的內容）的最低可能設置開始，然後通過增加各種設置來測試他們的內容，直到輸出可以接受。這是因為通常設置越高，在網絡或轉碼中遇到問題的可能性就越大。</p>
+</section>
+
+<section class="bcls-section">
+  <h2 id="gop_structure">共和黨結構</h2>
+  <p>視頻的圖片組 (GOP) 結構首先取決於用作以下用途的配置文件：</p>
+  <ol>
+    <li><strong>Baseline</strong> profile 僅支持 I 幀和 P 幀以及 CAVLC 熵編碼</li>
+    <li><strong>Main</strong> 和 <strong>High</strong> 支持 I、B 和 P 幀和 CABAC 熵編碼</li>
+  </ol>
+  <p>Main 和 High 配置文件通常會以更好的質量實現更好的壓縮，但也需要額外的計算來編碼和解碼，因為這樣可能更容易出現跳幀。此外，由於這些配置文件使用 B（雙向）幀，因此它們會在編碼過程中引起一些延遲。</p>
+  <p>基線配置文件需要較少的 CPU 來編碼和解碼，但由於它提供較少的壓縮，因此需要更高的比特率來保持質量，因此更容易受到網絡問題的影響。</p>
+  <h3>關於幀類型及其對性能的可能影響的註釋：</h3>
+  <ol>
+    <li><strong>I 幀</strong>：使用最多的帶寬。最好為完整的場景更改或在片段邊界添加 - 即內容更改越多，您需要的內容越多（GOP 長度越短）</li>
+    <li><strong>P 幀</strong>：是 I 幀之間的基本單元</li>
+    <li><strong>B 幀</strong>：同時使用之前和未來的幀，添加的幀越多，壓縮效果越好，但 CPU 和延遲也越高</li>
+  </ol>
+  <p>理想情況下， <strong>I 幀</strong> 的使用應限於段的開始（如果使用直通則很關鍵）或場景變化。應避免所有 I 幀或大量 I 幀，因為這會導致過載導致跳幀。</p>
+  <h3>補充筆記：</h3>
+  <ul>
+    <li>使用選項來防止關鍵幀的密集放置（例如：<code translate="no">min_keyin</code> = 3+）。</li>
+    <li>使用確保定期插入關鍵幀的選項。例如，不是以秒為單位指定 GOP 長度，而是以精確的分數或幀指定它。</li>
+  </ul>
+</section>
+
+<section class="bcls-section">
+  <h2 id="bitrate">位元速率</h2>
+  <ul>
+    <li>最小輸入頻寬：2.5 兆</li>
+    <li>最大輸入頻寬：10 兆</li>
+  </ul>
+  
+  <ul>
+    <li>使流“幾乎是 CBR”” - 使用<code translate="no">max_bitrate</code> = 1.1 * 目標比特率。</li>
+    <li>如果可用，請使用嚴格的符合 HRD 的速率控制模式。</li>
+  </ul>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Protocol">協議</h2>
+  <p>重要的是要注意，互聯網並不是一個有保證的傳輸網絡，雖然互聯網連接可能被認為是“良好”的，但對於可靠的高質量實時視頻流來說可能還不夠好。客戶編碼器和 Brightcove 轉碼平台之間路徑的小中斷（例如 ISP 處的少量擁塞、路由器之間的意外故障轉移或類似問題）都可能導致視頻輸出中斷。在高風險直播中，通常的做法是擁有多個專用網絡，包括專用光纖、預訂衛星帶寬或託管網絡上的承諾帶寬。這帶來了巨大的成本，並且在大多數情況下，可以通過互聯網獲得足夠好的結果。但是，如果保持無故障傳輸至關重要，請考慮使用 AWS Direct Connect 或可以提供某種程度的專用帶寬的 ISP。</p>
+  <p>我們推薦的選項是（按順序）：</p>
+  <ol>
+    <li><strong>SRT</strong> - 提供傳輸速度 (UDP) 與一些控制和錯誤恢復的良好組合。並非在所有編碼器上都可用，儘管有一些工具可以從本地 RTP 進行轉換，例如 srt-transmit。</li>
+    <li><strong>RTMP</strong> - 基於 TCP，它提供了良好的錯誤恢復能力，缺點是這會帶來大量開銷。請注意，並非所有功能（例如多音軌）都適用於 RTMP。</li>
+    <li><strong>RTP-FEC</strong> - 提供基於 UDP 的快速傳輸，具有一定的錯誤恢復能力</li>
+    <li><strong>RTP</strong> - 提供快速傳輸和高級功能，沒有錯誤恢復能力</li>
+  </ol>
+  <aside class="bcls-aside bcls-aside--information">注意：如果您使用 RTMP，請盡可能考慮禁用切片，因為它們可能會導致幀的某些部分亂序到達。</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="Certified_encoders">支援的編碼器</h2>
+
+<p>看到<a href="https://live.support.brightcove.com/general/supported-encoders-live-events.html">支持的直播活動編碼器</a>有關已知可與Live一起使用的編碼器的列表。請注意，其他編碼器也可以工作，但尚未經過測試。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Supported_CDNs">支援的 CDN</h2>
+
+<ul>
+	<li>阿卡</li>
+	<li>亞馬遜雲端</li>
+</ul>
+
+<aside class="bcls-aside bcls-aside--information">上面的 CDN 被官方支持，但其他基於文件的 CDN 應該可以工作。</aside>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="retries">重試</h2>
+
+<p>建議您從編碼器啟用 RTMP 連線的重試次數。5 秒的重試間隔進行大量的重試次數，將減輕編碼器與進入點之間的任何間歇性連線問題。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="job_settings">工作設定</h2>
+
+<p>建議的工作設定</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">工作設定</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>欄位</th>
+			<th>建議值</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">ad_audio_loudness_level</code></td>
+			<td><code translate="No">-23 </code>（EBU R.128標準）</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="input_requirements">輸入需求</h2>
+
+<p>下表顯示輸入即時串流的需求。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">輸入需求</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>料號</th>
+			<th>需求</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>協議</td>
+			<td><code translate="No">rtmp</code>，<code translate="No">rpt</code>，<code translate="No">rtp-fec</code>， 要么<code translate="No">srt</code>（除<code translate="No">rtmp</code>用於MPEG2-TS輸入）<sup><strong><a href="#note1-1"> [1-1]</a></strong></sup></td>
+		</tr>
+		<tr>
+			<td>視訊格式</td>
+			<td>H.264</td>
+		</tr>
+		<tr>
+			<td>音訊格式</td>
+			<td>AAC</td>
+		</tr>
+		<tr>
+			<td>最大音訊取樣率</td>
+			<td>高達 48000 Hz（布萊特灣支援可根據要求增加此值）</td>
+		</tr>
+		<tr>
+			<td>解析度</td>
+			<td>最高可達 1080p (寬度：1920 像素；高度：1080 像素)</td>
+		</tr>
+		<tr>
+			<td>位元速率</td>
+			<td>必須至少高於最高輸出位元率-最大值：10MBPS。
+			<p>在幾乎所有情況下，Brightcove 支持發現，使用恆定比特率輸入流大大降低了問題的機會。</p>
+			</td>
+		</tr>
+		<tr>
+			<td>畫面播放速率</td>
+			<td>30 fps（您可以提交<a href="https://supportportal.brightcove.com">支援要求</a>將限制提高到60fps）</td>
+		</tr>
+		<tr>
+			<td>切片</td>
+			<td>如果您的編碼器有此選項，請將其設置為<code translate="no">1</code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>注意事項</h3>
+
+<ul>
+	<li id="note1-1"><sup><strong>[1-1]</strong></sup>如果您在TS輸入中有多個音軌，我們將為每個音軌選擇第一個。我們也強烈建議使用 FEC，因為通過 UDP 在互聯網上的普通 TS 是非常不可靠的。對於FEC，我們可以注意到<em>較小的</em>您用於行/列的值，糾錯就越可靠（以增加帶寬為代價。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="slate_source_file_recommendations">石板原始碼檔案建議</h2>
+
+<ul>
+	<li><strong>解析度</strong>：（在您的編碼階梯中最好）</li>
+	<li><strong>第一人稱射擊</strong>：（與您的來源相同）</li>
+	<li><strong>比特率</strong>：（最好在您的編碼階梯中或更佳）</li>
+	<li><strong>音訊</strong>：（相同的比特率，通道，採樣頻率和每個採樣的比特作為最佳再現，或與您的輸入相同）</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="output_recommendations" class="bcls-section">輸出建議</h2>
+
+<p>以下是建議的輸出設定，但請注意，對於許多編碼器，RTMP 輸入限制為 10 MBPS (視訊 + 音訊)，畫面播放速率為 30fps。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">輸出建議</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>料號</th>
+			<th>建議</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>視訊轉碼器</td>
+			<td><code translate="No">h264</code>是目前唯一的選擇</td>
+		</tr>
+		<tr>
+			<td>音訊轉碼器</td>
+			<td><code translate="No">aac</code>是目前唯一的選擇</td>
+		</tr>
+		<tr>
+			<td>寬度</td>
+			<td>如果不<code translate="No">width</code>或者<code translate="No">height</code>提供時，使用源尺寸。如果提供了<code translate="No">width</code>或<code translate="No">height</code>，則會計算其他維度以維持來源的縱橫比。</td>
+		</tr>
+		<tr>
+			<td>高度</td>
+			<td>如果不<code translate="No">width</code>或者<code translate="No">height</code>提供時，使用源尺寸。如果提供了<code translate="No">width</code>或<code translate="No">height</code>，則會計算其他維度以維持來源的縱橫比。</td>
+		</tr>
+		<tr>
+			<td>位元速率</td>
+			<td>小於或等於輸入位元率</td>
+		</tr>
+		<tr>
+			<td>關鍵影格速率</td>
+			<td>2 秒</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section id="AWS_regions">AWS 區域
+<p>見<a href="/live-api/getting-started/overview-brightcove-live-api.html#Support_aws_regions">實時API概述</a>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="FAQ">常問問題</h2>
+
+<dl>
+	<dt class="bcls-question">建立即時工作後，您需要多久才能開始串流？</dt>
+	<dd class="bcls-answer">在Brightcove Live中，當狀態從<code translate="No">waiting </code>至<code translate="No">finishing </code>：
+	<ol>
+		<li>如果工作在<strong>等候</strong>狀態（尚未開始）和<code translate="No">max_waiting_time_ms</code>已過去，作業已完成/已停用。</li>
+		<li>如果工作在<strong>斷開連接</strong>狀態（已啟動，但已斷開連接），並且<code translate="No">reconnect_time</code>已過去，作業已完成/已停用。</li>
+	</ol>
+
+	<p>如果<code translate="No">event_length </code>大於30分鐘，作業將在30分鐘後終止。如果<code translate="No">event_length </code>少於30分鐘，作業將在<code translate="No">event_length </code>。</p>
+
+	<p>例如，如果<code translate="No">event_length </code>是60分鐘，那麼實時作業將在30分鐘後終止。如果<code translate="No">event_length </code>是15分鐘，那麼實時作業將在15分鐘後終止</p>
+
+	<p>的<code translate="No">reconnect_time </code>對等待狀態沒有影響。</p>
+	</dd>
+	<dt class="bcls-question">並發現時 job_設置有什麼限制？</dt>
+	<dd class="bcls-answer">
+	<p>任何時候最多允許 5 個使用中<strong>等待未啟</strong>動的工作。</p>
+
+	<p>並行工單的其他限制：</p>
+
+	<ul>
+		<li><code translate="No">channel</code> ( 24x7) 工作數量限制為 0 或每個區域的數目較少 (取決於帳戶類型)。</li>
+		<li>同時<strong>執行</strong>的<code translate="No">event</code>工作數目受區域限制，通常為 100。</li>
+		<li>同時<strong>等待連線</strong><code translate="No">event</code>工作的數目限制為 5 個。</li>
+		<li>每個區域的SEP作業數量限制為3或10（請參見<a href="/live-api/getting-started/overview-brightcove-live-api.html#Support_aws_regions">支持的AWS區域</a>）。</li>
+	</ul>
+
+	<p>任何這些限制都可以由支援在帳戶層級調整。如果您需要額外的容量，請聯繫您的客戶成功經理。</p>
+	</dd>
+	<dt class="bcls-question">只要輸入頻寬足夠，布萊特灣直播能否推動 1080p 品質？</dt>
+	<dd class="bcls-answer">是，所有帳戶都啟用 1080p 輸入功能。</dd>
+	<dt class="bcls-question">DRM 是否可用？</dt>
+	<dd class="bcls-answer">是的！如果您有興趣為您的真實賬戶添加 DRM 支持，請聯繫您的客戶成功經理。</dd>
+</dl>
+</section>
+</article>
+
+<!-- <div class="col-sm-2 right-side-bar" style="display: inline-block;max-width: 20%;"> -->
+  
+  <nav class="right-side-nav" id="right_side_nav">
+    <h6 class="toc">頁面內容</h6>
+    <ul id="in_page_nav" class="list-none"></ul>
+  </nav>
+  
+<!-- </div> -->
+</div>
+</div>
+</div>
+<div class="page-content" style="background-color: rgb(1, 5, 14);">
+  <div class="container" style="width: 50%;">
+    <footer class="py-5">
+      <div class="row">
+        <div class="col-6 col-md">
+          <h5 class="h5-text">布萊特灣支援</h5>
+          <ul class="list-unstyled text-small" style="color: white ;">
+            <li><a class="a-text" href="https://status.brightcove.com">系統狀態</a></li>
+            <li><a class="a-text" href="https://supportportal.brightcove.com">聯絡支援</a></li>
+            <li><a class="a-text" href="https://support.brightcove.com/search.html">搜索所有文檔</a></li>
+          </ul>
+        </div>
+      
+        <div class="col-6 col-md">
+          <h5 class="h5-text">訓練</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="a-text" href="https://studio.support.brightcove.com/get-started/training/online-training-courses.html">在線課程</a></li>
+            <li><a class="a-text" href="https://studio.support.brightcove.com/get-started/training/register-training.html">註冊課程</a></li>
+            <li><a class="a-text" href="https://academy.brightcove.com/">光明灣學院</a></li>
+          </ul>
+        </div>
+      
+        <div class="col-6 col-md">
+          <h5 class="h5-text">Brightcove</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="a-text" href="https://www.brightcove.com">亮麗</a></li>
+            <li><a class="a-text" href="https://community.brightcove.com/s/">亮點社區論壇</a></li>
+            <li><a class="a-text" href="https://support.brightcove.com/product-updates.html">產品發布說明</a></li>
+            <li><a class="a-text" href="https://support.brightcove.com/doc-updates.html">文檔更新</a></li>
+          </ul>
+        </div>
+      </div>
+    
+      <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+      <p>© Brightcove Inc. 保留所有權利。</p>
+      <a class="a-text" href="https://www.brightcove.com/en/legal/privacy">隱私</a> <a class="a-text" href="https://www.brightcove.com/en/terms-and-conditions">條款 &amp; 狀況</a>
+
+      <ul class="list-unstyled d-flex">
+        <li class="ms-3"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" target="_blank" class="gf-social-linkedin" style="margin-right: 1rem;"><i data-feather="linkedin" style="color:#8E9093;height: 1.25rem;"></i></a></li>
+
+        <li class="ms-3"><a href="https://twitter.com/brightcove" title="Twitter" target="_blank" class="gf-social-twitter" style="margin-right: 1rem;"><i data-feather="twitter" style="color:#8E9093;height: 1.25rem;"></i></a></li>
+
+        <li class="ms-3"><a href="https://www.facebook.com/Brightcove" title="Facebook" target="_blank" class="gf-social-facebook"><i data-feather="facebook" style="color:#8E9093;height: 1.25rem;"></i></a></li>
+      </ul>
+      </div>
+    </footer>
+  </div>
+</div>
+
+
+<script translate="no">
+  var searchBox = sajari.init({
+    mode: "search-box",
+    project: "1588255093746585379", // Set this to your project.
+    collection: "brightcove-documentation", // Set this to your collection.
+    instantPipeline: "autocomplete", // Pipeline used as you type
+    inputPlaceholder: "Search", // Input element placeholder,
+    styling: {
+      components: {
+        
+        input: {
+          container: {
+          backgroundColor: 'white',
+          }
+        
+        }
+      }
+    },
+    maxSuggestions: 5, // Maximum number of suggestions to show
+      attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
+  });
+
+  
+
+
+    searchBox("sub", "pipeline.search-sent", function (_, query) {
+    window.location = "/search.html?q=" + encodeURIComponent(query.q);
+    });
+  
+  </script>
+  
+  <!-- Javascript -->          
+  <script src="/assets/s-site-assets-template-stylesheets/plugins/popper.min.js"></script>
+  <script src="/assets/s-site-assets-template-stylesheets/plugins/bootstrap/js/bootstrap.min.js"></script>  
+
+
+  <!-- Page Specific JS -->
+  <script src="/assets/s-site-assets-template-stylesheets/plugins/smoothscroll.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script> -->
+  <!-- <script src="/assets/s-site-assets-template-stylesheets/js/highlight-custom.js"></script>  -->
+  <script src="/assets/s-site-assets-template-stylesheets/plugins/simplelightbox/simple-lightbox.min.js"></script>      
+  <script src="/assets/s-site-assets-template-stylesheets/plugins/gumshoe/gumshoe.polyfills.min.js"></script> 
+  <script src="/assets/s-site-assets-template-stylesheets/js/docs.js"></script> 
+
+  <!-- original footer components -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+  <script src="/assets/s-site-assets-scripts/https-fix.js"></script>
+  <script src="/assets/s-site-assets-scripts/setDate.js"></script>
+  <script src="/assets/s-site-assets-scripts/selector.js"></script>
+  
+  <script src="/assets/s-site-assets-scripts/prism.js"></script>
+  <script src="/assets/s-site-assets-scripts/prism-normalize.js"></script>
+  
+  <script src="/assets/s-site-assets-scripts/site.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/learning-paths/learning-paths.js"></script>
+  <!-- <script src="/assets/s-site-assets-scripts/site.js"></script> -->
+  <script src="/assets/s-site-assets-scripts/tabs.js"></script>
+  
+  <script src="/assets/s-site-assets-scripts/toc-new-template.js"></script>
+  
+  <script src="/assets/js/sites_nav.js"></script>
+  <script src="/assets/s-site-assets-scripts/bcls-utils.js"></script>
+  <script src="/assets/s-site-assets-scripts/local-link-fix.js"></script>
+  <script src="/assets/s-site-assets-scripts/sajari-reindex.js"></script>
+  <script src="/assets/js/feedback.js"></script>
+  
+  <script src="/assets/s-site-assets-scripts/sajari-search-foot.js"></script>
+  
+  <script translate="no">
+    feather.replace()
+  </script>
+  <!-- <script src="/assets/js/sajari-index.js"></script> -->
+  <script src="/assets/s-site-assets-scripts/in-app.js"></script>
+  <style translate="no">
+    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
+      background-color: lightblue;
+    }
+    div.sj-tabs__tab {
+      margin-top: 3rem;
+      margin-left: .3rem;
+      border-top-left-radius: .4rem;
+      border-top-right-radius: .4rem;
+      background-color:#e8e8e8;
+    }
+
+    div.sj-tabs__tab.sj-tabs__tab--selected {
+      border-bottom-color: crimson;
+      background-color: #f8f8f8;
+    }
+
+    p.sj-results__result__description.css-p9jvyt {
+      font-size: 1rem;
+    }
+
+    .sj-result__text.css-31l7gp h3 {
+      color: navy;
+      font-size: 1.4rem;
+    }
+    </style>
+
+  </body>
+</html> 
