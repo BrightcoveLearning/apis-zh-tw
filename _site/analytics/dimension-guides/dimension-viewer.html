@@ -3653,61 +3653,67 @@
     </section>
 
     <section class="bcls-section">
-  <h2 id="Send_viewer_id_web_player">發送觀眾 ID - Brightcove 播放器</h2>
-
-  <p>首先，您需要設置用戶標識符來存儲他們的觀看活動。</p>
-  <h3>布萊特灣玩家</h3>
-  <p>
-    如果您使用的是Brightcove Player，請按照下列步驟操作：
-  </p>
-
-  <ol class="bcls-tasklist-restart">
-    <li>
+      <h2 id="Send_viewer_id_web_player">發送觀看者 ID - Brightcove 玩家</h2>
+      <aside class="bcls-aside bcls-aside--information language-editable">注意：有關在Native SDK 播放器中設定檢視器ID 的信息，請參閱<a href="https://sdks.support. brightcove.com /features/cross-device-resume-sdks.html">使用本機 SDK 進行跨裝置復原</a>。</aside>
+      <h2 id="要求">要求</h2>
+      <p>檢視者 ID 追蹤需要滿足以下要求：</p>
+      <ul>
+      <li>Brightcove Player v7.18.0 或更高版本</li>
+      </ul>
+      <p>首先，您需要設定使用者識別碼來儲存該使用者的查看活動。
+      <h3>Brightcove 播放器</h3>
       <p>
-        即使瀏覽者資料會自動傳送至 Brightcove 分析，您仍需要設定使用者識別碼。為此，請使用<code translate="No">setUser()</code>方法。例如：
+      如果您使用的是 Brightcove Player，請依照下列步驟操作：
       </p>
-      <pre class="line-numbers"><code class="language-javascript" translate="No">myPlayer.bcAnalytics.client.setUser('<span class="bcls-input">viewer id</span>');</code></pre>
-      <p>在託管 Brightcove Player 的網站上，您可以使用身份驗證網關或某些身份管理解決方案來跟踪查看者。使用此查看器 ID 作為查看器標識符以傳遞給 Brightcove 分析。</p>
-      <aside class="bcls-aside bcls-aside--warning"><span class="bcls-input">查看器 ID</span> 值必須是唯一的字符串。無效值（例如數字）將被忽略。 </aside>
-    </li>
-    <li>
+      <ol class="bcls-tasklist-restart">
+      <li>
       <p>
-        在播放器上設置任何源之前設置查看器 ID 很重要。初始化播放器後應立即調用它。
+      儘管查看者資料會自動傳送到 Brightcove 分析，您仍需要設定使用者識別碼。為此，請使用 <code translate="No">user()</code> 方法。例如：
       </p>
-      <pre class="line-numbers"><code class="language-javascript" translate="No">&lt;video-js
-  id="myPlayerID"
-  data-account="1752604059001"
-  data-player="hyQW6GByl"
-  data-embed="default"
-  controls=""
-  data-video-id="6156696074001"
-  data-playlist-id=""
-  data-application-id=""
-  width="640" height="360"&gt;&lt;/video-js&gt;
-&lt;script src="https://players.brightcove.net/1752604059001/hyQW6GByl_default/index.min.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  videojs.getPlayer('myPlayerID').ready(function() {
-    var myPlayer = this;
-
-    // Set the viewer id for Brightcove analytics
-    myPlayer.bcAnalytics.client.setUser('<span class="bcls-input">viewer id</span>');
-  });
-&lt;/script&gt;</code></pre>
-    </li>
-    <li>當。。。的時候<code translate="No">setUser()</code>使用方法時，不會對該值進行哈希處理，並將與所有後續信標一起以明文形式發送。
+      <pre class="line-numbers"><code class="language-javascript"translate="No">myPlayer.bcAnalytics.client.user('<span class="bcls-input">檢視者ID</span > ');</code></pre>
+      <p>在託管 Brightcove Player 的網站上，您可以使用身分驗證網關或某些身分管理解決方案來追蹤檢視者。使用此檢視者 ID 作為檢視者識別碼以傳遞到 Brightcove 分析。
+      <aside class="bcls-aside bcls-aside--warning"><span class="bcls-input">檢視者 ID</span> 值必須是唯一字串。無效值（例如數字）將被忽略。 </旁>
+      <p></p>
+      <aside class="bcls-aside bcls-aside--tip language-editable">此處新增的值在 Insights 報告中稱為 <code translate="No">customerId</code>。
+      <p></p>
+      </li>
+      <li>
       <p>
-        請注意<code translate="No">player_init</code>事件將不包括<code translate="No">user</code>在這種情況下，但所有<code translate="No">video_*</code>事件應該包括它。
+      在播放器上設定任何來源之前設定檢視器 ID 非常重要。應在初始化播放器後立即調用它。
       </p>
-    </li>
-  </ol>
-  <h3>自定義網絡播放器</h3>
-  <p>
-    如果您要建置不使用 Brightcove 播放器的自訂實作，請將<code translate="No">user</code>參數新增至您的資料收集 API 請求。有關詳細信息，請參見<a href="https://apis.support.brightcove.com/data-collection/overview-data-collection-api-v2.html#all-event-parameters">概述：數據收集API v2</a>文件。
-  </p>
-  <p>在託管播放器的網站上，您可以使用身份驗證網關或某些身份管理解決方案來跟踪觀眾。使用此查看器 ID 作為查看器標識符以傳遞給 Brightcove 分析。</p>
-  
-</section>
+      <pre class="line-numbers"><code class="language-javascript"translate="No">&lt;video-js
+      id="我的玩家ID"
+      資料帳戶=“1752604059001”
+      數據播放器=“hyQW6GByl”
+      資料嵌入=“預設”
+      控制=“”
+      資料-影片-id＝“6156696074001”
+      資料播放清單 ID=""
+      資料應用程式 ID=""
+      寬度＝“640” height="360"&gt;&lt;/video-js&gt;
+     &lt;腳本 src=&quot;https://players.brightcove.net/1752604059001/hyQW6GByl_default/index.min.js&quot;&gt;&lt;/script&gt;
+     
+     <腳本>
+      videojs.getPlayer('myPlayerID').ready(function() {
+      var myPlayer = this;
+     
+      // 設定 Brightcove 分析的查看者 ID
+      myPlayer.bcAnalytics.client.user('<span class="bcls-input">檢視者 ID</span>');
+      });
+     &lt;/腳本&gt;</code></pre>
+      </li>
+      <li>使用 <code translate="No">user()</code> 方法時，該值不會經過雜湊處理，並將與所有後續信標一起以明文形式傳送。
+      <p>
+      請注意，在這種情況下，<codetranslate="No">player_init</code> 事件將不包含 <codetranslate="No">user</code> 字段，但包含所有 <codetranslate="No">video_ *</code> 事件應該包含它。
+      </p>
+      </li>
+      </ol>
+      <h3>自訂播放器</h3>
+      <p>
+      如果您正在建立不使用 Brightcove Player 的自訂實現，請將 <codetranslate="No">user</code> 參數新增至您的資料收集 API 請求中。有關詳細信息，請參閱<a href="https://apis.support.brightcove.com/data-collection/overview-data-collection-api-v2.html#all-event-parameters">概述：資料收集API v2</a> 文件。
+      </p>
+      <p>您可以使用身分驗證閘道或身分管理解決方案來追蹤託管播放器的網站上的檢視者。使用此檢視者 ID 作為檢視者識別碼以傳遞給 Brightcove 分析。
+     </節>
 
     <section class="bcls-section">
       <h2 id="send-viewer-id-sdk-players"></h2>
